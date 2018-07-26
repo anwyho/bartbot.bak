@@ -64,3 +64,10 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
+
+
+// curl -X GET "http://13.59.221.162:1337/webhook?hub.verify_token=a_random_string&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
+
+// curl -H "Content-Type: application/json" -X POST "13.59.221.162:1337/webhook" -d '{"object": "page", "entry": [{"messaging": [{"message": "TEST_MESSAGE"}]}]}'
+
+// curl -X GET "https://bottrain.herokuapp.com/webhook?hub.verify_token=<YOUR_VERIFY_TOKEN>&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
