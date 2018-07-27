@@ -1,0 +1,217 @@
+{
+  "?xml": {
+    "@version": "1.0",
+    "@encoding": "utf-8"
+  },
+  "root": {
+    "@id": "1",
+    "uri": {
+      "#cdata-section": "http://api.bart.gov/api/sched.aspx?cmd=depart&orig=24th&dest=rock&json=y"
+    },
+    "origin": "24TH",
+    "destination": "ROCK",
+    "sched_num": "47",
+    "schedule": {
+      "date": "Jul 26, 2018",
+      "time": "3:17 PM",
+      "before": "2",
+      "after": "2",
+      "request": {
+        "trip": [{
+          "@origin": "24TH",
+          "@destination": "ROCK",
+          "@fare": "4.70",
+          "@origTimeMin": "2:48 PM",
+          "@origTimeDate": "07/26/2018 ",
+          "@destTimeMin": "3:17 PM",
+          "@destTimeDate": "07/26/2018",
+          "@clipper": "1.55",
+          "@tripTime": "29",
+          "@co2": "9.84",
+          "fares": {
+            "@level": "normal",
+            "fare": [{
+              "@amount": "4.20",
+              "@class": "clipper",
+              "@name": "Clipper"
+            }, {
+              "@amount": "4.70",
+              "@class": "cash",
+              "@name": "BART Blue Ticket"
+            }, {
+              "@amount": "1.55",
+              "@class": "rtcclipper",
+              "@name": "Senior/Disabled Clipper"
+            }, {
+              "@amount": "2.10",
+              "@class": "student",
+              "@name": "Youth Clipper"
+            }]
+          },
+          "leg": [{
+            "@order": "1",
+            "@transfercode": "",
+            "@origin": "24TH",
+            "@destination": "ROCK",
+            "@origTimeMin": "2:48 PM",
+            "@origTimeDate": "07/26/2018",
+            "@destTimeMin": "3:17 PM",
+            "@destTimeDate": "07/26/2018",
+            "@line": "ROUTE 2",
+            "@bikeflag": "1",
+            "@trainHeadStation": "ANTC",
+            "@load": "1",
+            "@trainId": "3791426",
+            "@trainIdx": "49"
+          }]
+        }, {
+          "@origin": "24TH",
+          "@destination": "ROCK",
+          "@fare": "4.70",
+          "@origTimeMin": "3:03 PM",
+          "@origTimeDate": "07/26/2018 ",
+          "@destTimeMin": "3:32 PM",
+          "@destTimeDate": "07/26/2018",
+          "@clipper": "1.55",
+          "@tripTime": "29",
+          "@co2": "9.84",
+          "fares": {
+            "@level": "normal",
+            "fare": [{
+              "@amount": "4.20",
+              "@class": "clipper",
+              "@name": "Clipper"
+            }, {
+              "@amount": "4.70",
+              "@class": "cash",
+              "@name": "BART Blue Ticket"
+            }, {
+              "@amount": "1.55",
+              "@class": "rtcclipper",
+              "@name": "Senior/Disabled Clipper"
+            }, {
+              "@amount": "2.10",
+              "@class": "student",
+              "@name": "Youth Clipper"
+            }]
+          },
+          "leg": [{
+            "@order": "1",
+            "@transfercode": "",
+            "@origin": "24TH",
+            "@destination": "ROCK",
+            "@origTimeMin": "3:03 PM",
+            "@origTimeDate": "07/26/2018",
+            "@destTimeMin": "3:32 PM",
+            "@destTimeDate": "07/26/2018",
+            "@line": "ROUTE 2",
+            "@bikeflag": "1",
+            "@trainHeadStation": "ANTC",
+            "@load": "1",
+            "@trainId": "3811441",
+            "@trainIdx": "50"
+          }]
+        }, {
+          "@origin": "24TH",
+          "@destination": "ROCK",
+          "@fare": "4.70",
+          "@origTimeMin": "3:18 PM",
+          "@origTimeDate": "07/26/2018 ",
+          "@destTimeMin": "3:47 PM",
+          "@destTimeDate": "07/26/2018",
+          "@clipper": "1.55",
+          "@tripTime": "29",
+          "@co2": "9.84",
+          "fares": {
+            "@level": "normal",
+            "fare": [{
+              "@amount": "4.20",
+              "@class": "clipper",
+              "@name": "Clipper"
+            }, {
+              "@amount": "4.70",
+              "@class": "cash",
+              "@name": "BART Blue Ticket"
+            }, {
+              "@amount": "1.55",
+              "@class": "rtcclipper",
+              "@name": "Senior/Disabled Clipper"
+            }, {
+              "@amount": "2.10",
+              "@class": "student",
+              "@name": "Youth Clipper"
+            }]
+          },
+          "leg": [{
+            "@order": "1",
+            "@transfercode": "",
+            "@origin": "24TH",
+            "@destination": "ROCK",
+            "@origTimeMin": "3:18 PM",
+            "@origTimeDate": "07/26/2018",
+            "@destTimeMin": "3:47 PM",
+            "@destTimeDate": "07/26/2018",
+            "@line": "ROUTE 2",
+            "@bikeflag": "1",
+            "@trainHeadStation": "ANTC",
+            "@load": "1",
+            "@trainId": "3831456",
+            "@trainIdx": "51"
+          }]
+        }, {
+          "@origin": "24TH",
+          "@destination": "ROCK",
+          "@fare": "4.70",
+          "@origTimeMin": "3:33 PM",
+          "@origTimeDate": "07/26/2018 ",
+          "@destTimeMin": "4:02 PM",
+          "@destTimeDate": "07/26/2018",
+          "@clipper": "1.55",
+          "@tripTime": "29",
+          "@co2": "9.84",
+          "fares": {
+            "@level": "normal",
+            "fare": [{
+              "@amount": "4.20",
+              "@class": "clipper",
+              "@name": "Clipper"
+            }, {
+              "@amount": "4.70",
+              "@class": "cash",
+              "@name": "BART Blue Ticket"
+            }, {
+              "@amount": "1.55",
+              "@class": "rtcclipper",
+              "@name": "Senior/Disabled Clipper"
+            }, {
+              "@amount": "2.10",
+              "@class": "student",
+              "@name": "Youth Clipper"
+            }]
+          },
+          "leg": [{
+            "@order": "1",
+            "@transfercode": "",
+            "@origin": "24TH",
+            "@destination": "ROCK",
+            "@origTimeMin": "3:33 PM",
+            "@origTimeDate": "07/26/2018",
+            "@destTimeMin": "4:02 PM",
+            "@destTimeDate": "07/26/2018",
+            "@line": "ROUTE 2",
+            "@bikeflag": "1",
+            "@trainHeadStation": "ANTC",
+            "@load": "1",
+            "@trainId": "3851511",
+            "@trainIdx": "52"
+          }]
+        }]
+      }
+    },
+    "message": {
+      "co2_emissions": {
+        "#cdata-section": "<p>CO<sub>2</sub> emissions saved by this BART trip: <strong>9.8 pounds.</strong> <a href=\"http://www.bart.gov/guide/carbon\">Read more</a></p>"
+      }
+    }
+  }
+}
