@@ -13,10 +13,16 @@ def updateStations():
   payload = {'cmd': 'stns', 'key': KEY, 'json': 'y'}
 
   r = requests.get(urlEndpoint, payload)
+  content = r.content.decode('utf-8')
 
-  if not passingStatus.check(r.status_code):
+  if not passingStatus.check(r):
     print('Error: Could not update stations.')
     return False
+  elif r.status_code == 200:
+    if '<error>' in content:
+      print('Response content: {}'.format(content))
+      print('Error: Could not update stations.')
+      return False
   
   with open(TARGET, 'w') as f:
     j = r.json()
