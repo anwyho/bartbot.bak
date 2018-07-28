@@ -62,6 +62,8 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
   def feedback(msg:str) -> confirmationAndEmail:str
   ```
 
+- [ ] Support me through a donation at my [PayPal.me](https://www.paypal.me/anwyho)
+
 Future Features
 ---------------
 
@@ -124,3 +126,4 @@ Future Features
   - [ ] Ability to change reminder time and delete commutes
   - [ ] Limit to only 5 commutes per user?
   - [ ] After three of the same queries for station arrivals, suggest making a Commute
+
