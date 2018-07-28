@@ -1,7 +1,9 @@
+from json import JSONEncoder
+import os
 import requests
 
 KEY = 'ZSBD-57UA-9TVT-DWE9'
-RESOURCES = '../resources/stationInfo.txt'
+TARGET = os.path.join(os.path.dirname(__file__), "..", "resources", "stationAbbrToStationName.json")
 
 def updateStations():
   print('Updating stations...')
@@ -12,10 +14,14 @@ def updateStations():
   print(r.url)
   print(r.status_code)
   if (r.status_code == 200):
-    with open(RESOURCES, 'w') as f:
+    with open(TARGET, 'w') as f:
       j = r.json()
-      for station in j['root']['stations']['station']:
-        
+      abbrToName = {}
+      for s in j['root']['stations']['station']:
+        abbrToName[s['abbr']] = s['name']
+      nJson = JSONEncoder().encode(abbrToName)
+      print(nJson)
+      f.write(nJson)
   else: 
     raise Exception('Request for {url} responded with error {err}'
         .format(url=urlEndpoint, err=r.status_code))
