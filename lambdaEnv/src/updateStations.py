@@ -1,10 +1,22 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""Bartbot
+
+Run this program roughly every two weeks or when necessary to keep station list up to date. Program contacts BART API and writes JSON/Python Dict object to file `resources/stationABbrToStationName.json` for other programs to read."""
+
+__author__ = 'Anthony W. Ho'
+
 from json import JSONEncoder
 import os
 import requests
 
 import passingStatus
+import apiKeys
 
-KEY = 'ZSBD-57UA-9TVT-DWE9'
+# Public API key - this code will not be run very often. 
+KEY = apiKeys.PUBLIC
+# TODO: Generalize this path to make it easier to find later in project
 TARGET = os.path.join(os.path.dirname(__file__), "..", "resources", "stationAbbrToStationName.json")
 
 def updateStations():
@@ -23,17 +35,27 @@ def updateStations():
       print('Response content: {}'.format(content))
       print('Error: Could not update stations.')
       return False
+
+
+  j = r.json()
+  abbrToName = {}
+
+  for s in j['root']['stations']['station']:
+    abbrToName[s['abbr']] = s['name']
+
+  nJson = JSONEncoder().encode(abbrToName)    
   
   with open(TARGET, 'w') as f:
-    j = r.json()
-    abbrToName = {}
-    for s in j['root']['stations']['station']:
-      abbrToName[s['abbr']] = s['name']
-    nJson = JSONEncoder().encode(abbrToName)
-    print(nJson)
-    f.write(nJson)
+    try:
+      f.write(nJson)
+    except Exception as e:
+      print(e)
+      print("Error: Could not update stations - could not write to file.")
+    else:
+      print("Stations updated.")
   
   return True
+
 
 if __name__ == "__main__":
   updateStations()
