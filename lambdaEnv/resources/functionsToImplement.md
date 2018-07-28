@@ -1,49 +1,126 @@
-// Next departure times to arrive before or by arrival time
-deps:{Time} <- orig:Station, [ arr:Time ], [ dest:Station | dir:Direction 
-                                           | line:Station ];
-                                           
-Direction := 'N' | 'S';
-Time := 
+Functions to Implement
+======================
 
-// Next arrival times at or after departure time or current time
-arrs:{Time} <- orig:Station, dest:Station, [ dep:Time ];
+All function stubs are written in Python psudocode. See the [Python 3.5 Typing module](https://docs.python.org/3/library/typing.html) for more information on how to read these stubs.
 
+- [ ] Next departure times to arrive before or by arrival time
 
-eta:Time <- ( orig:Station, dest:Station, dep:Time ) | context:Context 
-          | ( loc:Location, dest:Station, dep:Time );
-// ETA in forwardable string
-forwardEta:str <- eta:Time;
+  ```python
+  def departureTimes(orig:Station, arr:Time=None, dest:Union[Station,Direction,Line,Location]=None) -> deps: List[Tuple[Time,Line]]
+  ```
 
-// Cost returned in cents
-cost:int <- orig:Station, dest:Station, [ adult:bool ];
+  Directions can be either northbound or southbound. Time is BART time, with BART midnight being 2:27 AM.
 
-accessibility:bool <- sta:Station;
+- [ ] Next arrival times at or after departure time or current time
 
-parking:bool <- sta:Station;
+  ```python
+  def arrivalTimes(orig:Union[Station,Location], dest:Station, dep:Time=None) -> arrs:List[Tuple[Time,Line]]
+  ```
 
-delays:{str} <- orig:Station, [ dest:Station ];
+- [ ] ETA given an origin, a destination, and a departure time
 
-// Accepting feedback
-responseAndEmail:str <- feedback:str;
+  ```python
+  def eta(orig:Union[Station,Location], dest:Union[Station,Location], dep:Time) -> eta:Time
+  ```
 
+  ```python
+  def eta(context:Context) -> eta:Time
+  ```
 
-// FUTURE FEATURES
+  - [ ] Returns in a forwarding-friendly string
+    ```python
+    def forwardableEta(eta:Time) -> textEta:str
+    ```
 
-// Weather, Station Info, Around the Station
-stationInfo{str} <- sta:Station;
+- [ ] Cost returned in cents
 
-// Weekly Poll
-confirmation:str <- weeklyPollResponse:int;
+  ```python
+  def cost(orig:Station, dest:Station, type:Ticket='Cash') -> cost:int
+  ```
 
-// Fun things for BART (maybe XKCD comics?)
-stuff{object} <- passTime:bool;
+- [ ] Accessibility at station
 
-// Report something to BART police?
-confirmationAndInfo:str <- reportEventToPolice:bool;
+  ```python
+  def accessibility(sta:Station) -> isAccessible:bool
+  ```
 
-// Set up Uber or Lyft? 
-rideLink:URL <- setUpUber:bool, dest:Station, arr:Time;
+- [ ] Parking at station
 
-// Request to send ETA to friend, message friend through Bartbot
-// Ask friend if they want to acknowledge, if yes, relay acknowledgement
-// Simultaneously do some sharing for Bartbot!
+  ```python
+  def parking(sta:Station) -> hasParking:bool
+  ```
+
+- [ ] Delays along a route - maybe make this a periodically run function that broadcasts to people who recently looked up trips on that route in the past 30min? See the [Messenger Broadcasting](https://developers.facebook.com/docs/messenger-platform/send-messages/broadcast-messages/) feature.
+
+  ```python
+  def delays(orig:Station) -> delays:List[String]
+  ```
+
+- [ ] Send feedback
+
+  ```python
+  def feedback(msg:str) -> confirmationAndEmail:str
+  ```
+
+Future Features
+---------------
+
+- [ ] Weather, station info, around the station
+
+  ```python
+  def stationInfo(sta:Station) -> stationInfo:str
+  ```
+
+- [ ] Weekly poll?
+
+  ```python
+  def weeklyPollSubmission(response:int) -> confirmation:bool
+  ```
+
+- [ ] Fun things for BART ride (maybe XKCD comics?)
+
+  ```python
+  def entertainMe() -> stuff:Union[Image,String,Url]
+  ```
+
+- [ ] Report something to BART police at station
+
+  ```python
+  def reportEventToPolice(sta:Station=None) -> confirmationAndInfo:str
+  ```
+
+- [ ] Set up Uber or Lyft
+
+  ```python
+  def uberLyftLink(setUpUber:bool, dest:Station, arr:Time) -> handle:Url
+  ```
+
+- [ ] Reminders (not exact implementation)
+  - [ ] Ask to set up reminder to transfer or for arrival (Send callback on positive?)
+
+    ```python
+    def reminder() -> callback:Callable[[bool, bool],Context]
+    ```
+
+    Allow user to silence this feature if both are false (after three times?)
+
+  - [ ] Request reminder to transefer and/or get off (remind user that this is a beta feature)
+
+    ```python
+    def requestReminders(transfer:bool, arr:bool, context:Context) -> confirmSetup:bool
+    ```
+
+- [ ] Nearest BART station with some amount of error (thinking about SF stations that are really close to each other)
+
+  ```python
+  def nearestStation(loc:Location) -> stas:Tuple[dist,Station]
+  ```
+
+- [ ] Support holiday schedules
+
+- [ ] Commute capabilities
+  - [ ] Name commutes
+  - [ ] Set up reminders to catch commutes
+  - [ ] Ability to change reminder time and delete commutes
+  - [ ] Limit to only 5 commutes per user?
+  - [ ] After three of the same queries for station arrivals, suggest making a Commute
