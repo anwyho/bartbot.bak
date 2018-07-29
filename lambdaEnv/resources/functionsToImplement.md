@@ -126,4 +126,3 @@ Future Features
   - [ ] Ability to change reminder time and delete commutes
   - [ ] Limit to only 5 commutes per user?
   - [ ] After three of the same queries for station arrivals, suggest making a Commute
-
