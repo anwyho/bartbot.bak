@@ -2,7 +2,7 @@
 
 > Doot doot, my dudes.
 
-## A Future Relatable Moment
+## :sparkles: A New Hope
 
 *Oh shoot.*
 
@@ -18,14 +18,14 @@
 
 :sunglasses:
 
-## Motivation
+## :thought_balloon: Motivation
 
 There were about twenty questions that motivated me to develop this Messenger chat bot.
 
 emoji test :smile: :monorail: :light_rail: :metro:
 blah blah blah
 
-## Contributing
+## :pray: Contributing
 
 See the [contributing guideline](contributing.md).
 
@@ -34,7 +34,7 @@ See the [contributing guideline](contributing.md).
 This is an awesome get-started article!
 [Run Node.js Facebook Messenger Chat Bot on AWS Lambda](https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76) by [Igor Khomenko](https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup)
 
-## Licensing
+## :key: Licensing
 
 [GNU GLPv3](LICENSE) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
 
