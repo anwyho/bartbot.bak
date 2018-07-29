@@ -14,15 +14,15 @@
 
 > **4 min** until the next train from **Bayfair to Powell**. Smell the roses - but not for too long. :rose:
 
-***You***:
+***You***, *now slowing to a saunter*:
 
-:sunglasses:
+> :sunglasses:
 
 ## :thought_balloon: Motivation
 
 There were about twenty questions that motivated me to develop this Messenger chat bot.
 
-emoji test :smile: :monorail: :light_rail: :metro:
+<!-- emoji test :smile: :monorail: :light_rail: :metro: -->
 blah blah blah
 
 ## :pray: Contributing
