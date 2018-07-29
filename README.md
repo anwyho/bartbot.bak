@@ -1,6 +1,6 @@
 # :light_rail: Bartbot
 
-> Doot doot, my dudes.
+> *Doot doot*, my dudes.
 
 ## :sparkles: A New Hope
 
@@ -20,7 +20,13 @@
 
 ## :thought_balloon: Motivation
 
-There were about twenty questions that motivate the development of this Messenger chat bot. 
+<!-- TODO: This section is not done yet -->
+
+There are about twenty questions that motivate the development of this Messenger chat bot, but the core of the app is to bring the user the most instant and up-to-date information about their trip. 
+
+## Implementation
+
+<!-- TODO: This section is not done yet -->
 
 stuff about structure
 * amazon web services
@@ -39,14 +45,19 @@ stuff about structure
 
 ## :pray: Contributing
 
+<!-- TODO: This section is not done yet -->
+
 See the [contributing guideline](contributing.md).
 
 Check out the [functions to implement checklist](./lambdaEnv/resources/functionsToImplement.md)
 
 ## :heart_eyes: Acknowledgements
 
+<!-- TODO: This section is not done yet -->
+
 This is an awesome get-started article!
-[Run Node.js Facebook Messenger Chat Bot on AWS Lambda](https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76) by [Igor Khomenko](https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup)
+
+* [Run Node.js Facebook Messenger Chat Bot on AWS Lambda](https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76) by [Igor Khomenko](https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup)
 
 ## :key: Licensing
 
