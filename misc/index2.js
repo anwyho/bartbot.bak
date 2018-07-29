@@ -1,9 +1,9 @@
 'use strict';
-var VERIFY_TOKEN = "a_random_string";
+var VERIFY_TOKEN = "my_awesome_token";
 var https = require('https');
-var PAGE_ACCESS_TOKEN = "EAADFvGcu0k4BAPjkS3vbe8Gq7whmnH0HV9bkGRGdrjW0pc5EjEZCe2AfiEURhq8Dw6IhfXIcdgangd2VN0qcFJelddhBD3xLaGpCLT8NTZBSCm56VFiNDp0yMqkXg11Pmi0Ildt8cceJQskMfX8PuW1bMYVT83jaR20W8ZC7FBHR5OdzemU";
-
+var PAGE_ACCESS_TOKEN = "EAADFvGcu0k4BAA76OyWLPxlGxOZAJCsNgGFbfZBXYZBp3olboQoZAJfCJMUZBwUGiannE8oS62q2jXlnM9DGNhIwnP8bQYPhbPsjFylPtMYAiOvK4YsgVxzhOQBnhbHDjWC1MwSOqS0iO5NpJSWNNJ2XuKJ88xz6C4xZAQBXEM13smZBuijWHLd";
 exports.handler = (event, context, callback) => {
+    
   // process GET request
   if(event.queryStringParameters){
     var queryParams = event.queryStringParameters;
@@ -82,11 +82,23 @@ function receivedMessage(event) {
         //sendGenericMessage(senderID);
         break;
       default:
+        messageText = mimicMessage(messageText)
         sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
+}
+function mimicMessage(msg){
+    var result = '';
+    for (var i = 0; i < msg.length; i++) {
+        if (Math.random() > 0.5) {
+            result += msg.charAt(i).toUpperCase();
+        } else {
+            result += msg.charAt(i).toLowerCase();
+        }
+    }
+    return result;
 }
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
