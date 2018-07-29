@@ -1,8 +1,20 @@
-# Bartbot
+# :light_rail: Bartbot
 
-> short description
+> Doot doot, my dudes.
 
-## How to use it
+## Motivation
+
+_Oh shoot_
+
+You: 
+
+> Do I need to run to catch the Bayfair train to Powell?
+
+Bartbot:
+
+> **4 min** until the next train from **Bayfair to Powell**. Smell the roses - but not for too long. :rose:
+
+There were about twenty questions motivated me to code out this Messenger chat bot.
 
 emoji test :smile: :monorail: :light_rail: :metro:
 blah blah blah
@@ -11,6 +23,17 @@ blah blah blah
 
 this is why
 
-## License
+## Contributing
 
-GNU GLPv3 Copyright 2018, Anthony Ho
+See the [contributing guideline](contributing.md).
+
+## Acknowledgements
+
+This is an awesome get-started article!
+[Run Node.js Facebook Messenger Chat Bot on AWS Lambda](https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76) by [Igor Khomenko](https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup)
+
+## Licensing
+
+[GNU GLPv3](LICENSE) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
+
+https://kogalkbizj.execute-api.us-west-1.amazonaws.com/default/jsProcessMessages
