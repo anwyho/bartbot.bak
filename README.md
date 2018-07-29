@@ -6,7 +6,7 @@
 
 *Oh shoot.*
 
-***You***, *yelling into your phone as you sprint from your Prius*:
+***You, yelling*** *into your phone as you sprint from your Prius*:
 
 > Do I need to run to catch the Bayfair train to Powell?
 
@@ -16,18 +16,32 @@
 
 ***You***, *now slowing to a saunter*:
 
-> :sunglasses:
+> :sunglasses: (:nose:)
 
 ## :thought_balloon: Motivation
 
-There were about twenty questions that motivated me to develop this Messenger chat bot.
+There were about twenty questions that motivate the development of this Messenger chat bot. 
+
+stuff about structure
+* amazon web services
+  * lambda
+  * s3 buckets?
+  * dynamodb?
+* facebook messenger
+  * nlp
+  * testers
+* bart api
+  * json
+  * writing to databases?
+  * python requests
 
 <!-- emoji test :smile: :monorail: :light_rail: :metro: -->
-blah blah blah
 
 ## :pray: Contributing
 
 See the [contributing guideline](contributing.md).
+
+Check out the [functions to implement checklist](./lambdaEnv/resources/functionsToImplement.md)
 
 ## :heart_eyes: Acknowledgements
 
