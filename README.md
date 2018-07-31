@@ -22,13 +22,14 @@
 
 <!-- TODO: This section is not done yet -->
 
-There are about twenty questions that motivate the development of this Messenger chat bot, but the core of the app is to bring the user the most instant and up-to-date information about their trip. 
+There are about twenty questions that motivate the development of this Messenger chat bot, but the core of the app is to bring the user the most instant and up-to-date information about their trip.
 
 ## Implementation
 
 <!-- TODO: This section is not done yet -->
 
 stuff about structure
+
 * amazon web services
   * lambda
   * s3 buckets?
@@ -50,6 +51,15 @@ stuff about structure
 See the [contributing guideline](contributing.md).
 
 Check out the [functions to implement checklist](./lambdaEnv/resources/functionsToImplement.md)
+
+## Components
+
+* [Amazon Web Services](broken link) - description
+  * [Lambda](broken link) - description
+* [Facebook Messenger Apps](broken link) - description
+  * [Wit.io](broken link) - Natural language processing
+* [BART API](api.bart.gov)
+* [Requests](broken link) - description
 
 ## :heart_eyes: Acknowledgements
 
