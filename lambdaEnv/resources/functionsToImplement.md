@@ -11,6 +11,15 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   Directions can be either northbound or southbound. Time is BART time, with BART midnight being 2:27 AM.
 
+  <details><summary>Example Queries</summary><p>
+
+  - hello
+  - hello again
+
+<!-- Implment this soon -->
+
+  </p></details>
+
 - [ ] Next arrival times at or after departure time or current time
 
   ```python
