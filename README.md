@@ -1,7 +1,5 @@
 # :light_rail: Bartbot
 
-> *Doot doot*, my dudes.
-
 ## :sparkles: A New Hope
 
 *Oh shoot.*
@@ -74,3 +72,5 @@ This is an awesome get-started article!
 [GNU GLPv3](LICENSE) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
 
 <!-- https://kogalkbizj.execute-api.us-west-1.amazonaws.com/default/jsProcessMessages -->
+
+> *Doot doot*, my dudes.
