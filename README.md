@@ -33,7 +33,7 @@ stuff about structure
   * s3 buckets?
   * dynamodb?
 * facebook messenger
-  * nlp
+  * wit.ai
   * testers
 * bart api
   * json
@@ -52,12 +52,12 @@ Check out the [functions to implement checklist](./lambdaEnv/resources/functions
 
 ## Components
 
-* [Amazon Web Services](broken link) - description
-  * [Lambda](broken link) - description
-* [Facebook Messenger Apps](broken link) - description
-  * [Wit.io](broken link) - Natural language processing
-* [BART API](api.bart.gov)
-* [Requests](broken link) - description
+* [Amazon Web Services](https://aws.amazon.com/) - description
+  * [Lambda](https://aws.amazon.com/lambda/) - description
+* [Facebook Messenger Apps](https://messenger.fb.com/) - description
+  * [Wit.ai](http://wit.ai) - Natural language processing
+* [BART API](api.bart.gov) - get real-time queries on BART schedule
+* [Requests](http://docs.python-requests.org/en/master/) - description
 
 ## :heart_eyes: Acknowledgements
 
