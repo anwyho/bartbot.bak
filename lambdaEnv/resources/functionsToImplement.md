@@ -3,6 +3,10 @@ Functions to Implement
 
 All function stubs are written in Python psudocode. See the [Python 3.5 Typing module](https://docs.python.org/3/library/typing.html) for more information on how to read these stubs.
 
+- [ ] App greeting. [Set it here.](https://developers.facebook.com/docs/messenger-platform/discovery/welcome-screen#set_greeting)
+
+- [ ] Incorporate accessibility emojis (maybe parking emojis too?) and cost/trip
+
 - [ ] Next departure times to arrive before or by arrival time
 
   ```python
@@ -13,18 +17,23 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
+  Simple Queries
 
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - When is the next train from Union City to Bay Fair?
+  - What are the next trains out of Dublin? (Dublin/Pleasanton)
+  - Can I catch the next Powell to Concord?
+  - n concord to gpark
+
+  Advanced Queries
+
+  - Should I run to catch the next Rockridge to W Oakland?
+  - What are the next trains to El Cerrito Plaza if I get to Fremont BART by 6pm
+  - nconc tmrw 6pm to gpark
+  - What barts come at 7am tomorrow from Fremont to Montgomery?
+  - When is the first BART from West Dublin Pleasanton to Colma?
+  - What is the first train out of Warm Springs?
+  - next train from s fremont
+    - any/north/northbound/daly city/
 
   </p></details>
 
@@ -36,18 +45,17 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
+  Simple Queries
 
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - What trains get to at SFO from MacArthur next Tuesday at noon?
+  - what are the trains that arrive to coliseum by 7p from s fremont
+  - When should I get to South San Francisco to get to Richmond by 4p?
+
+  Advanced Queries
+  - last bart from embarcadero to dberk
+  - s hay by 8pm
+    - powell
+  - can i get to s fremont from el cerrito by 4 pm?
 
   </p></details>
 
@@ -61,25 +69,25 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
   def eta(context:Context) -> eta:Time
   ```
 
-  - [ ] Returns in a forwarding-friendly string
+  - [ ] Returns in a human-friendly string
     ```python
     def forwardableEta(eta:Time) -> textEta:str
     ```
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
+  Simple Queries
 
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - What time will I get to San Bruno?
+  - When will I arrive at Powell?
+  - eta to rockridge
+
+  Advanced Queries
+
+  - Can I get an eta there?
+  - When is my eta?
+  - What's my eta?
+  - wat time arrive
 
   </p></details>
 
@@ -91,22 +99,14 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - How much is a ride from Rockridge to South Fremont?
+  - how much is dberk to powell
+  - what does dub to conc cost
+  - how expensive is bayfair to colma
 
   </p></details>
 
-- [ ] Accessibility at station
+- [ ] Accessibility at station (maybe send an emoji instead)
 
   ```python
   def accessibility(sta:Station) -> isAccessible:bool
@@ -114,18 +114,9 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - Is Colma wheelchair accessible?
+  - accessibility at bayfair
+  - montgomery accessibility
 
   </p></details>
 
@@ -137,18 +128,9 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - Does Union City have parking?
+  - parking at s fremont
+  - ashby parking
 
   </p></details>
 
@@ -160,18 +142,8 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - are there any delays?
+  - delays
 
   </p></details>
 
@@ -183,18 +155,8 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - feedback
+  - suggestions
 
   </p></details>
 
@@ -202,23 +164,20 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
   <details><summary>Example Queries</summary><p>
 
-  <!-- Implment this soon -->
-
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - how can i support
+  - how can i donate
+  - donation
 
   </p></details>
 
 Future Features
 ---------------
+
+- [ ] Nearest station
+  
+  ```python
+  def nearestStation(loc:Location) -> sta:Station
+  ```
 
 - [ ] Weather, station info, around the station
 
@@ -230,16 +189,9 @@ Future Features
 
   <!-- Implment this soon -->
 
-  - q1
-  - q2
-  - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
+  - What's the weather around downtown berkeley tomorrow?
+  - Will it rain around sfo on tuesday?
+  - weather at d city
 
   </p></details>
 
@@ -279,13 +231,6 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
 
@@ -302,13 +247,6 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
 
@@ -325,13 +263,6 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
 
@@ -349,13 +280,6 @@ Future Features
     - q1
     - q2
     - q3
-    - q4
-    - q5
-    - q6
-    - q7
-    - q8
-    - q9
-    - q10
 
     </p></details>
 
@@ -374,13 +298,6 @@ Future Features
     - q1
     - q2
     - q3
-    - q4
-    - q5
-    - q6
-    - q7
-    - q8
-    - q9
-    - q10
 
     </p></details>
 
@@ -397,13 +314,6 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
 
@@ -416,13 +326,6 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
 
@@ -440,12 +343,5 @@ Future Features
   - q1
   - q2
   - q3
-  - q4
-  - q5
-  - q6
-  - q7
-  - q8
-  - q9
-  - q10
 
   </p></details>
