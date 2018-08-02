@@ -17,7 +17,7 @@ import passingStatus
 import apiKeys
 
 # Public API key - this code will not be run very often. 
-KEY = apiKeys.PUBLIC
+KEY = apiKeys.BART_PUBLIC
 # TODO: Generalize this path to make it easier to find later in project
 TARGET = os.path.join(os.path.dirname(__file__), "..", "resources", "stationAbbrToStationName.json")
 
