@@ -345,3 +345,8 @@ Future Features
   - q3
 
   </p></details>
+
+- [ ] Implement [Google speech-to-text](https://cloud.google.com/speech-to-text/)
+
+- [ ] Implement a fuzzy search for station names
+  - [ ] Change this for speech-to-text
