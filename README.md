@@ -12,7 +12,7 @@
 
 > **4 min** until the next train from **Bayfair to Powell**. Smell the roses - but not for too long. :rose:
 
-***You***, *now slowing to a saunter*:
+***You***, *taking a moment to catch your breath*:
 
 > :sunglasses: (:nose:)
 
@@ -20,7 +20,7 @@
 
 <!-- TODO: This section is not done yet -->
 
-There are about twenty questions that motivate the development of this Messenger chat bot, but the core of the app is to bring the user the most instant and up-to-date information about their trip.
+There are about twenty questions that drove the development of this Messenger chat bot, but the core of the app is to bring the user the most instant and up-to-date information about their trip.
 
 ## Implementation
 
