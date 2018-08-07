@@ -1,13 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# This file is licensed under GNU GLPv3. 
-# Check out the LICENSE file in the root directory for more information. 
-
 """Bartbot
 
 Simple function to parse response status of a request. Adopted from https://www.digitalocean.com/community/tutorials/how-to-use-web-apis-in-python-3"""
 
 __author__ = "Anthony W. Ho"
+
+from __future__ import print_function
 
 def check(response):
   """Returns True in the case of a passing response code. Returns false and prints out the error in the case of a bad response code."""

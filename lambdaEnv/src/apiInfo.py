@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# apiKeys.py
-# This file is licensed under GNU GLPv3. 
-# Check out the LICENSE file in the root directory for more information. 
-
 # API URLs
-BART_API_URL = 'http://api.bart.gov/api'
-DARK_SKY_API_URL = 'https://api.darksky.net/forecast'
+BART_API_URL = 'http://api.bart.gov/api/'
+DARK_SKY_API_URL = 'https://api.darksky.net/forecast/'
 
 # API Keys
 BART_PUBLIC = 'MW9S-E7SL-26DU-VV8V' 

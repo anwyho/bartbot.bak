@@ -48,7 +48,7 @@ stuff about structure
 
 See the [contributing guideline](contributing.md).
 
-Check out the [functions to implement checklist](./lambdaEnv/resources/functionsToImplement.md)
+Check out the [functions to implement checklist](./lambdaEnv/resources/functionsToImplement.md).
 
 ## Components
 

@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# updateStations.py
-# This file is licensed under GNU GLPv3. 
-# Check out the LICENSE file in the root directory for more information. 
-
 """Bartbot
 
 Run this program roughly every two weeks or when necessary to keep station list up to date. Program contacts BART API and writes JSON/Python Dict object to file `resources/stationABbrToStationName.json` for other programs to read."""
@@ -11,23 +5,31 @@ Run this program roughly every two weeks or when necessary to keep station list 
 __author__ = 'Anthony W. Ho'
 
 from json import JSONEncoder
+
+import __future__
 import os
 import requests
 
 import passingStatus
-import apiKeys
+import apiInfo
 
 # Public API key - this code will not be run very often. 
-KEY = apiKeys.BART_PUBLIC
+KEY = apiInfo.BART_PUBLIC
 # TODO: Generalize this path to make it easier to find later in project
 TARGET = os.path.join(os.path.dirname(__file__), "..", "resources", "stationAbbrToStationName.json")
 
 def updateStations():
   print('Updating stations...')
-  urlEndpoint = 'http://api.bart.gov/api/stn.aspx'
+  urlEndpoint = apiInfo.BART_API_URL + 'stn.aspx'
   payload = {'cmd': 'stns', 'key': KEY, 'json': 'y'}
 
-  r = requests.get(urlEndpoint, payload)
+  try:
+    r = requests.get(urlEndpoint, payload)
+  except Exception as e:
+    print(e)
+    print('Error: Could not establish connection to {}.'.format(urlEndpoint))
+    return False
+  
   content = r.content.decode('utf-8')
 
   if not passingStatus.check(r):
