@@ -1,9 +1,3 @@
-#!#/usr/bin/python3
-# -*- coding: utf-8 -*-
-# handler.py
-# This file is licensed under GNU GLPv3. 
-# Check out the LICENSE file in the root directory for more information. 
-
 Functions to Implement
 ======================
 
@@ -180,7 +174,7 @@ Future Features
 ---------------
 
 - [ ] Nearest station
-  
+
   ```python
   def nearestStation(loc:Location) -> sta:Station
   ```
@@ -355,4 +349,4 @@ Future Features
 - [ ] Implement [Google speech-to-text](https://cloud.google.com/speech-to-text/)
 
 - [ ] Implement a fuzzy search for station names
-  - [ ] Change this for speech-to-text
+  - [ ] Change this for speech-to-text (phonetic fuzzy search)
