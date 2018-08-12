@@ -1,14 +1,17 @@
-# !#/usr/bin/python3
-# -*- coding: utf-8 -*-
-# handler.py
-# This file is licensed under GNU GLPv3. 
-# Check out the LICENSE file in the root directory for more information. 
-
 from __future__ import print_function
 import boto3
 import botocore
+import json
 import requests
 
-def lambda_handler():
-  print("sup")
+print('Loading function')
+
+def lambda_handler(event, context):
+    #print("Received event: " + json.dumps(event, indent=2))
+    print("value1 = " + event['key1'])
+    print("value2 = " + event['key2'])
+    print("value3 = " + event['key3'])
+    return event['key1']  # Echo back the first key value
+    #raise Exception('Something went wrong')
+
 
