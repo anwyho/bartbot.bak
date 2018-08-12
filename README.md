@@ -57,7 +57,7 @@ Check out the [functions to implement checklist](./lambdaEnv/resources/functions
 * [Facebook Messenger Apps](https://messenger.fb.com/) - description
   * [Wit.ai](http://wit.ai) - Natural language processing
 * [BART API](api.bart.gov) - get real-time queries on BART schedule
-* [Requests](http://docs.python-requests.org/en/master/) - description
+* [Requests](http://docs.python-requests.org/en/master/) - descriptionn
 
 ## :heart_eyes: Acknowledgements
 
