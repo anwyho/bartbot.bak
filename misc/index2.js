@@ -46,8 +46,7 @@ exports.handler = (event, context, callback) => {
             console.log("Webhook received unknown event: ", event);
           }
         });
-    });
-    
+      });
     }
     // Assume all went well.
     //
