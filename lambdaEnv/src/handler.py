@@ -14,6 +14,8 @@ def lambda_handler(event, context):
   return event['key1']  # Echo back the first key value
   #raise Exception('Something went wrong')
 
+  print("hello owrld")
+
   print(event.queryStringParameters)
 
   # GET request

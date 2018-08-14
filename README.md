@@ -14,7 +14,7 @@
 
 ***You***, *taking a moment to catch your breath*:
 
-> :sunglasses: (:nose:)
+> :sunglasses:
 
 ## :thought_balloon: Motivation
 
