@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # start in ../bartbot/
-if [[ ! "$PWD" == *bartbot/lambdaEnv/src ]]; then
+if [[ ! "$PWD" == *bartbot/env/src ]]; then
   echo "Error: current directory must be \"../bartbot/lambdaEnv/src\"." 
   exit 1
 fi
