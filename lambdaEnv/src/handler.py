@@ -9,7 +9,7 @@ from json import JSONDecoder
 
 import apiInfo
 
-VERIFY_TOKEN = "my_awesome_token";
+VERIFY_TOKEN = "my_appreciation";
 PAGE_ACCESS_TOKEN = apiInfo.FB_PAGE_ACCESS_KEY
 
 def processMessage(event, context):
