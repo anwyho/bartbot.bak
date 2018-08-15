@@ -30,7 +30,7 @@ exports.handler = (event, context, callback) => {
   
   // process POST request
   }else{
-    var data = JSON.parse(event.body);
+    var data = JSON.parse(event.bdody);
      
     // Make sure this is a page subscription
     if (data.object === 'page') {
