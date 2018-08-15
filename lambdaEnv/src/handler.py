@@ -42,7 +42,7 @@ app = Bottle()
 
 # Facebook Messenger GET Webhook
 @app.get('/webhook')
-def messenger_webhook():
+def processMessage():
     """
     A webhook to return a challenge
     """
