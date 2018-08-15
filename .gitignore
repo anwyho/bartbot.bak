@@ -31,6 +31,7 @@
 *.pyc
 *.pyo
 .Python
+__pycache__
 
 # OS generated files #
 ######################
