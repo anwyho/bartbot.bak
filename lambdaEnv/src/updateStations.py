@@ -2,11 +2,12 @@
 
 Run this program roughly every two weeks or when necessary to keep station list up to date. Program contacts BART API and writes JSON/Python Dict object to file `resources/stationABbrToStationName.json` for other programs to read."""
 
+import __future__
+
 __author__ = 'Anthony W. Ho'
 
 from json import JSONEncoder
 
-import __future__
 import os
 import requests
 
