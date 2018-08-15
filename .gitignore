@@ -30,6 +30,7 @@
 ################
 *.pyc
 *.pyo
+.Python
 
 # OS generated files #
 ######################
