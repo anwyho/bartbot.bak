@@ -23,10 +23,3 @@ def processMessage(event, context):
 
   return event['key1']  # Echo back the first key value
   raise Exception('Something went wrong')
-
-
-
-
-
-
-# testt
