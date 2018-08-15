@@ -16,10 +16,10 @@ def processMessage(event, context):
   print("Received event: " + json.dumps(event, indent=2))
 
   # GET request
-  # TODO
+  # TODO: Do this
 
   # POST request
-  # TODO
+  # TODO: Do this
 
   return event['key1']  # Echo back the first key value
   raise Exception('Something went wrong')
