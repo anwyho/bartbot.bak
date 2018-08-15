@@ -267,6 +267,7 @@ Future Features
   </p></details>
 
 - [ ] Reminders (not exact implementation)
+  - [ ] Request [subscription messaging](https://www.facebook.com/bartbotable/settings/?tab=messenger_platform)
   - [ ] Ask to set up reminder to transfer or for arrival (Send callback on positive?)
 
     ```python
