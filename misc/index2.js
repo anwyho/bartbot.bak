@@ -88,6 +88,7 @@ function receivedMessage(event) {
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
+
 function mimicMessage(msg){
     var result = '';
     for (var i = 0; i < msg.length; i++) {
@@ -99,6 +100,7 @@ function mimicMessage(msg){
     }
     return result;
 }
+
 function sendTextMessage(recipientId, messageText) {
   var messageData = {
     recipient: {
@@ -110,6 +112,7 @@ function sendTextMessage(recipientId, messageText) {
   };
   callSendAPI(messageData);
 }
+
 function callSendAPI(messageData) {
   var body = JSON.stringify(messageData);
   var path = '/v2.6/me/messages?access_token=' + PAGE_ACCESS_TOKEN;
