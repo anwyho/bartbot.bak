@@ -3,9 +3,6 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-# from aws_xray_sdk.core import xray_recorder
-# from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
-
 import os
 import requests
 import json
@@ -15,52 +12,53 @@ from wit import Wit
 
 app = Flask(__name__)
 
-# xray_recorder.configure(service='handler')
-# XRayMiddleware(app, xray_recorder)
-
-
-# Wit.ai parameters
 WIT_TOKEN = os.environ.get('WIT_TOKEN')
-# WIT_TOKEN = 'SS3OBO2R4BNYYUBW6EBI4WR2ZJO4VIF3'
-# Messenger API parameters
 FB_PAGE_TOKEN = os.environ.get('FB_PAGE_TOKEN')
-# FB_PAGE_TOKEN = 'EAADFvGcu0k4BAA76OyWLPxlGxOZAJCsNgGFbfZBXYZBp3olboQoZAJfCJMUZBwUGiannE8oS62q2jXlnM9DGNhIwnP8bQYPhbPsjFylPtMYAiOvK4YsgVxzhOQBnhbHDjWC1MwSOqS0iO5NpJSWNNJ2XuKJ88xz6C4xZAQBXEM13smZBuijWHLd'
-# A user secret to verify webhook get request.
 FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
-# FB_VERIFY_TOKEN = 'OF_MY_APPRECIATION'
 
+FB_PAGE_ACCESS_TOKEN = "EAADFvGcu0k4BAEDPXrULwvkFDP6tqmwLTOJJPah6GO9OEndFggkXMosHmRzO4edZAZCtEuFv6TvcLDDQvr6eMeb2XDZAZBLKoZAOIZAVPzgsQcn96AZCj10Ek653lsiUerZCqlchqqtZBxLh1S71XmYdAr7vsgEGvxCUpbyBiGzUrYAZDZD"
+FB_VERIFY_TOKEN = "OF_MY_APPRECIATION"
+WIT_TOKEN = "SS3OBO2R4BNYYUBW6EBI4WR2ZJO4VIF3"
 
-@app.route("/")
-def main_handle():
-    return "in main handle"
+client = Wit(access_token=WIT_TOKEN)
+
+# @app.route("/")
+# def main_handle():
+#     return "in main handle"
 
 @app.route("/webhook", methods=['POST', 'GET'])
 def handle_webhook():
     if request.method == 'GET':
-        webhook_challenge()
+        return webhook_challenge(request)
+    else:
+        # return simple_post(request)
+        return messenger_post(request)
 
+
+def simple_post(request):
+    pass
+
+    
+def webhook_challenge(request):
     """
     A webhook to return a challenge
     """
-    if request.method == 'GET':
-        query = request.args
-        verify_token = query['hub.verify_token']
-        # check whether the verify tokens match
-        if query['hub.mode'] == 'subscribe' and \
-                verify_token == FB_VERIFY_TOKEN:
-            # respond with the challenge to confirm
-            challenge = query['hub.challenge']
-            return challenge
-        else:
-            return 'Invalid Request or Verification Token'
+    queryParams = request.args
+    verify_token = queryParams['hub.verify_token']
+    # check whether the verify tokens match
+    if queryParams['hub.mode'] == 'subscribe' and \
+            verify_token == FB_VERIFY_TOKEN:
+        # respond with the challenge to confirm
+        challenge = queryParams['hub.challenge']
+        return challenge
     else:
-        return messenger_post()
+        return 'Invalid Request or Verification Token'
 
-def messenger_post():
+def messenger_post(request):
     """
     Handler for webhook (currently for postback and messages)
     """
-    data = request.json
+    data = request.args
     if data['object'] == 'page':
         for entry in data['entry']:
             # get all the messages
@@ -75,25 +73,27 @@ def messenger_post():
                 text = message['message']['text']
                 # Let's forward the message to Wit /message
                 # and customize our response to the message in handle_message
-                response = client.message(msg=text, context={'session_id':fb_id})
+                response = client.message(msg=text, context={'session_id':fb_id}, verbose=True)
                 handle_message(response=response, fb_id=fb_id)
+                return 'Handled Message'
     else:
         # Returned another event
         return 'Received Different Event'
-    return None
+    return 'Did not handle message...'
 
 def fb_message(sender_id, text):
     """
     Function for returning response to messenger
     """
     data = {
+        'messaging_type': 'RESPONSE',
         'recipient': {'id': sender_id},
         'message': {'text': text}
     }
     # Setup the query string with your PAGE TOKEN
     qs = 'access_token=' + FB_PAGE_TOKEN
     # Send POST request to messenger
-    resp = requests.post('https://graph.facebook.com/me/messages?' + qs,
+    resp = requests.post('https://graph.facebook.com/v2.6/me/messages?' + qs,
                          json=data)
     return resp.content
 
@@ -125,8 +125,6 @@ def handle_message(response, fb_id):
     # send message
     fb_message(fb_id, text)
 
-# Setup Wit Client
-client = Wit(access_token=WIT_TOKEN)
 
 if __name__ == '__main__':
     app.run()
