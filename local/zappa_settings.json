@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "app_function": "src.handler.app",
+        "aws_region": "us-west-1",
+        "profile_name": "default",
+        "project_name": "bartbot-flask",
+        "runtime": "python3.6",
+        "s3_bucket": "bart-bucket-p",
+        "environment_variables": {
+            "FB_PAGE_ACCESS_TOKEN": "EAADFvGcu0k4BAA76OyWLPxlGxOZAJCsNgGFbfZBXYZBp3olboQoZAJfCJMUZBwUGiannE8oS62q2jXlnM9DGNhIwnP8bQYPhbPsjFylPtMYAiOvK4YsgVxzhOQBnhbHDjWC1MwSOqS0iO5NpJSWNNJ2XuKJ88xz6C4xZAQBXEM13smZBuijWHLd",
+            "FB_VERIFY_TOKEN": "OF_MY_APPRECIATION",
+            "WIT_TOKEN": "SS3OBO2R4BNYYUBW6EBI4WR2ZJO4VIF3"
+        }
+    }
+}
