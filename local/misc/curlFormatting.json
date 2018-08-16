@@ -1,0 +1,8 @@
+curl - X GET "https://j8qd80tkh5.execute-api.us-west-1.amazonaws.com/dev/webhook?hub.verify_token=OF_MY_APPRECIATION&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
+curl - X GET "https://j8qd80tkh5.execute-api.us-west-1.amazonaws.com/dev/webhook"
+
+curl -H "Content-Type: application/json" -X POST "https://j8qd80tkh5.execute-api.us-west-1.amazonaws.com/dev/webhook" -d '{"object": "page","entry": [{ "messaging": [{ "sender": {            "id": "<PSID>" }, "recipient": { "id": "<PAGE_ID>" }, "timestamp": 1458692752478, "message": { "mid": "mid.1457764197618:41d102a3e1ae206a38", "text": "hello, world!", "quick_reply": { "payload": "<DEVELOPER_DEFINED_PAYLOAD>" }}}]}]}'
+
+curl -X GET "http://0.0.0.0:1337/webhook?hub.verify_token=OF_MY_APPRECIATION&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe"
+
+curl -H "Content-Type: application/json" -X POST "localhost:1337/webhook" -d '{"object": "page", "entry": [{"messaging": [{"message": "TEST_MESSAGE"}]}]}'
