@@ -1,57 +1,27 @@
 {
-  "mid": "1Hd65Swe_TCTkrySuRo3kokLKYgxzkzkA1c5Qo1fAeHnf_Uq1zVw8HNvrtYepZGbGxK3IY6uYTsx7ow1wzJtWw",
-  "seq": 1547652,
-  "text": "take me to fremont from cv",
-  "nlp": {
-    "entities": {
-      "dest": [{
-        "confidence": 0.99935807830335,
-        "value": "WARM",
-        "type": "value",
-        "_entity": "station",
-        "_role": "dest",
-        "_body": "fremont",
-        "_start": 11,
-        "_end": 18
-      }],
-      "orig": [{
-        "confidence": 0.96064053293148,
-        "value": "CAST",
-        "type": "value",
-        "_entity": "station",
-        "_role": "orig",
-        "_body": "cv",
-        "_start": 24,
-        "_end": 26
-      }],
-      "intent": [{
-        "confidence": 0.99988305275425,
-        "value": "travel",
-        "_entity": "intent"
-      }, {
-        "confidence": 0.00011313966685051,
-        "value": "cost",
-        "_entity": "intent"
-      }, {
-        "confidence": 0.0000037366938265871,
-        "value": "weather",
-        "_entity": "intent"
-      }],
-      "bye": [{
-        "confidence": 0.00015822997755993,
-        "value": "true",
-        "_entity": "bye"
-      }],
-      "greetings": [{
-        "confidence": 0.000065074583886974,
-        "value": "true",
-        "_entity": "greetings"
-      }],
-      "thanks": [{
-        "confidence": 0.000031285332415761,
-        "value": "true",
-        "_entity": "thanks"
-      }]
+  "object": "page",
+  "entry": [
+    {
+      "id":"<PAGE_ID>",
+      "time":1458692752478,
+      "messaging": [
+        {
+          "sender": {
+            "id": "<PSID>"
+          },
+          "recipient": {
+            "id": "<PAGE_ID>"
+          },
+          "timestamp": 1458692752478,
+          "message": {
+            "mid": "mid.1457764197618:41d102a3e1ae206a38",
+            "text": "hello, world!",
+            "quick_reply": {
+              "payload": "<DEVELOPER_DEFINED_PAYLOAD>"
+            }
+          }
+        }
+      ]
     }
-  }
+  ]
 }
