@@ -50,3 +50,4 @@ Thumbs.db
 # Editor generated files #
 ##########################
 *.code-workspace
+*_settings.json
