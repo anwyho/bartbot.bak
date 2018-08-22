@@ -69,7 +69,7 @@ This is an awesome get-started article!
 
 ## :key: Licensing
 
-[GNU GLPv3](LICENSE) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
+[GNU GLPv3](license) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
 
 <!-- https://kogalkbizj.execute-api.us-west-1.amazonaws.com/default/jsProcessMessages -->
 
