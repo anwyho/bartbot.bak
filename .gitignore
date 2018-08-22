@@ -55,3 +55,4 @@ Thumbs.db
 # Environment #
 ###############
 .env
+zappa_settings.json
