@@ -16,10 +16,6 @@ app = Flask(__name__)
 FB_PAGE_TOKEN = os.environ.get('FB_PAGE_TOKEN')
 FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
 
-FB_PAGE_ACCESS_TOKEN = "EAADFvGcu0k4BAEDPXrULwvkFDP6tqmwLTOJJPah6GO9OEndFggkXMosHmRzO4edZAZCtEuFv6TvcLDDQvr6eMeb2XDZAZBLKoZAOIZAVPzgsQcn96AZCj10Ek653lsiUerZCqlchqqtZBxLh1S71XmYdAr7vsgEGvxCUpbyBiGzUrYAZDZD"
-FB_VERIFY_TOKEN = "OF_MY_APPRECIATION"
-# WIT_TOKEN = "SS3OBO2R4BNYYUBW6EBI4WR2ZJO4VIF3"
-
 @app.route("/")
 def main_handle():
     # print("in main handle")
