@@ -51,3 +51,7 @@ Thumbs.db
 ##########################
 *.code-workspace
 *_settings.json
+
+# Environment #
+###############
+.env
