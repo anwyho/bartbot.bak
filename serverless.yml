@@ -1,0 +1,35 @@
+# serverless.yml
+
+service: bartbot-serverless
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+
+custom:
+  wsgi:
+    app: src.handler.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-west-1
+
+functions:
+  app:
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+    environment:
+      FB_PAGE_ACCESS: ${ssm:fb-page-access}
+      FB_PAGE_ACCESS_2: ${ssm:fb-app-access}
+      FB_VERIFY_TOKEN: ${ssm:fb-verify-token}
+      DARK_SKY_PRIV: ${ssm:dark-sky-priv}
+      BART_PUBL: ${ssm:bart-publ}
+      BART_PRIV: ${ssm:bart-priv}
+      WIT_TOKEN: ${ssm:wit-server-token}

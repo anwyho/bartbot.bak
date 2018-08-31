@@ -1,0 +1,24 @@
+{
+  "name": "bartbot",
+  "version": "1.0.0",
+  "description": "A chatbot to get your BART live shedules and more!",
+  "main": "src.handler.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anwyho/bartbot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/anwyho/bartbot/issues"
+  },
+  "homepage": "https://github.com/anwyho/bartbot#readme",
+  "devDependencies": {
+    "serverless-python-requirements": "^4.1.1",
+    "serverless-wsgi": "^1.5.0"
+  }
+}
