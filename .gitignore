@@ -51,4 +51,6 @@ Thumbs.db
 # Environment #
 ###############
 .env
-zappa_settings.json
+node_modules
+.serverless
+misc
