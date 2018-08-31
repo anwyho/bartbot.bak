@@ -67,6 +67,10 @@ This is an awesome get-started article!
 
 * [Run Node.js Facebook Messenger Chat Bot on AWS Lambda](https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76) by [Igor Khomenko](https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup)
 
+This Serverless tutorial got my app up and running.
+
+* [Serverless tutorial!](https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/)
+
 ## :key: Licensing
 
 [GNU GLPv3](license) Copyright 2018, [Anthony Ho](http://github.com/anwyho).
