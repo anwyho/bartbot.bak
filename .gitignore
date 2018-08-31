@@ -53,4 +53,4 @@ Thumbs.db
 .env
 node_modules
 .serverless
-# misc
+misc
