@@ -19,6 +19,7 @@ FB_PAGE_ACCESS = os.environ.get('FB_PAGE_ACCESS')
 FB_PAGE_ACCESS_2 = os.environ.get('FB_PAGE_ACCESS_2')
 FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
 WIT_TOKEN = os.environ.get('WIT_TOKEN')
+FB_MESSAGES_URL = 'https://graph.facebook.com/v2.6/me/messages?'
 
 @app.route("/")
 def main_handle():
@@ -78,7 +79,7 @@ def messenger_post(request):
                 # We retrieve the message content
                 text = message['message']['text']
 
-                fb_message(fb_id,text)
+                turn_on_seen_and_typing_indicator(fb_id)
 
                 # Let's forward the message to Wit /message
                 # and customize our response to the message in handle_message
@@ -88,6 +89,9 @@ def messenger_post(request):
         # Returned another event
         return 'Received Different Event'
     return 'OK'
+
+def app_secret_proof():
+    return hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),msg=FB_PAGE_ACCESS.encode('utf-8'),digestmod=sha256).hexdigest()
 
 
 def fb_message(sender_id, text):
@@ -102,12 +106,10 @@ def fb_message(sender_id, text):
 
     # Setup the query string with your PAGE TOKEN
     qs = 'access_token=' + FB_PAGE_ACCESS + \
-        '&appsecret+proof=' + hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'), 
-            msg=FB_PAGE_ACCESS.encode('utf-8'), digestmod=sha256).hexdigest()
+        '&appsecret+proof=' + app_secret_proof() 
     # Send POST request to messenger
-    resp = requests.post('https://graph.facebook.com/v2.6/me/messages?' + qs,
+    resp = requests.post(FB_MESSAGES_URL + qs,
                          json=data)
-    return resp.content
 
 
 def first_entity_value(entities, entity):
@@ -136,6 +138,20 @@ def handle_message(response, fb_id):
         text = "We've received your message: " + response['_text']
     # send message
     fb_message(fb_id, text)
+
+def turn_on_seen_and_typing_indicator(fb_id):
+    data = {
+        'messaging_type': 'RESPONSE', 
+        'recipient': { 'id': fb_id }
+    }
+
+    qs = 'access_token=' + FB_PAGE_ACCESS + \
+        '&appsecret+proof=' + app_secret_proof() 
+
+    data['sender_action'] = 'typing_on'
+    resp = requests.post(FB_MESSAGES_URL+qs, json=data)
+    data['sender_action'] = 'mark_seen'
+    resp = requests.post(FB_MESSAGES_URL+qs, json=data)
 
 
 if __name__ == '__main__':
