@@ -3,14 +3,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import hashlib
 import hmac
 import json
 import os
 import requests
 
-from hashlib import sha256
 from flask import Flask, request, redirect, url_for
-from sys import argv
 from wit import Wit
 
 app = Flask(__name__)
@@ -75,7 +74,7 @@ def messenger_post(request):
                 # We retrieve the Facebook user ID of the sender
                 fb_id = message['sender']['id']
                 if fb_id == '<PSID>':
-                    raise ValueError("fb_id: {}".format(fb_id))
+                    raise ValueError("Invalid FB user ID: {}".format(fb_id))
                 # We retrieve the message content
                 text = message['message']['text']
 
@@ -91,7 +90,7 @@ def messenger_post(request):
     return 'OK'
 
 def app_secret_proof():
-    return hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),msg=FB_PAGE_ACCESS.encode('utf-8'),digestmod=sha256).hexdigest()
+    return hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),msg=FB_PAGE_ACCESS.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
 
 
 def fb_message(sender_id, text):
