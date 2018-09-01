@@ -8,7 +8,7 @@ plugins:
 
 custom:
   wsgi:
-    app: src.handler.app
+    app: src.webhook.app
     packRequirements: false
   pythonRequirements:
     dockerizePip: non-linux
