@@ -330,6 +330,8 @@ Future Features
 
   </p></details>
 
+- [ ] Friends also using bartbot
+
 - [ ] Commute capabilities
   - [ ] Name commutes
   - [ ] Set up reminders to catch commutes
