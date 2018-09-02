@@ -11,6 +11,8 @@ from .getChallenge import verify_challenge
 
 app = Flask(__name__)
 
+DEBUG = True
+
 
 @app.route("/")
 def main_handle():
@@ -21,10 +23,13 @@ def main_handle():
 
 @app.route("/webhook", methods=['POST', 'GET'])
 def handle_webhook():
-    log.basicConfig(filename='bartbot-info.log', format="%(levelname)s:%(module)s.%(funcName)s:%(lineno)d %(message)s:%(asctime)s", level=log.INFO)
-    # log.basicConfig(filename='bartbot-debug.log', level=log.DEBUG)
+    """Processes POST and GET requests from the Messenger Platform"""
+
+    log.basicConfig(filename='.bartbot-{}.log'.format('debug' if DEBUG else 'info'), format="%(levelname)s:%(module)s.%(funcName)s:%(lineno)d %(message)s:%(asctime)s", level=log.DEBUG if DEBUG else log.info)
     log.info("S T A R T I N G   L O G")
+    
     # TODO: Verify SHA-1
+
     res = None
     if request.method == 'GET':
         res = verify_challenge(request)
