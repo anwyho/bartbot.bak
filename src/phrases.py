@@ -12,7 +12,7 @@ def get_phrase(*sentences):
 def time_of_day(night=False):
     """Returns signifier for the time of day"""
     hour = time.localtime().tm_hour 
-    if night and hour > 21 or hour <= 4:
+    if night and (hour > 21 or hour <= 4):
         return "night"
     elif hour > 16:
         return "evening"
@@ -81,6 +81,15 @@ bye = [
     'Have a great time!',
     'Have a great time {fn}!',
     ]
+delivery = [
+    'Here it is!',
+    'Here you go!',
+    'Here ya go!',
+    'There ya go!',
+    'Here ya go!',
+    'Special delivery!',
+    'Special delivery, for {fn}'
+]
 
 
 
