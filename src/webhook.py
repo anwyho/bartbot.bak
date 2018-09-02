@@ -1,6 +1,7 @@
-from __future__ import absolute_import
-from __future__ import print_function
+# from __future__ import absolute_import
+# from __future__ import print_function
 
+import logging as log
 import sys
 
 from flask import Flask, request
@@ -14,14 +15,14 @@ app = Flask(__name__)
 @app.route("/")
 def main_handle():
     """Returns static website for Bartbot info"""
-    print("In main handle", file=sys.stderr)
+    log.info("In main handle")
     # TODO turn this into staticly delivered website
     return """Hello! This is the main API endpoint for Bartbot. What is Bartbot you ask? Check out <a href=\"http://github.com/anwyho/bartbot\">github.com/anwyho/bartbot</a> for more details."""
 
 
 @app.route("/webhook", methods=['POST', 'GET'])
 def handle_webhook():
-    print("In webhook", file=sys.stderr)
+    log.info("In webhook")
     # TODO: Verify SHA-1
     if request.method == 'GET':
         return verify_challenge(request)

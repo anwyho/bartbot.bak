@@ -1,12 +1,13 @@
-from __future__ import print_function
-from __future__ import unicode_literals
+# from __future__ import print_function
+# from __future__ import unicode_literals
 
 import random as r
 import time
 
+def get_phrase(*sentences):
+    """Constructs randomized sentences of phrase lists"""
+    return " ".join(map(r.choice,sentences))
 
-# Maybe implement some sort of caching and pulling from files? 
-    # (Maybe pull from an S3 bucket?)
 
 def time_of_day(night=False):
     """Returns signifier for the time of day"""
@@ -23,61 +24,67 @@ def time_of_day(night=False):
         return "day"
 
 
-class PhrasesFactory:
-    """Constructs phrases for Bartbot"""
+# Phrase lists
 
-    def __init__(self):
-        self.hello = [
-            'Greetings.',
-            'Hello there.',
-            'Sup!',
-            'Hello from the other side!',
-            'Good day!', 
-            'Good {time}!'.format(time=time_of_day()),
-            'Hi there!',
-            'Hello!',
-            'Hi!',
-        ]
-        self.cta = [
-            'Where are you headed?',
-            'Where are you headed today?',
-            'Where would you like to go?',
-            'Where would you like to go today?',
-            'Where are you off to?',
-            'Where are you off to today?',
-            'Where to?',
-            'Where ya headed?',
-            'Where ya headed today?',
-        ]
-        self.yw = [
-            'You\'re welcome!',
-            'Have a great {time}!'.format(time=time_of_day(night=True)),
-            'Anytime!',
-            'Yeah, no problem!',
-            'Safe travels!',
-        ]
-        self.bye = [
-            'See ya later!',
-            'Adios!',
-            'Bye bye!',
-            'Zai jian!',
-            'Take care.',
-            # 'Love you!',
-            'Bye!',
-            'Tootles!',
-            'TTFN',
-            'TTYL',
-            'Later!',
-            'Until next time!',
-            'Have a great time!',
-        ]
+hello = [
+    'Greetings.',
+    'Hello there.',
+    'Sup!',
+    'Sup {fn}!'
+    'Hello from the other side!',
+    'Good day!', 
+    'Good day, {fn}!',
+    'Good {time}!'.format(time=time_of_day()),
+    'Hi there!',
+    'Hello!',
+    'Hello {fn}!',
+    'Hi!',
+    'Hi {fn}!',
+    ]
+cta = [
+    'Where are you headed?',
+    'Where are you headed today?',
+    'Where would you like to go?',
+    'Where would you like to go today?',
+    'Where are you off to?',
+    'Where are you off to today?',
+    'Where to?',
+    'Where ya headed?',
+    'Where ya headed today?',
+    ]
+yw = [
+    'You\'re welcome!',
+    'Have a great {time}!'.format(
+        time=time_of_day(night=True)),
+    'Anytime!',
+    'Yeah, no problem!',
+    'Safe travels!',
+    ]
+bye = [
+    'See ya later!',
+    'See ya later {fn}!',
+    'Adios!',
+    'Bye bye!',
+    'Zai jian!',
+    'Take care.',
+    'Love you!',
+    'BART safe!',
+    'Bye!',
+    'Bye {fn}!'
+    'Tootles!',
+    'TTFN',
+    'TTYL',
+    'TTYL {fn}!',
+    'Later!',
+    'Until next time!',
+    'Until next time, {fn}!',
+    'Have a great time!',
+    'Have a great time {fn}!',
+    ]
 
-    def get_phrase(self, *sentences):
-        return " ".join(map(r.choice,sentences))
-        
+
 
 if __name__ == '__main__':
-    p = PhrasesFactory()
-    print('PhrasesFactory demonstration:')
-    print(p.get_phrase(p.hello,p.cta))
-    print(p.get_phrase(p.yw,p.bye))
+    print('Phrases demonstration:')
+    print(get_phrase(hello,cta))
+    print(get_phrase(yw,bye))
