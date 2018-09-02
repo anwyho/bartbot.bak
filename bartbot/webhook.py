@@ -2,7 +2,6 @@
 # from __future__ import print_function
 
 import logging as log
-import sys
 
 from flask import Flask, request
 
