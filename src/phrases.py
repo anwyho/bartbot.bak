@@ -30,7 +30,7 @@ hello = [
     'Greetings.',
     'Hello there.',
     'Sup!',
-    'Sup {fn}!'
+    'Sup {fn}!',
     'Hello from the other side!',
     'Good day!', 
     'Good day, {fn}!',
@@ -70,7 +70,7 @@ bye = [
     'Love you!',
     'BART safe!',
     'Bye!',
-    'Bye {fn}!'
+    'Bye {fn}!',
     'Tootles!',
     'TTFN',
     'TTYL',
@@ -88,7 +88,7 @@ delivery = [
     'There ya go!',
     'Here ya go!',
     'Special delivery!',
-    'Special delivery, for {fn}'
+    'Special delivery, for {fn}',
 ]
 
 
