@@ -1,0 +1,1 @@
+curl -X GET "localhost:5000/webhook?hub.mode=subscribe&hub.verify_token=invalid_token&hub.challenge=challenge_should_not_be_accepted"
