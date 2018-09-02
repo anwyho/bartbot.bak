@@ -39,6 +39,8 @@ def handle_text(fbId:str, text:str) -> str:
 
 def fb_message(fbId:str, text:str) -> str:
     """Function for returning response to messenger"""
+    log.info("Sending message {text} to FB ID {id}".format(text=text,id=fbId))
+    
     data = {
         'messaging_type': 'RESPONSE',
         'recipient': {'id': fbId},
@@ -53,10 +55,11 @@ def fb_message(fbId:str, text:str) -> str:
     
 
 def handle_errors(response:dict):
-    pass
+    log.debug("Response: {}".format(json.dumps(response.json())))
 
 
 def get_id_name(fbId:str) -> Tuple[str,str]:
+    log.info("Getting FB name")
     q = {'fields':['first_name','last_name']}
     resp = req.get(GRAPH_API+fbId+'?'+AUTH, json=q)
     data = resp.json()
