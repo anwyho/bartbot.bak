@@ -8,7 +8,7 @@ plugins:
 
 custom:
   wsgi:
-    app: src.webhook.app
+    app: bartbot.webhook.app
     packRequirements: false
   pythonRequirements:
     dockerizePip: non-linux
