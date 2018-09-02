@@ -353,3 +353,6 @@ Future Features
 
 - [ ] Implement a fuzzy search for station names
   - [ ] Change this for speech-to-text (phonetic fuzzy search)
+
+- [ ] For Wit.ai, implement renaming intent
+- [ ] Implement ability to rename stations or nickname stations
