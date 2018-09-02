@@ -22,6 +22,7 @@ provider:
 functions:
   app:
     handler: wsgi.handler
+    description: Handles Bartbot requests from Facebook Messenger Platform
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
