@@ -1,7 +1,7 @@
 # from __future__ import absolute_import
 # from __future__ import print_function
 
-import logging as log
+import logging
 
 from flask import (Flask, request)
 
@@ -24,11 +24,11 @@ def main_handle():
 def handle_webhook():
     """Processes POST and GET requests from the Messenger Platform"""
 
-    log.basicConfig(
+    logging.basicConfig(
         filename='.bartbot-{}.log'.format('debug' if DEBUG else 'info'), 
         format="%(levelname)s:%(module)s.%(funcName)s:%(lineno)d %(message)s:%(asctime)s", 
-        level=log.DEBUG if DEBUG else log.info)
-    log.info("S T A R T I N G   L O G")
+        level=logging.DEBUG if DEBUG else logging.info)
+    logging.info("S T A R T I N G   L O G")
     
     # TODO: Verify SHA-1
 
@@ -40,8 +40,8 @@ def handle_webhook():
     else:
         res = "Unsupported HTTPS Verb."
 
-    log.info("E N D I N G   L O G")
-    log.shutdown()
+    logging.info("E N D I N G   L O G")
+    logging.shutdown()
     return res
 
     

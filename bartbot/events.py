@@ -4,9 +4,7 @@
 # from __future__ import unicode_literals
 
 import json
-import logging as log
-
-import requests as req
+import logging
 
 from .processPage import process_page_entry
 from .urls import MESSAGES_URL
@@ -17,16 +15,16 @@ def process_event(req) -> str:
     try:  # parse JSON into data
         data:dict = req.json
     except Exception as e:
-        log.warning("Couldn't parse JSON with req.json.")
+        logging.warning("Couldn't parse JSON with req.json.")
         return "Unable to parse JSON."
-    log.info("Processed event JSON")
-    log.debug("Processed event JSON: {}".format(
+    logging.info("Processed event JSON")
+    logging.debug("Processed event JSON: {}".format(
         json.dumps(data,indent=2)))
 
     res = "OK"
     try:  # switch for processing different request object types
         if data['object'] == 'page':
-            log.info("Received 'page' object")
+            logging.info("Received 'page' object")
             if not 'entry' in data.keys():
                 raise KeyError("Expected 'entry' in request object.")
             for entry in data['entry']:
@@ -34,7 +32,7 @@ def process_event(req) -> str:
 
         elif data['object'] == 'user':
             # TODO: Subscribed to name change. Implement change
-            log.info("Received 'user' object")
+            logging.info("Received 'user' object")
             res = 'OK'
 
         else:
@@ -43,12 +41,12 @@ def process_event(req) -> str:
                     str(data['object'])))
 
     except KeyError as e:
-        log.warning(
+        logging.warning(
             "Couldn't parse JSON structure. Received error: {}.".format(e))
         res = "Unexpected JSON structure."
 
     except Exception as e:
-        log.error("An unexpected error occurred. Error: {}.".format(e))
+        logging.error("An unexpected error occurred. Error: {}.".format(e))
         res = "Not OK, but surviving. Check logs."
 
     return res

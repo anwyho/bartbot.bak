@@ -1,8 +1,8 @@
 import json
-import logging as log
+import logging
 from typing import Tuple, Union
 
-import requests as req
+import requests
 
 from wit import Wit
 
@@ -32,7 +32,7 @@ def process_page_entry(entry:dict) -> str:
         elif 'attachments' in m['message'].keys():
             res = handle_attachment(fbId, m['message']['attachments'])
         else: 
-            log.warning("Received empty message event")
+            logging.warning("Received empty message event")
             res = "Message body is empty."
         
         res = post_response(res, fbId, m['message'])
@@ -49,12 +49,12 @@ def post_response(result:str, fbId:str, messageObj:dict) -> str:
 
 
 def handle_attachment(fbId:str, attach:dict) -> str:
-    log.info("Received attachment message event")
+    logging.info("Received attachment message event")
     return 'OK'
 
 
 def handle_text(fbId:str, text:str) -> str:
-    log.info("Received text message event")
+    logging.info("Received text message event")
     nlp_entities:dict = get_wit_entities(fbId, text)
     if nlp_entities == None:
         # TODO: Create fallback, either message about NLP or do cheap hack
@@ -66,10 +66,10 @@ def handle_text(fbId:str, text:str) -> str:
     # HACK: fix entity parsing
     fn,ln = get_id_name(fbId)
     if 'greeting' in entities:
-        log.info('Sending a greeting')
+        logging.info('Sending a greeting')
         text = phrases.get_phrase(phrases.hello,phrases.cta).format(fn=fn)
     elif 'intent' in entities and 'map' == entities['intent'][0]['value']:
-        log.info('Sending a map')
+        logging.info('Sending a map')
         send_map(fbId)
     else:
         text = "Hello {} {}. You typed: ".format(fn,ln) + nlp_entities['_text']
@@ -88,34 +88,32 @@ def send_map(fbId:str):
                 'type': 'image',
                 'payload': {
                     'attachment_id': MAP_ID}}}}
-    resp = req.post(MESSAGES_URL, json=data)
+    post_request(MESSAGES_URL, data=data)
 
 
 def fb_message(fbId:str, text:str) -> str:
     """Function for returning response to messenger"""
-    log.info("Sending message {text} to FB ID {id}".format(text=text,id=fbId))
+    logging.info("Sending message {text} to FB ID {id}".format(text=text,id=fbId))
     
     data = {
         'messaging_type': 'RESPONSE',
         'recipient': {'id': fbId},
         'message': {'text': text}}
     
-    resp = req.post(MESSAGES_URL, json=data)
-    handle_errors(resp)
+    post_request(MESSAGES_URL, data=data)
     return 'OK'
 
 
 
     
 
-def handle_errors(response:dict):
-    log.debug("Response: {}".format(json.dumps(response.json())))
+
 
 
 def get_id_name(fbId:str) -> Tuple[str,str]:
-    log.info("Getting FB name")
+    logging.info("Getting FB name")
     q = {'fields':['first_name','last_name']}
-    resp = req.get(GRAPH_API+fbId+'?'+AUTH, json=q)
+    resp = requests.get(GRAPH_API+fbId+'?'+AUTH, json=q)
     data = resp.json()
     if "error" in data.keys():
         return None
@@ -129,7 +127,7 @@ def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
         return Wit(access_token=k.WIT_TOK).message(
             msg=text, context={'session_id':fbId}, verbose=True)
     except Exception as e:
-        log.error("Failed to access Wit API. Error: {}".format(e))
+        logging.error("Failed to access Wit API. Error: {}".format(e))
         return None
 
 def first_entity_value(entities, entity):
@@ -149,14 +147,15 @@ def turn_on_seen_and_typing_indicator(fbId:str):
         'recipient': { 'id': fbId }}
 
     data['sender_action'] = 'mark_seen'
-    resp = req.post(MESSAGES_URL, json=data)
-    handle_errors(resp)
+    post_request(MESSAGES_URL, data=data)
     data['sender_action'] = 'typing_on'
-    resp = req.post(MESSAGES_URL, json=data)
-    handle_errors(resp)
+    post_request(MESSAGES_URL, data=data)
 
 
 
-
+def post_request(url:str, data:dict):
+    resp = requests.post(url,json=data)
+    logging.debug("Response: {}".format(json.dumps(resp.json())))
+    return resp
 
 # TODO: for unsure traits, offer a "find nearest" button
