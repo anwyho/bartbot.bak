@@ -153,7 +153,8 @@ def post_request(url:str, data:dict):
 
 # TODO: for unsure traits, offer a "find nearest" button
 
-
+# TODO: Implement "yes/no" postback quick replies
+#   Vary the "yes/no" e.g. "yes!/no...", "affirmative/negatory", "yep/nope"
 
 
 
