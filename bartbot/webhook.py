@@ -3,7 +3,7 @@
 
 import logging as log
 
-from flask import Flask, request
+from flask import (Flask, request)
 
 from .events import process_event
 from .getChallenge import verify_challenge
@@ -24,7 +24,10 @@ def main_handle():
 def handle_webhook():
     """Processes POST and GET requests from the Messenger Platform"""
 
-    log.basicConfig(filename='.bartbot-{}.log'.format('debug' if DEBUG else 'info'), format="%(levelname)s:%(module)s.%(funcName)s:%(lineno)d %(message)s:%(asctime)s", level=log.DEBUG if DEBUG else log.info)
+    log.basicConfig(
+        filename='.bartbot-{}.log'.format('debug' if DEBUG else 'info'), 
+        format="%(levelname)s:%(module)s.%(funcName)s:%(lineno)d %(message)s:%(asctime)s", 
+        level=log.DEBUG if DEBUG else log.info)
     log.info("S T A R T I N G   L O G")
     
     # TODO: Verify SHA-1
@@ -40,8 +43,8 @@ def handle_webhook():
     log.info("E N D I N G   L O G")
     log.shutdown()
     return res
+
     
 
-
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

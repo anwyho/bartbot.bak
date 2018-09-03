@@ -8,8 +8,7 @@ import logging as log
 
 import requests as req
 
-from .processText import (handle_attachment, handle_text,
-                          turn_on_seen_and_typing_indicator)
+from .processPage import process_page_entry
 from .urls import MESSAGES_URL
 
 
@@ -53,44 +52,3 @@ def process_event(req) -> str:
         res = "Not OK, but surviving. Check logs."
 
     return res
-
-
-def process_page_entry(entry:dict) -> str:
-    """Processes a page object returned by a message subscription"""
-    if not 'messaging' in entry:
-        raise KeyError("Expected 'messaging' in entry")
-
-    for m in entry['messaging']:
-        try: 
-            fbId:str = m['sender']['id']
-        except:
-            raise KeyError("Expected 'sender.id' in messaging") 
-
-        pre_response(fbId, m['message'])
-
-        res:str = None
-        if 'text' in m['message'].keys():
-            log.info("Received text message event")
-            res = handle_text(fbId, m['message']['text'])
-        elif 'attachments' in m['message'].keys():
-            log.info("Received attachment message event")
-            res = handle_attachment(fbId, m['message']['attachments'])
-        else: 
-            log.warning("Received empty message event")
-            res = "Message body is empty."
-        
-        res = post_response(res, fbId, m['message'])
-
-        return res
-
-def pre_response(fbId:str, messageObj:dict) -> None:
-    """Tasks to prep for and set up response"""
-    turn_on_seen_and_typing_indicator(fbId)
-
-def post_response(result:str, fbId:str, messageObj:dict) -> str:
-    """Tasks to clean up response before returning"""
-    return result
-
-
-
-# TODO: for unsure traits, offer a "find nearest" button
