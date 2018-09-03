@@ -7,7 +7,7 @@ package:
     # Folders
     - bartbot/__pycache__/**
     - misc/**
-    - node_modules/**
+    # - node_modules/**
     - resources/images/**
     - tests/**
     - tmp/**
