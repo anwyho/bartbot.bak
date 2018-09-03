@@ -356,3 +356,4 @@ Future Features
 
 - [ ] For Wit.ai, implement renaming intent
 - [ ] Implement ability to rename stations or nickname stations
+- [ ] [Messenger Picture Code](https://developers.facebook.com/docs/messenger-platform/reference/messenger-code-api)
