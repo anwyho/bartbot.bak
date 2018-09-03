@@ -2,7 +2,7 @@
   "name": "bartbot",
   "version": "1.0.0",
   "description": "A chatbot to get your BART live shedules and more!",
-  "main": "src.handler.py",
+  "main": "bartbot.webhook.py",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
