@@ -54,3 +54,7 @@ Thumbs.db
 node_modules
 .serverless
 misc
+
+# Files with sensitive information #
+####################################
+bartbot/scripts/*
