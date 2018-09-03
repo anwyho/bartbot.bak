@@ -24,7 +24,7 @@ def process_page_entry(entry:dict) -> str:
         except:
             raise KeyError("Expected 'sender.id' in messaging") 
 
-        pre_response(fbId, m['message'])
+        turn_on_seen_and_typing_indicator(fbId)
 
         res:str = None
         if 'text' in m['message'].keys():
@@ -34,18 +34,9 @@ def process_page_entry(entry:dict) -> str:
         else: 
             logging.warning("Received empty message event")
             res = "Message body is empty."
-        
-        res = post_response(res, fbId, m['message'])
 
         return res
 
-def pre_response(fbId:str, messageObj:dict) -> None:
-    """Tasks to prep for and set up response"""
-    turn_on_seen_and_typing_indicator(fbId)
-
-def post_response(result:str, fbId:str, messageObj:dict) -> str:
-    """Tasks to clean up response before returning"""
-    return result
 
 
 def handle_attachment(fbId:str, attach:dict) -> str:
@@ -70,7 +61,7 @@ def handle_text(fbId:str, text:str) -> str:
         text = phrases.get_phrase(phrases.hello,phrases.cta).format(fn=fn)
     elif 'intent' in entities and 'map' == entities['intent'][0]['value']:
         logging.info('Sending a map')
-        send_map(fbId)
+        text = send_map(fbId, fn)
     else:
         text = "Hello {} {}. You typed: ".format(fn,ln) + nlp_entities['_text']
     
@@ -79,7 +70,8 @@ def handle_text(fbId:str, text:str) -> str:
     return fb_message(fbId, text)
 
 
-def send_map(fbId:str):
+def send_map(fbId:str, fn:str='{fn}'):
+    # TODO: Send a phrases.delivery post
     data = {
         'recipient': {'id': fbId},
         'messaging_type': 'RESPONSE',
@@ -89,6 +81,13 @@ def send_map(fbId:str):
                 'payload': {
                     'attachment_id': MAP_ID}}}}
     post_request(MESSAGES_URL, data=data)
+    return phrases.get_phrase(phrases.delivery, fn=fn)
+
+    # Handle code in this function instead: 
+    # del data['message']['attachment']
+    # data['message']['text'] = \
+    #     phrases.get_phrase(phrases.delivery, fn=fn)
+    # post_request(MESSAGES_URL, data=data)
 
 
 def fb_message(fbId:str, text:str) -> str:
@@ -102,12 +101,6 @@ def fb_message(fbId:str, text:str) -> str:
     
     post_request(MESSAGES_URL, data=data)
     return 'OK'
-
-
-
-    
-
-
 
 
 def get_id_name(fbId:str) -> Tuple[str,str]:
@@ -159,3 +152,17 @@ def post_request(url:str, data:dict):
     return resp
 
 # TODO: for unsure traits, offer a "find nearest" button
+
+
+
+
+
+
+
+# def pre_response(fbId:str, messageObj:dict) -> None:
+#     """Tasks to prep for and set up response"""
+#     turn_on_seen_and_typing_indicator(fbId)    
+
+# def post_response(result:str, fbId:str, messageObj:dict) -> str:
+#     """Tasks to clean up response before returning"""
+#     return result

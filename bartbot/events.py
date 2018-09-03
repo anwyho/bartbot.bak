@@ -50,3 +50,8 @@ def process_event(req) -> str:
         res = "Not OK, but surviving. Check logs."
 
     return res
+
+
+
+# TODO: Implement "yes/no" postback quick replies
+#   Vary the "yes/no" e.g. "yes!/no...", "affirmative/negatory", "yep/nope"

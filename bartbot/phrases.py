@@ -4,9 +4,12 @@
 import random as r
 import time
 
-def get_phrase(*sentences):
+def get_phrase(*sentences, fn='{fn}'):
     """Constructs randomized sentences of phrase lists"""
-    return " ".join(map(r.choice,sentences))
+    resp = '{fn}'
+    while '{fn}' in resp:
+        resp = " ".join(map(r.choice,sentences)).format(fn=fn)  
+    return resp
 
 
 def time_of_day(night=False):
@@ -78,15 +81,14 @@ bye = [
     'Later!',
     'Until next time!',
     'Until next time, {fn}!',
-    'Have a great time!',
-    'Have a great time {fn}!',
     ]
 delivery = [
     'Here it is!',
+    'Here it is {fn}!',
     'Here you go!',
+    'Here ya go {fn}!',
     'Here ya go!',
     'There ya go!',
-    'Here ya go!',
     'Special delivery!',
     'Special delivery, for {fn}',
 ]
