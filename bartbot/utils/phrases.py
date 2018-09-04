@@ -4,11 +4,11 @@
 import random as r
 import time
 
-def get_phrase(*sentences, fn='{fn}'):
+def get_phrase(*sentences, opt='{opt}'):
     """Constructs randomized sentences of phrase lists"""
-    resp = '{fn}'
-    while '{fn}' in resp:
-        resp = " ".join(map(r.choice,sentences)).format(fn=fn)  
+    resp = '{opt}'
+    while '{opt}' in resp:
+        resp = " ".join(map(r.choice,sentences)).format(opt=opt)  
     return resp
 
 
@@ -33,16 +33,16 @@ hello = [
     'Greetings.',
     'Hello there.',
     'Sup!',
-    'Sup {fn}!',
+    'Sup {opt}!',
     'Hello from the other side!',
     'Good day!', 
-    'Good day, {fn}!',
+    'Good day, {opt}!',
     'Good {time}!'.format(time=time_of_day()),
     'Hi there!',
     'Hello!',
-    'Hello {fn}!',
+    'Hello {opt}!',
     'Hi!',
-    'Hi {fn}!',
+    'Hi {opt}!',
     ]
 cta = [
     'Where are you headed?',
@@ -55,6 +55,18 @@ cta = [
     'Where ya headed?',
     'Where ya headed today?',
     ]
+sorry = [
+    'Sorry about that! {opt}',
+    'Oops! {opt}',
+    'Oh no! {opt}',
+    'Hmm... {opt}',
+    'Darn. {opt}',
+    'Shucks. {opt}',
+    'That\'s embarrassing... {opt}',
+    'Aiya! {opt}',
+    'Whoops! {opt}',
+    ''
+]
 yw = [
     'You\'re welcome!',
     'Have a great {time}!'.format(
@@ -65,7 +77,7 @@ yw = [
     ]
 bye = [
     'See ya later!',
-    'See ya later {fn}!',
+    'See ya later {opt}!',
     'Adios!',
     'Bye bye!',
     'Zai jian!',
@@ -73,24 +85,24 @@ bye = [
     'Love you!',
     'BART safe!',
     'Bye!',
-    'Bye {fn}!',
+    'Bye {opt}!',
     'Tootles!',
     'TTFN',
     'TTYL',
-    'TTYL {fn}!',
+    'TTYL {opt}!',
     'Later!',
     'Until next time!',
-    'Until next time, {fn}!',
+    'Until next time, {opt}!',
     ]
 delivery = [
     'Here it is!',
-    'Here it is {fn}!',
+    'Here it is {opt}!',
     'Here you go!',
-    'Here ya go {fn}!',
+    'Here ya go {opt}!',
     'Here ya go!',
     'There ya go!',
     'Special delivery!',
-    'Special delivery, for {fn}',
+    'Special delivery, for {opt}',
 ]
 
 
@@ -99,3 +111,5 @@ if __name__ == '__main__':
     print('Phrases demonstration:')
     print(get_phrase(hello,cta))
     print(get_phrase(yw,bye))
+
+# TODO: Figure out emoji support

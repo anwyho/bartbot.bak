@@ -2,6 +2,7 @@
 
 import hashlib
 import hmac
+import logging
 import os
 import sys
 
@@ -25,7 +26,7 @@ WIT_TOK = os.environ.get('WIT_TOKEN')
 
 def gen_app_secret_proof():
     """Calculates FB app secret proof from SHA256"""
-    print("Generating app secret proof in keys.py", file=sys.stderr)
+    logging.info("Generating app secret proof in keys.py")
     pudding = hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),
         msg=FB_PAGE_ACCESS.encode('utf-8'),
         digestmod=hashlib.sha256).hexdigest()
