@@ -110,7 +110,7 @@ def get_id_name(fbId:str) -> Tuple[str,str]:
     else: 
         return (data['first_name'], data['last_name'])
 
- 
+
 def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
     """Calls Wit API for natural language processing"""
     try:

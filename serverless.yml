@@ -5,7 +5,7 @@ service: bartbot-serverless
 package: 
   exclude:
     # Folders
-    - bartbot/__pycache__ 
+    - bartbot/__pycache__
     - bartbot/**/__pycache__
     - bartbot/.logs
     - bartbot/scripts/*.sh
