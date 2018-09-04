@@ -5,17 +5,20 @@ service: bartbot-serverless
 package: 
   exclude:
     # Folders
-    - bartbot/__pycache__/**
+    - bartbot/__pycache__
+    - bartbot/**/__pycache__
+    - bartbot/.logs
+    - bartbot/scripts/*.sh
     - misc/**
     # - node_modules/**
-    - resources/images/**
-    - tests/**
+    # - resources/images/**
+    - tests
     - tmp/**
     # Files
     - .bartbot-debug.log
     - .bartbot-info.log
     - .git/**
-    - .git*
+    - .gitignore
     - bartbot.code-workspace
     - contributing.md
     - functionsToImplement.md

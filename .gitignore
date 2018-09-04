@@ -51,10 +51,12 @@ Thumbs.db
 # Environment #
 ###############
 .env
-node_modules
 .serverless
 misc
+node_modules
+.logs
+
 
 # Files with sensitive information #
 ####################################
-bartbot/scripts/*
+bartbot/scripts/*.sh
