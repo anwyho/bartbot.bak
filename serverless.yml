@@ -22,6 +22,7 @@ package:
     - bartbot.code-workspace
     - contributing.md
     - functionsToImplement.md
+  excludeDevDependencies: true
 
 
 plugins:
@@ -45,6 +46,7 @@ functions:
   app:
     handler: wsgi.handler
     description: Handles Bartbot requests from Facebook Messenger Platform
+    timeout: 16
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
