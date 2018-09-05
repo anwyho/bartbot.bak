@@ -8,7 +8,7 @@ def handle_request_error(response:dict) -> bool:
     Handles error and outputs to logs.
     """
 
-    logging.debug("Response: {}".format(json.dumps(response))) 
+    logging.debug(f"Response: {json.dumps(response,indent=2)}") 
 
     if 'error' in response: 
         # TODO: More apecific responses

@@ -37,8 +37,9 @@ def handle_webhook():
     os.makedirs(os.path.dirname(logFile), exist_ok=True)
     logFormat = "%(levelname)s:%(module)s:%(lineno)d %(message)s:%(asctime)s"
 
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+    # TODO: Check if uncommenting this breaks AWS Lambda
+    # for handler in logging.root.handlers[:]:
+    #     logging.root.removeHandler(handler)
 
     logging.basicConfig(
         filename=logFile, 
@@ -63,7 +64,8 @@ def process_request(request) -> str:
     """
     Passes request onto other methods depending on request method
     """
-    
+
+    res = None 
     if request.method == 'GET':
         res = verify_challenge(request)
     elif request.method == 'POST':

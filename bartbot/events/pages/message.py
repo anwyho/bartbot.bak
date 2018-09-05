@@ -16,7 +16,7 @@ from ...utils.urls import (AUTH, GRAPH_API, MESSAGES_API, MESSENGER_USER_API)
 MAP_ID = "264370450851085"
 
 def handle_message(fbId:str, message:dict) -> str:
-    logging.debug("Message: {}".format(json.dumps(message,indent=2)))
+    logging.debug(f"Message: {json.dumps(message,indent=2)}")
     res:str = "test"
     if 'text' in message.keys():
         res = handle_text(fbId, message['text'])
@@ -31,12 +31,13 @@ def handle_message(fbId:str, message:dict) -> str:
 
 def handle_attachment(fbId:str, attach:dict) -> str:
     logging.info("Received attachment message event")
+    fb_message(fbId, "Ooh attachment! We're glad ")
     return 'OK'
 
 
 def handle_text(fbId:str, text:str) -> str:
     logging.info("Received text message event")
-    logging.debug("Message: {}".format(text))
+    logging.debug(f"Message: {text}")
 
     nlp_entities:dict = get_wit_entities(fbId, text)
 
@@ -56,9 +57,9 @@ def handle_text(fbId:str, text:str) -> str:
     elif 'intent' in entities and 'map' == entities['intent'][0]['value']:
         text = send_map(fbId, fn)
     else:
-        text = "Hello {} {}. You typed: ".format(fn,ln) + nlp_entities['_text']
+        text = f"Hello {fn} {ln}. You typed: {nlp_entities['_text']}"
     
-    text += "\nDebug info: {}".format(json.dumps(entities, indent=4))
+    text += f"\nDebug info: {json.dumps(entities, indent=4)}"
 
     return fb_message(fbId, text)
 
@@ -66,7 +67,7 @@ def handle_text(fbId:str, text:str) -> str:
 def send_map(fbId:str, fn:str='{opt}') -> str:
     """Sends a map using Messenger Attachment and returns delivery phrase"""
     logging.info('Sending a map')
-    logging.debug('fbId: {}'.format(fbId))
+    logging.debug(f'fbId: {fbId}')
     mapId = bartMap.get_map_id()
     if mapId != None: 
         data = {
@@ -87,7 +88,7 @@ def send_map(fbId:str, fn:str='{opt}') -> str:
 def fb_message(fbId:str, text:str) -> str:
     """Returns response to Messenger via Send API"""
 
-    logging.info("Sending message '{text}' to FB ID {id}".format(text=text,id=fbId))
+    logging.info(f"Sending message '{text}' to FB ID {fbId}")
     data = {
         'messaging_type': 'RESPONSE',
         'recipient': {'id': fbId},
@@ -117,10 +118,10 @@ def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
         resp = Wit(access_token=WIT_TOK).message(
             msg=text, context={'session_id':fbId}, verbose=True)
         logging.info("Retrieved Wit entities")
-        logging.debug("Wit entities: {}".format(json.dumps(resp,indent=2)))
+        logging.debug(f"Wit entities: {json.dumps(resp,indent=2)}")
         return resp
     except Exception as e:
-        logging.error("Failed to access Wit API. Error: {}.".format(e))
+        logging.error(f"Failed to access Wit API. Error: {e}.")
         return None
 
 

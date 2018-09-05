@@ -16,8 +16,8 @@ def post(*args, **kwargs) -> Tuple[bool,dict]:
 
     logging.info("Performing POST request") 
     if 'json' in kwargs:
-        logging.debug("POSTing to URL {} \nwith data {}".format(
-            args[0],json.dumps(kwargs['json'],indent=2)))
+        logging.debug(f"POSTing to URL {args[0]} \nwith " + \
+            "data {json.dumps(kwargs['json'],indent=2)}")
     resp = requests.post(*args, **kwargs).json()
     ok:bool = handle_request_error(resp)
     return ok, resp
@@ -31,8 +31,8 @@ def get(*args, **kwargs) -> Tuple[bool,dict]:
 
     logging.info("Performing GET request") 
     if 'json' in kwargs:
-        logging.debug("GETing to URL {} \nwith queries {}".format(
-            args[0],json.dumps(kwargs['json'],indent=2)))
+        logging.debug(f"GETing to URL {args[0]} \nwith " + \
+            "queries {json.dumps(kwargs['json'],indent=2)}")
     resp = requests.get(*args, **kwargs).json()
     ok:bool = handle_request_error(resp)
     return ok, resp

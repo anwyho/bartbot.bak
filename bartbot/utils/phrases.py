@@ -12,7 +12,7 @@ def get_phrase(*sentences, opt='{opt}'):
     return resp
 
 
-def time_of_day(night=False):
+def time_of_day(night=True):
     """Returns signifier for the time of day"""
     hour = time.localtime().tm_hour 
     if night and (hour > 21 or hour <= 4):
@@ -37,7 +37,7 @@ hello = [
     'Hello from the other side!',
     'Good day!', 
     'Good day, {opt}!',
-    'Good {time}!'.format(time=time_of_day()),
+    f'Good {time_of_day(night=False)}!',
     'Hi there!',
     'Hello!',
     'Hello {opt}!',
@@ -69,8 +69,7 @@ sorry = [
 ]
 yw = [
     'You\'re welcome!',
-    'Have a great {time}!'.format(
-        time=time_of_day(night=True)),
+    f'Have a great {time_of_day()}!',
     'Anytime!',
     'Yeah, no problem!',
     'Safe travels!',

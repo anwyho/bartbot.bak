@@ -19,10 +19,7 @@ def verify_challenge(req):
             return qParams['hub.challenge']
         else: 
             logging.info("Unable to verify token. Either " + \
-                "{hubTok} != {verTok} or {hubMode} != 'subscribe'".format(
-                hubTok=qParams['hub.verify_token'], 
-                verTok=FB_VERIFY_TOK, 
-                hubMode=qParams['hub.mode']))
+                f"{qParams['hub.verify_token']} != {FB_VERIFY_TOK} or {qParams['hub.mode']} != 'subscribe'")
             return 'Invalid request or verification token.'
     else: 
         logging.info("GET did not include all necessary parameters")

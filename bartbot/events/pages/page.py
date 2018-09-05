@@ -17,7 +17,7 @@ def process_page_entry(entry:dict) -> str:
             fbId:str = message['sender']['id']
         except KeyError as e:
             raise KeyError("Expected 'sender.id' in messaging. " + \
-                "Received error: {}.".format(e)) 
+                f"Received error: {e}.") 
 
         turn_on_seen_and_typing_indicator(fbId)
 
