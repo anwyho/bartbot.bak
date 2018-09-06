@@ -46,15 +46,16 @@ functions:
   app:
     handler: wsgi.handler
     description: Handles Bartbot requests from Facebook Messenger Platform
-    timeout: 16
+    timeout: 21
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
     environment:
-      FB_PAGE_ACCESS: ${ssm:fb-page-access}
-      FB_PAGE_ACCESS_2: ${ssm:fb-app-access}
-      FB_VERIFY_TOKEN: ${ssm:fb-verify-token}
-      DARK_SKY_PRIV: ${ssm:dark-sky-priv}
-      BART_PUBL: ${ssm:bart-publ}
-      BART_PRIV: ${ssm:bart-priv}
-      WIT_TOKEN: ${ssm:wit-server-token}
+      DARK_SKY_PRIV: ${ssm:DARK_SKY_PRIV}
+      DEBUG_TOK: ${ssm:DEBUG_TOK}
+      BART_PRIV: ${ssm:BART_PRIV}
+      BART_PUBL: ${ssm:BART_PUBL}
+      FB_PAGE_ACCESS: ${ssm:FB_PAGE_ACCESS}
+      FB_PAGE_ACCESS_2: ${ssm:FB_PAGE_ACCESS_2}
+      FB_VERIFY_TOK: ${ssm:FB_VERIFY_TOK}
+      WIT_TOK: ${ssm:WIT_SERVER_TOK}
