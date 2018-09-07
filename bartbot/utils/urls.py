@@ -14,3 +14,8 @@ MESSAGE_ATTACHMENTS_API: str = \
 MESSENGER_PROFILE_API: str = \
     MESSENGER_PLATFORM+'messenger_profile?'+AUTH
 MESSENGER_USER_API: str = GRAPH_API+'{fbId}?'+AUTH
+
+# Testing
+LOCALHOST = "https://localhost:5000/webhook?"
+AWS_WEBHOOK = \
+    "https://ick416py79.execute-api.us-west-1.amazonaws.com/dev/webhook?"

@@ -64,8 +64,8 @@ def get_phrase(
         #   joins them to make a phrase
         resp = ' '.join(map(r.choice,[localePkg.phrases[type] for type in typesOfPhrases])).format(
             opt=opt,
-            time_of_day=time_of_day(),
-            time_of_day_night=time_of_day(True))
+            time_of_day=time_of_day(night=False),
+            time_of_day_night=time_of_day(night=True))
     return resp
 
 

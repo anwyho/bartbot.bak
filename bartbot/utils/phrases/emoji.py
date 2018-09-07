@@ -1,7 +1,7 @@
 from typing import List
 
 # List of used emojis
-emoji = {
+emojis = {
     # Faces
     'smiling_face_with_smiling_eyes' : b'\xf0\x9f\x98\x8a'.decode('utf8'),
     'grinning_face_with_sweat' : b'\xf0\x9f\x98\x85'.decode('utf8'),
@@ -228,12 +228,12 @@ def emoji_code_factory(emoji_names:List[str]):
         code += f"'{name}' : {em.encode('utf8')}.decode('utf8'),\n    "
     print(code)
 
-def emoji_test() -> str:
-    emojis = ""
-    for k,v in emoji.items():
-        emojis += f"{v}\n{{e.emoji[{k.__repr__()}]}}\n"
-    return emojis
+def print_all_emojis() -> str:
+    all_emojis = ""
+    for k,v in emojis.items():
+        all_emojis += f"{v}\n{{e.emojis[{k.__repr__()}]}}\n"
+    return all_emojis
 
 
 if __name__ == '__main__':
-    print(emoji_test())
+    print(print_all_emojis())
