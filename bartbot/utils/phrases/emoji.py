@@ -1,7 +1,7 @@
 from typing import List
 
 # List of used emojis
-emojis = {
+emoji = {
     # Faces
     'smiling_face_with_smiling_eyes' : b'\xf0\x9f\x98\x8a'.decode('utf8'),
     'grinning_face_with_sweat' : b'\xf0\x9f\x98\x85'.decode('utf8'),
@@ -28,10 +28,6 @@ emojis = {
     'flushed_face' : b'\xf0\x9f\x98\xb3'.decode('utf8'),
     'child' : b'\xf0\x9f\xa7\x92'.decode('utf8'),
     'senior' : b'\xf0\x9f\xa7\x93'.decode('utf8'),
-    # Non-Faces
-    'hundred_points' : b'\xf0\x9f\x92\xaf'.decode('utf8'),
-    'speech_balloon' : b'\xf0\x9f\x92\xac'.decode('utf8'),
-    'zzz' : b'\xf0\x9f\x92\xa4'.decode('utf8'),
     # Hand Gestures
     'waving_hand' : b'\xf0\x9f\x91\x8b'.decode('utf8'),
     'raised_hand' : b'\xe2\x9c\x8b'.decode('utf8'),
@@ -50,6 +46,9 @@ emojis = {
     'tongue' : b'\xf0\x9f\x91\x85'.decode('utf8'),
     'eye' : b'\xf0\x9f\x91\x81'.decode('utf8'),
     'mouth' : b'\xf0\x9f\x91\x84'.decode('utf8'),
+    'sunglasses' : b'\xf0\x9f\x95\xb6'.decode('utf8'),
+    'grad_cap' : b'\xf0\x9f\x8e\x93'.decode('utf8'),
+    'billed_cap' : b'\xf0\x9f\xa7\xa2'.decode('utf8'),
     # Plants
     'rose' : b'\xf0\x9f\x8c\xb9'.decode('utf8'),
     'sunflower' : b'\xf0\x9f\x8c\xbb'.decode('utf8'),
@@ -101,10 +100,9 @@ emojis = {
     'airplane_departure' : b'\xf0\x9f\x9b\xab'.decode('utf8'),
     'airplane_arrival' : b'\xf0\x9f\x9b\xac'.decode('utf8'),
     'rocket' : b'\xf0\x9f\x9a\x80'.decode('utf8'),
-    # something
-    'bellhop_bell' : b'\xf0\x9f\x9b\x8e'.decode('utf8'),
-    'hourglass_done' : b'\xe2\x8c\x9b'.decode('utf8'),
-    'hourglass_not_done' : b'\xe2\x8f\xb3'.decode('utf8'),
+    # something 
+    'hundred_points' : b'\xf0\x9f\x92\xaf'.decode('utf8'),
+    'trumpet' : b'\xf0\x9f\x8e\xba'.decode('utf8'),
     # Weather
     'full_moon_face' : b'\xf0\x9f\x8c\x9d'.decode('utf8'),
     'sun_with_face' : b'\xf0\x9f\x8c\x9e'.decode('utf8'),
@@ -146,10 +144,8 @@ emojis = {
     'baseball' : b'\xe2\x9a\xbe'.decode('utf8'),
     'football' : b'\xf0\x9f\x8f\x88'.decode('utf8'),
     '8_ball' : b'\xf0\x9f\x8e\xb1'.decode('utf8'),
+    # Other
     'target' : b'\xf0\x9f\x8e\xaf'.decode('utf8'),
-    'sunglasses' : b'\xf0\x9f\x95\xb6'.decode('utf8'),
-    'grad_cap' : b'\xf0\x9f\x8e\x93'.decode('utf8'),
-    'billed_cap' : b'\xf0\x9f\xa7\xa2'.decode('utf8'),
     'musical_note' : b'\xf0\x9f\x8e\xb5'.decode('utf8'),
     'musical_notes' : b'\xf0\x9f\x8e\xb6'.decode('utf8'),
     'magnifying_glass' : b'\xf0\x9f\x94\x8e'.decode('utf8'),
@@ -164,26 +160,16 @@ emojis = {
     'envelope' : b'\xe2\x9c\x89'.decode('utf8'),
     'package' : b'\xf0\x9f\x93\xa6'.decode('utf8'),
     'pencil' : b'\xe2\x9c\x8f'.decode('utf8'),
-    'spiral_calendar' : b'\xf0\x9f\x97\x93'.decode('utf8'),
-    'chart increasing' : b'\xf0\x9f\x93\x88'.decode('utf8'),
-    'chart decreasing' : b'\xf0\x9f\x93\x89'.decode('utf8'),
-    'bar chart' : b'\xf0\x9f\x93\x8a'.decode('utf8'),
-    'clipboard' : b'\xf0\x9f\x93\x8b'.decode('utf8'),
-    'round pushpin' : b'\xf0\x9f\x93\x8d'.decode('utf8'),
+    'pushpin' : b'\xf0\x9f\x93\x8c'.decode('utf8'),
     'ruler' : b'\xf0\x9f\x93\x8f'.decode('utf8'),
     'scissors' : b'\xe2\x9c\x82'.decode('utf8'),
     'file cabinet' : b'\xf0\x9f\x97\x84'.decode('utf8'),
     'trash bin' : b'\xf0\x9f\x97\x91'.decode('utf8'),
-    'lock' : b'\xf0\x9f\x94\x92'.decode('utf8'),
-    'unlock' : b'\xf0\x9f\x94\x93'.decode('utf8'),
-    'key' : b'\xf0\x9f\x94\x91'.decode('utf8'),
     'hammer' : b'\xf0\x9f\x94\xa8'.decode('utf8'),
-    'wrench' : b'\xf0\x9f\x94\xa7'.decode('utf8'),
-    'gear' : b'\xe2\x9a\x99'.decode('utf8'),
-    'link' : b'\xf0\x9f\x94\x97'.decode('utf8'),
     'microscope' : b'\xf0\x9f\x94\xac'.decode('utf8'),
     'telescope' : b'\xf0\x9f\x94\xad'.decode('utf8'),
     'door' : b'\xf0\x9f\x9a\xaa'.decode('utf8'),
+    # Signs
     'wheelchair' : b'\xe2\x99\xbf'.decode('utf8'),
     'restroom' : b'\xf0\x9f\x9a\xbb'.decode('utf8'),
     'warning' : b'\xe2\x9a\xa0'.decode('utf8'),
@@ -211,11 +197,26 @@ emojis = {
     'megaphone' : b'\xf0\x9f\x93\xa3'.decode('utf8'),
     'bell' : b'\xf0\x9f\x94\x94'.decode('utf8'),
     'no bell' : b'\xf0\x9f\x94\x95'.decode('utf8'),
-    'trumpet' : b'\xf0\x9f\x8e\xba'.decode('utf8'),
-    'pushpin' : b'\xf0\x9f\x93\x8c'.decode('utf8'),
     'go back' : b'\xe2\x86\xa9'.decode('utf8'),
     'cool' : b'\xf0\x9f\x86\x92'.decode('utf8'),
     'free' : b'\xf0\x9f\x86\x93'.decode('utf8'),
+    'speech_balloon' : b'\xf0\x9f\x92\xac'.decode('utf8'),
+    'zzz' : b'\xf0\x9f\x92\xa4'.decode('utf8'),
+    'bellhop_bell' : b'\xf0\x9f\x9b\x8e'.decode('utf8'),
+    'hourglass_done' : b'\xe2\x8c\x9b'.decode('utf8'),
+    'hourglass_not_done' : b'\xe2\x8f\xb3'.decode('utf8'),
+    'wrench' : b'\xf0\x9f\x94\xa7'.decode('utf8'),
+    'gear' : b'\xe2\x9a\x99'.decode('utf8'),
+    'link' : b'\xf0\x9f\x94\x97'.decode('utf8'),
+    'lock' : b'\xf0\x9f\x94\x92'.decode('utf8'),
+    'unlock' : b'\xf0\x9f\x94\x93'.decode('utf8'),
+    'key' : b'\xf0\x9f\x94\x91'.decode('utf8'),
+    'spiral_calendar' : b'\xf0\x9f\x97\x93'.decode('utf8'),
+    'chart increasing' : b'\xf0\x9f\x93\x88'.decode('utf8'),
+    'chart decreasing' : b'\xf0\x9f\x93\x89'.decode('utf8'),
+    'bar chart' : b'\xf0\x9f\x93\x8a'.decode('utf8'),
+    'clipboard' : b'\xf0\x9f\x93\x8b'.decode('utf8'),
+    'round location pushpin' : b'\xf0\x9f\x93\x8d'.decode('utf8'),
 }
 
 def emoji_code_factory(emoji_names:List[str]):
@@ -228,10 +229,10 @@ def emoji_code_factory(emoji_names:List[str]):
     print(code)
 
 def emoji_test() -> str:
-    all_emojis = ""
-    for k,v in emojis.items():
-        all_emojis += f"{v}\n{{e.emojis[{k.__repr__()}]}}\n"
-    return all_emojis
+    emojis = ""
+    for k,v in emoji.items():
+        emojis += f"{v}\n{{e.emoji[{k.__repr__()}]}}\n"
+    return emojis
 
 
 if __name__ == '__main__':
