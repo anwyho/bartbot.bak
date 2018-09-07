@@ -19,7 +19,7 @@ def process_page_entry(entry:dict) -> str:
             raise KeyError("Expected 'sender.id' in messaging. " + \
                 f"Received error: {e}.") 
 
-        turn_on_seen_and_typing_indicator(fbId)
+        toggle_seen_and_typing_indicator(fbId, True)
 
         res = None
         if 'message' in message.keys():
@@ -33,26 +33,32 @@ def process_page_entry(entry:dict) -> str:
         else: 
             res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging referrals'."
 
+        toggle_seen_and_typing_indicator(fbId, False)
+
         return res
 
         
-def turn_on_seen_and_typing_indicator(fbId:str):
+def toggle_seen_and_typing_indicator(fbId:str, on:bool):
     """POST to Messenger Platform to turn on sender actions"""
     data = {
         'messaging_type': 'RESPONSE', 
         'recipient': { 'id': fbId }}
 
-    data['sender_action'] = 'mark_seen'
-    ok, _ = post(MESSAGES_API, json=data)
-    if ok:
-        data['sender_action'] = 'typing_on'
+    if on:
+        data['sender_action'] = 'mark_seen'
+        ok, _ = post(MESSAGES_API, json=data)
+        if ok:
+            data['sender_action'] = 'typing_on'
+            ok, _ = post(MESSAGES_API, json=data)
+            if not ok: 
+                logging.error("Didn't complete 'typing_on' sender action.")
+        else: 
+            logging.error("Didn't complete 'mark_seen' sender action.")
+    else: 
+        data['sender_action'] = 'typing_off'
         ok, _ = post(MESSAGES_API, json=data)
         if not ok: 
-            logging.error("Didn't complete 'typing_on' sender action.")
-    else: 
-        logging.error("Didn't complete 'mark_seen' sender action.")
-
-
+            logging.error("Didn't complete 'typing_off' sender action.")
 
 
 
