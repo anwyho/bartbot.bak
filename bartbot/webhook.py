@@ -7,7 +7,7 @@ import os
 from flask import (Flask, request)
 
 from .events.event import process_event
-from .utils.keys import FB_VERIFY_TOK
+from .utils.keys import (DEBUG_TOK, FB_VERIFY_TOK)
 
 
 app = Flask(__name__)
@@ -119,10 +119,23 @@ def verify_challenge(req):
         return 'Invalid request or verification token.'
 
 
+@app.route("/debug", methods=['GET'])
+def debug():
+    # TODO: Logging in this function
+    qParams = request.args
+    print(qParams)
+    if 'debug_tok' in qParams and qParams['debug_tok'] == DEBUG_TOK:
+        
+        if 'scripts' in qParams:
+            from .scripts import setMessengerProfile as prof
+            res = prof.run_scripts(qParams['scripts'])
+            return f"Ran scripts with results {res}."
+    return "OK"
+
+
 
 if __name__ == '__main__':
     app.run()
-
 
 
 

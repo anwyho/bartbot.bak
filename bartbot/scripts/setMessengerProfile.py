@@ -1,6 +1,6 @@
 import logging
 
-from typing import Tuple
+from typing import (List, Tuple)
 
 from ..utils.requests import post
 from ..utils.urls import MESSENGER_PROFILE_API
@@ -25,7 +25,7 @@ home_url_data = {
      "url": "<URL_FOR_CHAT_EXTENSION>",
      "webview_height_ratio": "tall",
      "webview_share_button": "show",
-     "in_test":false}}  # TODO: Set this to true in deployment
+     "in_test":False}}  # TODO: Set this to true in deployment
 persistent_menu_data = {
 
 }
@@ -36,6 +36,21 @@ target_audience_data = {"target_audience": { "audience_type":"all" }}
     #     "countries": {
     #     "whitelist": ["US", "CA"]}}}
 
+def run_scripts(*scripts) -> List[str]:
+    results = []
+    for script in scripts:
+        print(f"Running script {script}.")
+        if script is 'get_started':
+            results += get_started()[0]
+        if script is 'greeting':
+            results += greeting()[0]
+        if script is 'home_url':
+            results += home_url()[0]
+        if script is 'persistent_menu':
+            results += persistent_menu()[0]
+        if script is 'target_audience':
+            resultes += target_audience()[0]
+    return results
 
 def get_started() -> Tuple[bool,dict]:
     """Sets postback for Get Started"""
