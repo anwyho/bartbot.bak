@@ -7,13 +7,11 @@ from typing import (Tuple, Union)
 from wit import Wit
 
 from ...scripts import attachMapToMessenger as bartMap
-from ...utils import phrases
-from ...utils.keys import WIT_TOK
+from ...utils.phrases.phrase import get_phrase
+from ...utils.keys import WIT_TOK, DEBUG_TOK
 from ...utils.requests import (get, post)
 from ...utils.urls import (AUTH, GRAPH_API, MESSAGES_API, MESSENGER_USER_API)
 
-
-MAP_ID = "264370450851085"
 
 def handle_message(fbId:str, message:dict) -> str:
     """Decides whether to process for text or attachments"""
@@ -33,10 +31,7 @@ def handle_message(fbId:str, message:dict) -> str:
 def handle_attachment(fbId:str, attach:dict) -> str:
     """Replies about attachments"""
     logging.info("Received attachment message event")
-    # TODO: More varied responses! 
-    # TODO: Create a more sustainable way to import emojis
-    fb_message(fbId, phrases.get_phrase(phrases.attachments,opt=get_id_name(fbId)[0]))
-    return 'OK'
+    return fb_message(fbId, get_phrase('attachment',opt=get_id_name(fbId)[0]))
 
 
 def handle_text(fbId:str, text:str) -> str:
@@ -50,19 +45,17 @@ def handle_text(fbId:str, text:str) -> str:
     nlp_entities:dict = get_wit_entities(fbId, text)
 
     if nlp_entities == None:
-        # TODO: Create fallback, either message about NLP or do cheap hack
-        # TODO: Link to another suitable BART schedule thing.
-            # Maybe download offline schedules if can't access BART API
-            # Read-access S3 bucket
+        return wit_fallback(fbId)
+        
         return "Cannot access Wit at the moment."
 
     entities:dict = nlp_entities['entities']
 
     # HACK: fix entity parsing
     fn,ln = get_id_name(fbId)
-    if 'greeting' in entities:
+    if 'greetings' in entities:
         logging.info('Sending a greeting')
-        text = phrases.get_phrase(phrases.hello,phrases.cta).format(fn=fn)
+        text = get_phrase('hello', 'cta', opt=fn)
     elif 'intent' in entities and 'map' == entities['intent'][0]['value']:
         text = send_map(fbId, fn)
     else:
@@ -87,8 +80,10 @@ def send_map(fbId:str, fn:str='{opt}') -> str:
                     'type': 'image',
                     'payload': {
                         'attachment_id': mapId}}}}
+
+        # TODO: Maybe batch map and message?
         post(MESSAGES_API, json=data)
-        return phrases.get_phrase(phrases.delivery, opt=fn)
+        return get_phrase('delivery', opt=fn)
     else: 
         # HACK: Make this better
         return 'Check here! http://www.bart.gov/stations'
@@ -120,7 +115,7 @@ def get_id_name(fbId:str) -> Tuple[str,str]:
     logging.info("Getting FB name")
     queries = {'fields':['first_name','last_name']}
     ok, data = get(MESSENGER_USER_API.format(fbId=fbId),json=queries)
-    if "error" in data.keys():
+    if not ok or "error" in data.keys():
         return ('{opt}','{opt}')
     else: 
         return (data['first_name'], data['last_name'])
@@ -140,13 +135,33 @@ def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
 
 
 def handle_keywords(text:str) -> Tuple[bool,Union[str,None]]:
-    resp = ""
+    """Checks for existence of keywords to access debugging"""
+    resp:str = ""
+    keywords:bool = False
     # Tests emojis and creates a palette
-    if 'debug=True;emoji_test()' in text:
-        from ...utils.emojis import emoji_test
-        return (True, emoji_test())
-    return (False, None)
+    if f'debug.verify_tok={DEBUG_TOK};' in text: 
+    # if f'debug.verify_tok=yeaboi;' in text: 
+        resp += f"{'sup fam'}\n"  # f"{"fun"}-strings"
+        keywords = True
+    if keywords:
+        if 'print_all_emojis();' in text:
+            from ...utils.phrases.emoji import print_all_emojis
+            resp +=  f"{print_all_emojis()}\n"
 
+    if resp is not "":
+        return (True, resp)
+    else: 
+        return (False, None)
+
+
+
+def wit_fallback(fbId:str) -> str:
+    # TODO: Create fallback, either message about NLP or do cheap hack
+    # TODO: Link to another suitable BART schedule thing.
+        # Maybe download offline schedules if can't access BART API
+        # Read-access S3 bucket
+    fb_message(fbId, "Uh oh! I'm currently not on talking terms with my natural language processor. Sorry about that!")
+    return "Can't access Wit API at the moment."
 
 
 # TODO: For unsure traits, offer a "find nearest" button

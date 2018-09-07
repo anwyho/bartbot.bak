@@ -19,6 +19,7 @@ greeting_data = {
         "locale": "en_US",
         "text": "A one-stop shop for all your BART needs, " + \
             "all on Messenger!" }]}
+        # TODO: Support multiple locales
 home_url_data = {
   "home_url" : {
      "url": "<URL_FOR_CHAT_EXTENSION>",

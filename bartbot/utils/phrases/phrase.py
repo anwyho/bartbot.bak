@@ -1,25 +1,79 @@
+# TODO: Ambiguous filenames? Maybe change to PhraseFactory or something
+
+import logging
 import random as r
 import time
 
-from typing import List
+from typing import (List, Tuple, Union)
 
-from .emoji import emoji
+from .locales import (DEFAULT_LOCALE, import_locale_package)
 
-def get_phrase(*sentences:List[str], opt:str='{opt}') -> str:
-    """Constructs randomized sentences of phrase lists"""
+currentLocale = None
+localePkg = None
+
+def set_locale(newLocale:str) -> bool:
+    # TODO: Function docstring
+    
+    # Check if current locale already exists
+    global currentLocale
+    global localePkg
+    if localePkg is not None and newLocale is currentLocale: 
+        logging.info(f"New locale {newLocale} and current locale {currentLocale} are the same")
+        return localePkg
+    elif newLocale is None: 
+        newLocale = DEFAULT_LOCALE
+    
+    # Tries to import locale package
+    logging.info(f"Setting locale to {newLocale}")
+    newLocale = newLocale.lower()
+    try: 
+        
+        localePkg = import_locale_package(newLocale)
+    except ImportError as e:
+        logging.error(f"Failed to import package for locale {newLocale}. Error: {e}")
+        return None
+    except KeyError as e:
+        logging.error(f"Failed to import package for locale {newLocale}. Error: {e}")
+        return None
+    
+    currentLocale = newLocale
+    return localePkg
+
+    
+# HACK: This will hang if :
+    # no opt is given or `opt = '{opt}'` AND
+    # the phrases in localePkg.phrases all contain `{opt}`
+        # it will also take more runtime if almost every string 
+        #   contains `{opt}``
+# TODO: Improve performance. Hanging can take up to 5 seconds...
+# TODO: Check that each typeOfSentence exists in localePkg.phrases
+    # ONERROR: Fail silently, remove type from typeOfSentence
+    #   Remember to logging.debug
+def get_phrase(
+        *typesOfPhrases:str, 
+        opt:str='{opt}', 
+        locale:str=DEFAULT_LOCALE) -> str:
+    """Constructs randomized sentences of types of phrases"""
+
+    set_locale(locale) 
     resp = '{opt}'
-    # HACK: This will hang if :
-        # no opt is given or opt = '{opt}' AND
-        # sentences is a List[str] where each string has '{opt}'
-            # it will also take more runtime if almost every string has '{opt}'
-    # NOTE: While this is unchanged, make sure 
+
+
     while '{opt}' in resp: 
-        resp = " ".join(map(r.choice,sentences)).format(opt=opt)  
+        # Maps random choice on each phrase type depending on locale and 
+        #   joins them to make a phrase
+        resp = ' '.join(map(r.choice,[localePkg.phrases[type] for type in typesOfPhrases])).format(
+            opt=opt,
+            time_of_day=time_of_day(),
+            time_of_day_night=time_of_day(True))
     return resp
 
 
-def time_of_day(night:bool=True) -> str:
+# TODO: Connect this to localePkg.times
+def time_of_day(night:bool=False) -> str:
     """Returns signifier for the time of day"""
+    global localePkg
+
     hour = time.localtime().tm_hour 
     if night and (hour > 21 or hour <= 4):
         return "night"
@@ -33,106 +87,7 @@ def time_of_day(night:bool=True) -> str:
         return "day"
 
 
-# Phrase lists
-# TODO: Should I move these all to separate files? With emojis.py
-# TODO: More emojis
-phrases = {
-    'attachment' : [
-        f"Ooh attachment! I'm starting to get a little attached to you too {{opt}} {emoji['smiling_face_with_smiling_eyes']}",
-        "Ooh! For me?",
-        "Wow!",
-        "Hmm... I don\'t quite know what to do with this.",
-        "Hello there.",
-        "Whoa what is that?",
-        "Cool!",
-        ],
-    'bye' : [
-        "See ya later!",
-        "See ya later {opt}!",
-        "Adios!",
-        "Bye bye!",
-        "Zai jian!",
-        "Take care.",
-        "Love you!",
-        "BART safe!",
-        "Bye!",
-        "Bye {opt}!",
-        "Tootles!",
-        "TTFN",
-        "TTYL",
-        "TTYL {opt}!",
-        "Later!",
-        "Until next time!",
-        "Until next time, {opt}!",
-        ],
-    # CTA usually follows hello. 
-    # NOTE: No {opt}s because name would"ve already been stated.
-    'cta' : [
-        "Where are you headed?",
-        "Where are you headed today?",
-        "Where would you like to go?",
-        "Where would you like to go today?",
-        "Where are you off to?",
-        "Where are you off to today?",
-        "Where to?",
-        "Where ya headed?",
-        "Where ya headed today?",
-        ],
-    'delivery' : [
-        "Here it is!",
-        "Here it is {opt}!",
-        "Here you go!",
-        "Here ya go {opt}!",
-        "Here ya go!",
-        "There ya go!",
-        "Special delivery!",
-        "Special delivery, for {opt}",
-        ],
-    'hello' : [
-        "Greetings.",
-        "Hello there.",
-        "Sup!",
-        "Sup {opt}!",
-        "Hello from the other side!",
-        "Good day!", 
-        "Good day, {opt}!",
-        f"Good {time_of_day(night=False)}!",
-        f"Good {time_of_day(night=False)} {{opt}}!",
-        "Hi there!",
-        "Hello!",
-        "Hello {opt}!",
-        "Hi!",
-        "Hi {opt}!",
-        "Hey, didn\'t see ya there!",
-        ],
-    'sorry' : [
-        "Sorry about that!",
-        "Oops!",
-        "Oh no!",
-        "Hmm...",
-        "Darn.",
-        "Shucks.",
-        "That\'s embarrassing...",
-        "Aiya!",
-        "Whoops!",
-        "My bad!",
-        ],
-    'thanks' : [
-        "Thanks!",
-        "Thankya!",
-        "Wow thanks!",
-        "tysm!",
-        "TY!",
-        "Xie xie!",
-        ],
-    'yw' : [
-        "You\'re welcome!",
-        f"Have a great {time_of_day()}!",
-        "Anytime!",
-        "Yeah, no problem!",
-        "Safe travels!",
-        ],
-}
+
     
 
 
@@ -149,7 +104,5 @@ phrases = {
 
 if __name__ == '__main__':
     print("Phrases demonstration:")
-    print(get_phrase(hello,cta))
-    print(get_phrase(yw,bye))
-
-# TODO: Figure out emoji support
+    print(get_phrase('hello','cta'))
+    print(get_phrase('yw','bye'))
