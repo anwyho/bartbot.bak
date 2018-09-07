@@ -59,4 +59,4 @@ node_modules
 
 # Files with sensitive information #
 ####################################
-bartbot/scripts/*.sh
+# bartbot/scripts/*.sh
