@@ -45,6 +45,15 @@ def toggle_seen_and_typing_indicator(fbId:str, on:bool):
         'recipient': { 'id': fbId }}
 
     if on:
+        # TODO: Bundle these two requests into a batch request
+        # https://developers.facebook.com/docs/graph-api/making-multiple-requests
+        # curl \
+        # -F 'access_token=...' \
+        # -F 'batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' \
+        # https://graph.facebook.com
+        # data = {
+        #     'batch' : [data]
+        # }
         data['sender_action'] = 'mark_seen'
         ok, _ = post(MESSAGES_API, json=data)
         if ok:
