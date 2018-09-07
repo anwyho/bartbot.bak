@@ -12,16 +12,19 @@ import sys
 BART_PUBL = os.environ.get('BART_PUBL')
 BART_PRIV = os.environ.get('BART_PRIV')
 
-# Dark Sky
-DS_TOK = os.environ.get('DARK_SKY_PRIV')
-
 # Facebook
 FB_PAGE_ACCESS = os.environ.get('FB_PAGE_ACCESS')
 FB_PAGE_ACCESS_2 = os.environ.get('FB_PAGE_ACCESS_2')
-FB_VERIFY_TOK = os.environ.get('FB_VERIFY_TOKEN')
+FB_VERIFY_TOK = os.environ.get('FB_VERIFY_TOK')
+
+# Dark Sky
+DS_TOK = os.environ.get('DARK_SKY_PRIV')
 
 # Wit
-WIT_TOK = os.environ.get('WIT_TOKEN')
+WIT_TOK = os.environ.get('WIT_SERVER_TOK')
+
+# Debug
+DEBUG_TOK = os.environ.get('DEBUG_TOK')
 
 
 def gen_app_secret_proof():
