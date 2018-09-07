@@ -7,6 +7,7 @@
 # HACK? Still requires modifying the source... 
 
 # TO USE: 
+# Make sure you have your AWS credentials available to aws-cli.
 # Before calling source .env/bin/activate, add this line to 
 #     the beginning of `./<ENV_NAME>/bin/activate`:
 
@@ -26,6 +27,7 @@
 
 # EXTRA: Put this into `else; PS1=...` to change the color of env
 
+    # # This changes the `(.env)` to red!
     # PS1="\[\e[31m\](`basename \"$VIRTUAL_ENV\"`) \[\e[0m\]$PS1"
 
 # WARNING: Not including all the keys may cause problems. 
@@ -67,7 +69,7 @@ import_vars () {
 
     # Prints environment variables joined by commas
     function join_by { local d=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$d}"; }
-    echo "Done importing environment variables $(join_by ", " "${KEYS[@]::${#KEYS[@]}-1}")." >&1
+    echo "Done importing environment variables: $(join_by ", " "${KEYS[@]::${#KEYS[@]}-1}")." >&1
 
 
     remove_vars () {
@@ -81,7 +83,7 @@ import_vars () {
         unset -f import_vars
         unset -f remove_vars
         # Prints environment variables removed
-        echo "Removed variables $(join_by ", " "${KEYS[@]::${#KEYS[@]}-1}")." >&1
+        echo "Removed variables: $(join_by ", " "${KEYS[@]::${#KEYS[@]}-1}")." >&1
     }
 }
 
