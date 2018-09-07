@@ -26,7 +26,39 @@ def main_handle():
 @app.route("/webhook", methods=['POST', 'GET'])
 def handle_webhook():
     """Processes POST and GET requests from the Messenger Platform"""
-    logging.info("S T A R T I N G   L O G")
+
+
+    # try:
+    #     # Set up logging configuration
+    #     logFile = os.path.join( '.',
+    #         'bartbot',
+    #         '.logs', 
+    #         '.bartbot-{}.log'.format('debug' if DEBUG else 'info'))
+    #     os.makedirs(os.path.dirname(logFile), exist_ok=True)
+    # except Exception as e:
+    #     logFile.error(f"Couldn't make log file {logFile}. Error: {e}")
+
+    # logFormat = \
+    #         "%(levelname)s:%(module)s:%(lineno)d %(message)s:%(asctime)s"
+
+    # try:
+    #     # TODO: Check if uncommenting this breaks AWS Lambda
+    #     for handler in logging.root.handlers[:]:
+    #         print(handler)
+    #         logging.root.removeHandler(handler)
+
+    #     logging.basicConfig(
+    #         filename=logFile, 
+    #     # logging.basicConfig(
+    #         format=logFormat, 
+    #         level=logging.DEBUG if DEBUG else logging.INFO)
+    # except Exception as e:
+    #     logFile.error(f"Couldn't configure logfile. Error: {e}")
+
+
+
+
+    logging.info("\n\nS T A R T I N G   N E W   L O G\n\n")
 
     if verify_request(request):
         res = process_request(request)
@@ -34,6 +66,7 @@ def handle_webhook():
         res = "Invalid request. Failed SHA-1 verification."
 
     logging.info("E N D I N G   L O G")
+    logging.shutdown()
 
     return res+'\n'
 
