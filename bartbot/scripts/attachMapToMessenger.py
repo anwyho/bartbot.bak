@@ -20,10 +20,15 @@ def get_map_id(forceRefresh=False) -> Union[str,None]:
     """
 
     mapId = ""
-    if not forceRefresh: mapId = read_local()
-    if mapId == "": mapId = post_from_git()
-    if mapId != "": write_local(mapId)
-    else: mapId = None  # Clearly not found
+    
+    if not forceRefresh: 
+        mapId = read_local()
+
+    if mapId == "": 
+        mapId = post_from_git()
+        if mapId != "": 
+            write_local(mapId)
+        else: mapId = None  # Clearly not found
 
     return mapId
     
