@@ -2,13 +2,7 @@
 
 from ..emoji import emojis
 # TODO: More emojis
-
-times = {
-    4 : "morning",
-    12 : "afternoon",
-    16 : "evening",
-    23 : "night",
-}
+# TODO: Better support for {opt} (maybe in .format() pass in opt dict)
 
 phrases = {
     'attachment' : [

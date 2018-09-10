@@ -1,4 +1,7 @@
+import logging
+
 from typing import List
+
 
 # List of used emojis
 emojis = {
@@ -230,6 +233,7 @@ def emoji_code_factory(emoji_names:List[str]):
 
 def print_all_emojis() -> str:
     all_emojis = ""
+    logging.info("Printing all emojis")
     for k,v in emojis.items():
         all_emojis += f"{v}\n{{e.emojis[{k.__repr__()}]}}\n"
     return all_emojis
