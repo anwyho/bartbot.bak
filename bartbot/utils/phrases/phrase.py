@@ -11,12 +11,13 @@ from .locales import (DEFAULT_LOCALE, import_locale_package)
 currentLocale = None
 localeModule = None
 
-def set_locale(newLocale:str) -> bool:
+def set_locale(newLocale:str=DEFAULT_LOCALE) -> bool:
     # TODO: Function docstring
     
-    # Check if current locale already exists
     global currentLocale
     global localeModule
+    
+    # Check if current locale already exists
     if localeModule is not None and newLocale is currentLocale: 
         logging.info(f"New locale {newLocale} and current locale {currentLocale} are the same")
         return localeModule
@@ -46,26 +47,40 @@ def set_locale(newLocale:str) -> bool:
         # it will also take more runtime if almost every string 
         #   contains `{opt}``
 # TODO: Improve performance. Hanging can take up to 5 seconds...
-# TODO: Check that each typeOfSentence exists in localeModule.phrases
-    # ONERROR: Fail silently, remove type from typeOfSentence
-    #   Remember to logging.debug
 def get_phrase(
         *typesOfPhrases:str, 
-        opt:str='{opt}', 
+        opt:dict={'fn' : '{opt[fn]}'}, 
         locale:str=DEFAULT_LOCALE) -> str:
     """Constructs randomized sentences of types of phrases"""
 
-    set_locale(locale) 
-    resp = '{opt}'
+    global currentLocale
+    global localeModule
 
+    # Check to see if correct locale is installed
+    if localeModule is None or currentLocale is not locale:
+        logging.info(f"Locale module was not previously set or current locale {currentLocale} is not given locale {locale}. Setting now to locale {locale}.")
+        set_locale(locale) 
 
-    while '{opt}' in resp: 
-        # Maps random choice on each phrase type depending on locale and 
-        #   joins them to make a phrase
-        resp = ' '.join(map(r.choice,[localeModule.phrases[type] for type in typesOfPhrases])).format(
-            opt=opt,
-            time_of_day=time_of_day(night=False),
-            time_of_day_night=time_of_day(night=True))
+    resp = '{opt'
+    if 'fn' not in opt: 
+        opt['fn'] = '{opt[\'fn\']}'
+    if 'time_of_day_wo_night' not in opt: 
+        opt['time_of_day_w_night'] = time_of_day(night=True)
+    if 'time_of_day' not in opt: 
+        opt = time_of_day(night=False)
+
+    while '{opt' in resp: 
+        # Maps random choice on each phrase list type 
+        #   depending on locale and joins them to make a phrase
+        resp = ' '.join(
+            map(r.choice,
+                [localeModule.phrases[type] 
+                    if type in localeModule.phrases 
+                    else type 
+                for type in typesOfPhrases])
+            ).format(opt=opt)
+
+    logging.debug(f"Phrase being returned: {resp}")
     return resp
 
 
