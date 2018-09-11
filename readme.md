@@ -26,7 +26,7 @@ I have always wanted to make some sort of quick access to the BART API but didn'
 
 Being able to message (or even speak) to BART about the next trains seemed like such a convenient idea. So far, I've learned an incredible amount, since this project covers so much!
 
-Things they didn't teach me in university:
+Things Bartbot taught me:
 
 * Writing libraries
   * Semantic Versioning
@@ -34,6 +34,8 @@ Things they didn't teach me in university:
 * Logging & debugging
 * Package logistics
 * RESTful APIs
+  * All the protocols
+  * How to design them and how to call them
   * Key/secret management
 * Serverless programming
 * Natural language processing
@@ -87,6 +89,12 @@ I went through plenty of design iterations for how to structure the code, but I 
 
 <!-- emoji test :smile: :monorail: :light_rail: :metro: -->
 
+## :wrench: Set It Up!
+
+<!-- TODO: This section is not done yet -->
+
+I will detail this section more at v1.0 release. 
+
 ## :clock10: Releases
 
 Ayy [check it](releases).
@@ -95,9 +103,9 @@ Ayy [check it](releases).
 
 <!-- TODO: This section is not done yet -->
 
-See the [contributing guideline](contributing).
+I'm not sure if I'll be supporting contributors before v1.0, but watch the repo and see the [contributing guideline](contributing) if you're interested! It'll be soon. 
 
-Check out the [functions-to-implement checklist](toimplement).
+Also, check out the [functions-to-implement checklist](toimplement).
 
 ## :trophy:  Acknowledgements
 
@@ -126,30 +134,31 @@ This Serverless tutorial got my app up and running.
 [aws]:             https://aws.amazon.com/
 [bartapi]:         http://api.bart.gov/docs/overview/index.aspx
 [bottle]:          https://bottlepy.org/
-[darksky]:         https://darksky.net/dev
-[gitprof]:         http://github.com/anwyho
+[darksky]:         https://darksky.net/dev/
+[gitprof]:         http://github.com/anwyho/
 [lambda]:          https://aws.amazon.com/lambda/
-[messenger]:       https://messenger.com
+[messenger]:       https://messenger.com/
 [messengerapps]:   https://messenger.fb.com/
 [parameterstore]:  https://aws.amazon.com/systems-manager/
-[pybart]:          https://github.com/anwyho/pybart
+[pybart]:          https://github.com/anwyho/pybart/
 [python3]:         https://www.python.org/
 [requests]:        http://docs.python-requests.org/en/master/
 [s3]:              https://aws.amazon.com/s3/
 [serverless]:      https://serverless.com/
 [unittest]:        https://docs.python.org/3/library/unittest.html
 [venv]:            https://virtualenv.pypa.io/en/stable/
-[wit]:             https://wit.ai
+[wit]:             https://wit.ai/
 [zappa]:           https://www.zappa.io/
 
 <!-- Articles -->
 [khomenko]:        https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup
 [nodetutorial]:    https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76
-[serverlesstutorial]: https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/
+[serverlesstutorial]: 
+                   https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/
 
 <!-- Repo References -->
-[changelog]:       ./RELEASES.md
 [contributing]:    ./CONTRIBUTING.md
 [license]:         ./LICENSE
+[releases]:        ./RELEASES.md
 [requirements]:    ./requirements.txt
 [toimplement]:     ./functionsToImplement.md
