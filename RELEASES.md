@@ -6,17 +6,18 @@ This change log tries its best to follow [Semantic Versioning](semver). Since th
 
 ### To Be Added
 
-* Something I will be adding
+* Support for BART API through a [pybart session](https://github.com/anwyho/pybart/)
 
 ## [1.0.0] - 2018-MM-DD
 
-* Anticipating 1.0 release!
+* Anticipating 1.0 release! Getting ready to ship it :shipit:
 
 ## [0.6.2] - 2018-09-11
 
 ### Notes
 
 * From now on, I'll be more conscious of contributing to versions and patches. I'm still learning and hope to be an expert at managing projects soon!
+* Also, much of the research has been completed. In the near future I will be focusing on implementation and pushing towards the final product. The goal is to reach v1.0.0 by October! :octocat:
 
 ### Added
 
