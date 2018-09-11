@@ -2,7 +2,7 @@ import unittest
 
 from bartbot.utils.phrases import emoji as e
 
-class test_emoji(unittest.TestCase):
+class TestEmoji(unittest.TestCase):
 
     def test_print_all_emojis(self):
         if len(e.emojis):
