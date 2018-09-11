@@ -47,6 +47,7 @@ functions:
     handler: wsgi.handler
     description: Handles Bartbot requests from Facebook Messenger Platform
     timeout: 21
+    memorySize: 512
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
