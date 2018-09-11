@@ -22,9 +22,21 @@
 
 "Should I run to catch the train?" This was the main question that I wanted to answer with Bartbot.
 
-I have always wanted to make some sort of quick access to the BART API but didn't know what format to write it in. Then one day, as I looked for open-source projects to contribute to, I found some examples of Facebook Messenger chatbots!
+I have always wanted to make some sort of quick access to the BART API but didn't know where to start developing. Then one day, as I looked for open-source projects to contribute to, I found some examples of Facebook Messenger chatbots! It was then that I became super inspired to create my own chatbot. Thus, Bartbot was born.
 
-Being able to message (or even speak) to BART about the next trains seemed like such a convenient idea. And thus stood the inception of Bartbot.
+Being able to message (or even speak) to BART about the next trains seemed like such a convenient idea. So far, I've learned an incredible amount, since this project covers so much!
+
+Things they didn't teach me in university:
+
+* Writing libraries
+  * Semantic Versioning
+  * Readme-Driven Development
+* Logging & debugging
+* Package logistics
+* RESTful APIs
+  * Key/secret management
+* Serverless programming
+* Natural language processing
 
 ## :gift:  Implementation
 
@@ -42,7 +54,7 @@ I went through plenty of design iterations for how to structure the code, but I 
     * Exposes a RESTful API endpoint for my Lambda function
   * [S3](s3)
     * Hosts user data, sessions, and caches
-  * [Parameter Store / Systems Manager](parameterstore)
+  * [Systems Manager/Parameter Store](parameterstore)
     * Houses my secrets like API keys and the lot
 * [Wit.ai](wit)
   * Natural language processing for requests
@@ -68,6 +80,10 @@ I went through plenty of design iterations for how to structure the code, but I 
     * A Python library for accessing the BART API with caching
   * [Dark Sky](darksky) _(Future Support)_
     * API endpoint for weather information at specific stations
+  * Transfer and arrival notifications
+    * I've thought hard about how to implement these with AWS Lambda constraings (and even AWS Step Functions), but haven't come to any solid ideas yet, since neither can take the ~2hr longest trip (Antioch to Dublin Pleasanton). Please shoot me a message if you happen to have a work-around!
+  * Increased use of concurrency (even though I'm working in Python)
+    * I can easily see implementing futures
 
 <!-- emoji test :smile: :monorail: :light_rail: :metro: -->
 
