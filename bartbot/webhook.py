@@ -1,7 +1,8 @@
 # TODO: File-level docstrings
 
-
-import logging  # TODO: Look into logging that filters out sensitive info
+import json
+# TODO: Look into logging that filters out sensitive info
+import logging  
 import os
 
 from flask import (Flask, request)
@@ -128,7 +129,7 @@ def debug():
         
         if 'scripts' in qParams:
             from .scripts import setMessengerProfile as prof
-            res = prof.run_scripts(qParams['scripts'])
+            res = json.dumps(prof.run_scripts(qParams['scripts']), indent=2)
             return f"Ran scripts with results {res}."
     return "OK"
 
