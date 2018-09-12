@@ -26,12 +26,20 @@ WIT_TOK = os.environ.get('WIT_SERVER_TOK')
 # Debug
 DEBUG_TOK = os.environ.get('DEBUG_TOK')
 
+_pudding = None
 
 def gen_app_secret_proof():
-    """Calculates FB app secret proof from SHA256"""
+    """
+    Calculates FB app secret proof from SHA256 with Singleton DP
+    """
+
     logging.info("Generating app secret proof in keys.py")
-    pudding = hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),
-        msg=FB_PAGE_ACCESS.encode('utf-8'),
-        digestmod=hashlib.sha256).hexdigest()
-    return pudding
+
+    global _pudding
+    _pudding = _pudding if _pudding else \
+        hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),
+            msg=FB_PAGE_ACCESS.encode('utf-8'),
+            digestmod=hashlib.sha256).hexdigest()
+    
+    return _pudding
 
