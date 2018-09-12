@@ -275,7 +275,7 @@ This change log tries its best to follow [Semantic Versioning](semver). Since th
 
 ### Added
 
-* Started README.md
+* Started [`README.md`](README.md)
 * Initialized environment and initial dependencies
 
 <!-- Categories for headers

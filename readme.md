@@ -1,7 +1,5 @@
 # :light_rail:  Bartbot
 
-## :sparkles:  A New Hope
-
 *Oh shoot.*
 
 ***You, yelling*** *into your phone as you sprint from your Prius*:
@@ -89,13 +87,13 @@ I went through plenty of design iterations for how to structure the code, but I 
 
 <!-- emoji test :smile: :monorail: :light_rail: :metro: -->
 
-## :wrench: Set It Up!
+## :wrench: Set It Up
 
 <!-- TODO: This section is not done yet -->
 
-I will detail this section more at v1.0 release. 
+I will detail this section more at v1.0 release.
 
-## :clock10: Releases
+## :sparkles: Releases
 
 Ayy [check it](releases).
 
