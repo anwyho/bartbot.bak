@@ -1,84 +1,107 @@
+"""
+The phrase module statically remembers the current locale and provides a facade to the locales, phrases, and emojis modules. It allows the setting of new locales and provides a fault-tolerant interface for phrase generation. 
+"""
+
 # TODO: Ambiguous filenames? Maybe change to PhraseFactory or something
 
 import logging
 import random as r
 import time
 
+from types import ModuleType
 from typing import (List, Tuple, Union)
 
-from .locales import (DEFAULT_LOCALE, import_locale_package)
+from .locales import (DEFAULT_LOCALE, import_locale_module)
+
 
 currentLocale = None
-localeModule = None
+phrasesModule = None
 
-def set_locale(newLocale:str=DEFAULT_LOCALE) -> bool:
-    # TODO: Function docstring
+# TODO: Turn this into a class? Class communicates with locale 
+#   package and holds state
+
+def set_locale(newLocale:str=None) -> ModuleType:
+    """
+    Idempotent function that sets locale for the current package. If no locale is given, current locale is set and returned with fallback to default locale.
+    Always returns a usable phrases module or raises an error. 
+    """
     
     global currentLocale
-    global localeModule
-    
-    # Check if current locale already exists
-    if localeModule is not None and newLocale is currentLocale: 
+    global phrasesModule
+
+    if newLocale is None:  # no argument given
+        if currentLocale is None:  # no locale set
+            return set_locale(DEFAULT_LOCALE)  # set default locale
+        else:  # locale is set
+            return set_locale(currentLocale)  # set locale
+    elif newLocale == currentLocale and phrasesModule is not None:
         logging.info(f"New locale {newLocale} and current locale {currentLocale} are the same")
-        return localeModule
-    elif newLocale is None: 
-        newLocale = DEFAULT_LOCALE
+        return phrasesModule  # current phrasesModule is new locale
     
-    # Tries to import locale package
     logging.info(f"Setting locale to {newLocale}")
     newLocale = newLocale.lower()
+
     try: 
-        
-        localeModule = import_locale_package(newLocale)
+        phrasesModule, currentLocale = import_locale_module(newLocale)
     except ImportError as e:
-        logging.error(f"Failed to import package for locale {newLocale}. Error: {e}")
-        return None
+        logging.warning(f"Failed to import package for locale {newLocale}. Error: {e}")
+        return import_locale_module()[0]
     except KeyError as e:
-        logging.error(f"Failed to import package for locale {newLocale}. Error: {e}")
-        return None
+        logging.warning(f"Failed to import package for locale {newLocale}. Error: {e}")
+        return import_locale_module()[0]
     
-    currentLocale = newLocale
-    return localeModule
+    return phrasesModule
 
     
 # HACK: This will hang if :
     # no opt is given or `opt = '{opt}'` AND
-    # the phrases in localeModule.phrases all contain `{opt}`
+    # the phrases in phrasesModule.phrases all contain `{opt}`
         # it will also take more runtime if almost every string 
         #   contains `{opt}``
 # TODO: Improve performance. Hanging can take up to 5 seconds...
+#   Remove random beyond initial call?
 def get_phrase(
-        *typesOfPhrases:str, 
+        *typesOfPhrases, 
         opt:dict={'fn' : '{opt[fn]}'}, 
-        locale:str=DEFAULT_LOCALE) -> str:
+        locale:str=None) -> str:
     """Constructs randomized sentences of types of phrases"""
 
-    global currentLocale
-    global localeModule
+    # get_phrase() should use locale temporarily and currentLocale if possible and fallback to DEFAULT_LOCALE
+    if locale is not None:  # attempt to load given locale
+        locale = locale.lower()
+        try: 
+            curPhrasesModule, _ = import_locale_module(locale)
+        except KeyError as e:
+            logging.warning("Couldn't import locale {locale}. Using default locale")
+            curPhrasesModule, _ = import_locale_module()  # fallback
+    elif locale is None:  # no locale given
+        global phrasesModule
+        if phrasesModule is None:  # no phrases module set
+            curPhrasesModule = set_locale()  # attempts to load phrases
+        elif phrasesModule is not None: 
+            curPhrasesModule = phrasesModule
 
-    # Check to see if correct locale is installed
-    if localeModule is None or currentLocale is not locale:
-        logging.info(f"Locale module was not previously set or current locale {currentLocale} is not given locale {locale}. Setting now to locale {locale}.")
-        set_locale(locale) 
-
+    # Sets dictionary of terms to replace
     resp = '{opt'
     if 'fn' not in opt: 
-        opt['fn'] = '{opt[\'fn\']}'
+        opt['fn'] = "{opt[fn]}"
     if 'time_of_day_wo_night' not in opt: 
         opt['time_of_day_w_night'] = time_of_day(night=True)
     if 'time_of_day' not in opt: 
-        opt = time_of_day(night=False)
+        opt['time_of_day'] = time_of_day(night=False)
 
+    # Loops through choosing phrases until sentence has no more placeholders. 
     while '{opt' in resp: 
         # Maps random choice on each phrase list type 
         #   depending on locale and joins them to make a phrase
         resp = ' '.join(
-            map(r.choice,
-                [localeModule.phrases[type] 
-                    if type in localeModule.phrases 
-                    else type 
-                for type in typesOfPhrases])
-            ).format(opt=opt)
+            [
+                r.choice(curPhrasesModule.phrases[type]).strip()
+                    if type in curPhrasesModule.phrases
+                    else type.strip()
+                for type in typesOfPhrases
+            ]
+        ).format(opt=opt)
 
     logging.debug(f"Phrase being returned: {resp}")
     return resp
@@ -87,11 +110,10 @@ def get_phrase(
 # TODO: Connect this to localeModule.times
 def time_of_day(night:bool=False) -> str:
     """Returns signifier for the time of day"""
-    global localeModule
+    global phrasesModule
     global currentLocale
     hour = time.localtime().tm_hour 
-
-    if currentLocale is "en_us":
+    if currentLocale == "en_us":
         if night and (hour > 21 or hour <= 4):
             return "night"
         elif hour > 16:
@@ -105,13 +127,13 @@ def time_of_day(night:bool=False) -> str:
                 return "day"
         else:
             return "night"
-    elif currentLocale is "ja_jp":
+    elif currentLocale == "ja_jp":
         pass
-    elif currentLocale is "es_la":
+    elif currentLocale == "es_la":
         pass
-    elif currentLocale is "zh_cn" or \
-         currentLocale is "zh_hk" or \
-         currentLocale is "zh_tw":
+    elif currentLocale == "zh_cn" or \
+         currentLocale == "zh_hk" or \
+         currentLocale == "zh_tw":
         pass
     raise NotImplementedError(f"Retrieving times of day for locale {currentLocale} is not currently supported.")
 

@@ -1,6 +1,8 @@
 
 
-from ..emoji import emojis
+from ..emojis import emojis
+
+locale = "ja_JP"
 
 phrases = {
     'attachment' : [

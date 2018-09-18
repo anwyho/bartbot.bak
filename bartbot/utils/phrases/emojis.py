@@ -235,7 +235,7 @@ def print_all_emojis() -> str:
     all_emojis = ""
     logging.info("Printing all emojis")
     for k,v in emojis.items():
-        all_emojis += f"{v}\n{{e.emojis[{k.__repr__()}]}}\n"
+        all_emojis += f"{v}\n{{emojis[{k.__repr__()}]}}\n"
     return all_emojis
 
 

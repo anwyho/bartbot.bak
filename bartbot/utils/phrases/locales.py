@@ -1,3 +1,5 @@
+"""The locales module keeps a list of all supported locales and returns errors on import failures."""
+
 import importlib
 import logging
 
@@ -22,17 +24,17 @@ FUTURE_SUPPORTED_LOCALES:dict = {
     "zh_tw" : "zh_HK_TW",
 }
 
-def import_locale_package(locale:str=DEFAULT_LOCALE) -> ModuleType:
+def import_locale_module(locale:str=DEFAULT_LOCALE) -> Tuple[ModuleType,str]:
     locale = locale.lower()
     if locale in SUPPORTED_LOCALES:
         logging.info(f"Importing locale {locale}")
         return importlib.import_module(
                 '.phrases_'+SUPPORTED_LOCALES[locale], 
                 package="bartbot.utils.phrases."+
-                    SUPPORTED_LOCALES[locale])
+                    SUPPORTED_LOCALES[locale]), locale
     else:
         if locale == DEFAULT_LOCALE:
-            logging.error("Couldn't find default locale. Probably unset it or dereferenced it in `bartbot/utils/phrases/locales.py")
+            logging.error("Couldn't find default locale. Probably unset it or dereferenced it in `bartbot/utils/phrases/locales.py. Fix ASAP!")
             raise ModuleNotFoundError(f"Support for default locale is not implemented. Please implement default locale.")
         else: 
             raise KeyError(f"Locale {locale} is not in list of supported locales")

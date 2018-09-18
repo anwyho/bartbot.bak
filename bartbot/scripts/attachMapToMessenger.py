@@ -39,11 +39,11 @@ def read_local() -> str:
         with open(BART_MAP_FILE, 'r') as f:
             mapId = f.read()
     except IOError as e:
-        logging.error("Couldn't retreive attachment ID from file " +  
+        logging.warning("Couldn't retreive attachment ID from file " +  
             f"{BART_MAP_FILE}. Error: {e}")
         mapId = ""
     if not mapId.isdigit():
-        logging.error("Invalid attachment ID in file")
+        logging.warning("Invalid attachment ID in file")
         logging.debug(f"mapId = {mapId}")
         mapId = ""
     else:
@@ -66,7 +66,7 @@ def post_from_git() -> str:
     if ok and 'attachment_id' in resp:
         return resp['attachment_id']
     else:
-        logging.error("Couldn't retrieve attachment ID from Messenger")
+        logging.warning("Couldn't retrieve attachment ID from Messenger")
         logging.debug(f"resp: {json.dumps(resp,indent=2)}")
         return ""
 
@@ -79,7 +79,7 @@ def write_local(mapId:str) -> bool:
         logging.info(f"Wrote map attachment ID to file {BART_MAP_FILE}")
         return True
     except Exception as e:
-        logging.error("Couldn't write attachment ID to " +  
+        logging.warning("Couldn't write attachment ID to " +  
             f"file {BART_MAP_FILE}. Received error {e}.")
     return False
 
