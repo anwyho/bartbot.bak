@@ -21,17 +21,17 @@ def process_page_entry(entry:dict) -> str:
 
         toggle_seen_and_typing_indicator(fbId, True)
 
-        res = None
         if 'message' in message.keys():
             logging.info("Received message")
             res = handle_message(fbId, message['message'])
-
         elif 'postback' in message.keys():
             logging.info("Received postback")
             res = handle_postback(fbId, message['postback'])
-
+        elif 'referral' in message.keys():
+            logging.info("Received referral")
+            res = "Received referral object. Referral is not currently supported."
         else: 
-            res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging referrals'."
+            res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging_referrals'."
 
         toggle_seen_and_typing_indicator(fbId, False)
 
@@ -47,10 +47,7 @@ def toggle_seen_and_typing_indicator(fbId:str, on:bool):
     if on:
         # TODO: Bundle these two requests into a batch request
         # https://developers.facebook.com/docs/graph-api/making-multiple-requests
-        # curl \
-        # -F 'access_token=...' \
-        # -F 'batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' \
-        # https://graph.facebook.com
+        # curl -F 'access_token=...&batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' https://graph.facebook.com
         # data = {
         #     'batch' : [data]
         # }
@@ -60,27 +57,17 @@ def toggle_seen_and_typing_indicator(fbId:str, on:bool):
             data['sender_action'] = 'typing_on'
             ok, _ = post(MESSAGES_API, json=data)
             if not ok: 
-                logging.error("Didn't complete 'typing_on' sender action.")
+                logging.warning("Didn't complete 'typing_on' sender action.")
         else: 
-            logging.error("Didn't complete 'mark_seen' sender action.")
+            logging.warning("Didn't complete 'mark_seen' sender action.")
     else: 
         data['sender_action'] = 'typing_off'
         ok, _ = post(MESSAGES_API, json=data)
         if not ok: 
-            logging.error("Didn't complete 'typing_off' sender action.")
+            logging.warning("Didn't complete 'typing_off' sender action.")
 
 
-
-
-# def first_entity_value(entities, entity):
-#     """Returns first entity value"""
-#     if entity not in entities:
-#         return None
-#     val = entities[entity][0]['value']
-#     if not val:
-#         return None
-#     return val['value'] if isinstance(val, dict) else val
-
+# NOTE: I can possibly use these later
 # def pre_response(fbId:str, messageObj:dict) -> None:
 #     """Tasks to prep for and set up response"""
 #     turn_on_seen_and_typing_indicator(fbId)    

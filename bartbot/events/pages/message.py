@@ -31,7 +31,9 @@ def handle_message(fbId:str, message:dict) -> str:
 def handle_attachment(fbId:str, attach:dict) -> str:
     """Replies about attachments"""
     logging.info("Received attachment message event")
-    return fb_message(fbId, get_phrase('attachment',opt=get_id_name(fbId)[0]))
+
+    fn, _ = get_id_name(fbId)
+    return fb_message(fbId, get_phrase('attachment',opt={'fn' : fn}))
 
 
 def handle_text(fbId:str, text:str) -> str:
@@ -47,15 +49,13 @@ def handle_text(fbId:str, text:str) -> str:
     if nlp_entities == None:
         return wit_fallback(fbId)
         
-        return "Cannot access Wit at the moment."
-
     entities:dict = nlp_entities['entities']
 
     # HACK: fix entity parsing
     fn,ln = get_id_name(fbId)
     if 'greetings' in entities:
         logging.info('Sending a greeting')
-        text = get_phrase('hello', 'cta', opt=fn)
+        text = get_phrase('hello', 'cta', opt={'fn' : fn})
     elif 'intent' in entities and 'map' == entities['intent'][0]['value']:
         text = send_map(fbId, fn)
     else:
@@ -83,7 +83,7 @@ def send_map(fbId:str, fn:str='{opt}') -> str:
 
         # TODO: Maybe batch map and message?
         post(MESSAGES_API, json=data)
-        return get_phrase('delivery', opt=fn)
+        return get_phrase('delivery', opt={'fn' : fn})
     else: 
         # HACK: Make this better
         return 'Check here! http://www.bart.gov/stations'
@@ -130,7 +130,7 @@ def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
         logging.debug(f"Wit entities: {json.dumps(resp,indent=2)}")
         return resp
     except Exception as e:
-        logging.error(f"Failed to access Wit API. Error: {e}.")
+        logging.warning(f"Failed to access Wit API. Error: {e}.")
         return None
 
 
@@ -145,7 +145,7 @@ def handle_keywords(text:str) -> Tuple[bool,Union[str,None]]:
         keywords = True
     if keywords:
         if 'print_all_emojis();' in text:
-            from ...utils.phrases.emoji import print_all_emojis
+            from ...utils.phrases.emojis import print_all_emojis
             resp +=  f"{print_all_emojis()}\n"
 
     if resp is not "":
