@@ -44,11 +44,13 @@ def handle_text(fbId:str, text:str) -> str:
     if keyword_found:
         return fb_message(fbId, resp_text)
 
-    nlp_entities:dict = get_wit_entities(fbId, text)
-
-    if nlp_entities == None:
+    try: 
+        nlp_entities:dict = get_wit_entities(fbId, text)
+    except:
         return wit_fallback(fbId)
-        
+    else:
+        pass  # Call a new function to handle below
+
     entities:dict = nlp_entities['entities']
 
     # HACK: fix entity parsing
@@ -121,17 +123,17 @@ def get_id_name(fbId:str) -> Tuple[str,str]:
         return (data['first_name'], data['last_name'])
 
 
-def get_wit_entities(fbId:str, text:str) -> Union[None,str]:
+def get_wit_entities(fbId:str, text:str) -> dict:
     """Calls Wit API for natural language processing"""
     try:
         resp = Wit(access_token=WIT_TOK).message(
             msg=text, context={'session_id':fbId}, verbose=True)
+    except Exception as e:
+        raise ConnectionError(f"Failed to access Wit API. Error: {e}.")
+    else: 
         logging.info("Retrieved Wit entities")
         logging.debug(f"Wit entities: {json.dumps(resp,indent=2)}")
         return resp
-    except Exception as e:
-        logging.warning(f"Failed to access Wit API. Error: {e}.")
-        return None
 
 
 def handle_keywords(text:str) -> Tuple[bool,Union[str,None]]:
@@ -160,7 +162,7 @@ def wit_fallback(fbId:str) -> str:
     # TODO: Link to another suitable BART schedule thing.
         # Maybe download offline schedules if can't access BART API
         # Read-access S3 bucket
-    fb_message(fbId, "Uh oh! I'm currently not on talking terms with my natural language processor. Sorry about that!")
+    fb_message(fbId, "Uh oh! I'm currently not on talking terms with my natural language processor. Sorry about that!!!")
     return "Can't access Wit API at the moment."
 
 

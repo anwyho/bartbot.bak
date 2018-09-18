@@ -47,8 +47,8 @@ def handle_webhook():
         logging.debug(f"An unexpected error occurred. Error: {e}. Error info: {exc_type}, {fname}, {exc_tb.tb_lineno}")
         print(f"An unexpected error occurred. Error: {e}. Error info: {exc_type}, {fname}, {exc_tb.tb_lineno}")
         res = "Not OK, but surviving. Check logs\n"
-
-    return res
+    finally:
+        return res
 
 
 def verify_request(request) -> bool:

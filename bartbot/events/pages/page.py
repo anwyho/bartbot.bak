@@ -18,39 +18,41 @@ def process_page_entry(entry:dict) -> str:
         except KeyError as e:
             raise KeyError("Expected 'sender.id' in messaging. " + \
                 f"Received error: {e}.") 
+        else:
+            toggle_seen_and_typing_indicator(fbId, True)
+            res = identify_message(fbId, message)
+            toggle_seen_and_typing_indicator(fbId, False)
+            return res
 
-        toggle_seen_and_typing_indicator(fbId, True)
+def identify_message(fbId:str, message:str) -> str: 
+    if 'message' in message.keys():
+        logging.info("Received message")
+        res = handle_message(fbId, message['message'])
+    elif 'postback' in message.keys():
+        logging.info("Received postback")
+        res = handle_postback(fbId, message['postback'])
+    elif 'referral' in message.keys():
+        logging.info("Received referral")
+        res = "Received referral object. Referral is not currently supported."
+    else: 
+        res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging_referrals'."
 
-        if 'message' in message.keys():
-            logging.info("Received message")
-            res = handle_message(fbId, message['message'])
-        elif 'postback' in message.keys():
-            logging.info("Received postback")
-            res = handle_postback(fbId, message['postback'])
-        elif 'referral' in message.keys():
-            logging.info("Received referral")
-            res = "Received referral object. Referral is not currently supported."
-        else: 
-            res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging_referrals'."
+    return res
 
-        toggle_seen_and_typing_indicator(fbId, False)
 
-        return res
-
-        
-def toggle_seen_and_typing_indicator(fbId:str, on:bool):
+# TODO: Bundle these two requests into a batch request
+# https://developers.facebook.com/docs/graph-api/making-multiple-requests
+# curl -F 'access_token=...&batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' https://graph.facebook.com
+# data = {
+#     'batch' : [data]
+# }
+def toggle_seen_and_typing_indicator(fbId:str, on:bool) -> None:
     """POST to Messenger Platform to turn on sender actions"""
     data = {
         'messaging_type': 'RESPONSE', 
         'recipient': { 'id': fbId }}
 
     if on:
-        # TODO: Bundle these two requests into a batch request
-        # https://developers.facebook.com/docs/graph-api/making-multiple-requests
-        # curl -F 'access_token=...&batch=[{"method":"GET", "relative_url":"me"},{"method":"GET", "relative_url":"me/friends?limit=50"}]' https://graph.facebook.com
-        # data = {
-        #     'batch' : [data]
-        # }
         data['sender_action'] = 'mark_seen'
         ok, _ = post(MESSAGES_API, json=data)
         if ok:
