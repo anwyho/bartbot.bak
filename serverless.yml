@@ -59,4 +59,4 @@ functions:
       FB_PAGE_ACCESS: ${ssm:FB_PAGE_ACCESS}
       FB_PAGE_ACCESS_2: ${ssm:FB_PAGE_ACCESS_2}
       FB_VERIFY_TOK: ${ssm:FB_VERIFY_TOK}
-      WIT_TOK: ${ssm:WIT_SERVER_TOK}
+      WIT_SERVER_TOK: ${ssm:WIT_SERVER_TOK}
