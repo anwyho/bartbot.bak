@@ -1,0 +1,2 @@
+workon bartbot
+pip install flask wit requests

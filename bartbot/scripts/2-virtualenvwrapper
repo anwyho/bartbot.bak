@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Hello! Here are the installation instructions for setting up virtualenvwrapper for use with bartbot.
+
+# PREREQUISITES: 
+# - pip and awscli must be installed and on your path
+# - valid credentials and configs in ~/.aws/
+# - correct parameters in AWS Parameter Store as highlighted in ./postactivate
+
+
+# 1. Use your desired pip version to run 
+#
+#   pip install virtualenv
+#   pip install virtualenvwrapper
+#
+# 2. Set the variable `WORKON_HOME` and create the necessary file paths
+#
+#   export WORKON_HOME=<MY_VIRTUAL_ENVIRONMENTS>  # e.g. name it VirEnvs?
+#   mkdir -p $WORKON_HOME
+#
+# 3. Start the virtualenvwrapper script
+#
+#   source /usr/local/bin/virtualenvwrapper.sh
+#
+# 4. Move the following lines into your ~/.bashrc or ~/.profile:
+#
+#   export WORKON_HOME=<MY_VIRTUAL_ENVIRONMENTS>
+#   source /usr/local/bin/virtualenvwrapper.sh
+#
+# 5. Create a virtual environment with the `mkvirtualenv` command
+#
+#   mkvirtualenv bartbot
+#   workon bartbot
+#
+# 5. Move ./postactivate and ./predeactivate into the folder 
+#       $VIRTUAL_ENV/bartbot and activate the postactivate file
+#
+#   cp ./postactivate ./predeactivate $VIRTUAL_ENV/bartbot/bin/
+#   source $VIRTUAL_ENV/bartbot/postactivate
+#
+# 6. If you want to check that everything is working, type 
+#
+#   deactivate
+#   lsvirtualenv  # check that bartbot virtualenv was created
+#   workon bartbot  # check that all environment variables were loaded
+
+
+
+
+
+# OLD CODE SORRY DON'T MIND THIS BECAUSE I WANT TO AUTOMATE THIS PROCESS EVENTUALLY
+
+# if [[ "$OSTYPE" != "darwin"* ]]; then
+#     echo "Sorry, this script only works with Apple at the moment. Confugure your virtual environment with the instructions found here: https://virtualenvwrapper.readthedocs.io/en/latest/install.html"
+#     exit 1
+# fi
+
+# # Installs virtualenv and its wrapper into global site-packages
+# pip3 install virtualenv
+# pip3 install virtualenvwrapper
+
+
+# if [ -z "$1" ]; then
+#     echo "Usage: start_venv <WORKON_HOME>" 
+#     exit 1
+# fi
+
+# mkdir -p $1
+# export WORKON_HOME=$1
+# source /usr/local/bin/virtualenvwrapper.sh
+
+# # 
+# echo  $WORKON_HOME/postactivate
+# cp ./predeactivate $VIRTUAL_ENV/predeactivate

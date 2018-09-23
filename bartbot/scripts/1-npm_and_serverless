@@ -1,0 +1,5 @@
+brew install node
+npm install -g serverless
+npm init -f
+npm install --save-dev serverless-wsgi serverless-python-requirements
+echo "Follow installation instructions found in this folder to continue."
