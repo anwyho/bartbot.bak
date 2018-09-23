@@ -47,6 +47,7 @@ Thumbs.db
 ##########################
 *.code-workspace
 *_settings.json
+.vscode
 
 # Environment #
 ###############
