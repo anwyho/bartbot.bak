@@ -6,42 +6,45 @@ from flask import request
 from .pages.page import process_page_entry
 
 
-def process_event(req:request) -> str:
+def process_event(req:request, respMsg:str) -> str:
     """
     Handler for webhook (currently only for postback, referrals, and messages)
     """
-    try:  # parse JSON into data
+    try:  # parse flak request JSON into data dict
         data:dict = req.json
+
     except Exception as e:
         logging.warning(f"Couldn't parse JSON with req.json. Error: {e}")
-        res = "Unable to parse JSON."
+        respMsg += "Unable to parse JSON.\n"
+
     else: 
         logging.debug(f"Processed event JSON: {json.dumps(data,indent=2)}")
-        res = identify_object(data)
+        respMsg += identify_object(data, respMsg)
+
     finally:
-        return res
+        return respMsg
 
 
-def identify_object(data:dict) -> str:
+def identify_object(data:dict, respMsg:str) -> str:
     if data['object'] == 'page':
         logging.info("Received 'page' object")
         if 'entry' in data.keys():
-            res = ""
             for entry in data['entry']:
-                res += f"{process_page_entry(entry)}\n"
+                respMsg += process_page_entry(entry, respMsg)
+                print(respMsg)
         else:
             logging.warning(
                 f"Object doesn't have the right structure. Error: {e}.")
-            res = "Unexpected JSON structure."
+            respMsg += "Unexpected JSON structure. Expected 'entry' in page object.\n"
 
     elif data['object'] == 'user':
         logging.info("Received 'user' object")
         # TODO: Subscribed to name  change. Implement change
         # NOTE: Is this even necessary? We query FB for names every time
             # and don't have a database to store the names in...
-        res = 'OK'
+        respMsg += "Received 'user' object. Response not implemented yet.\n"
         
     else:
-        res = f"Unexpected object; received {str(data['object'])} object"
+        respMsg += f"Unexpected object; received {str(data['object'])} object\n"
 
-    return res
+    return respMsg

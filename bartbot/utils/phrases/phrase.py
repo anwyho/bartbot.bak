@@ -9,7 +9,7 @@ import random as r
 import time
 
 from types import ModuleType
-from typing import (List, Tuple, Union)
+from typing import (List, Tuple, Optional)
 
 from .locales import (DEFAULT_LOCALE, import_locale_module)
 

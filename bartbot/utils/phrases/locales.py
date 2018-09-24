@@ -4,7 +4,7 @@ import importlib
 import logging
 
 from types import ModuleType
-from typing import (Tuple, Union)
+from typing import (Tuple, Optional)
 
 
 DEFAULT_LOCALE = "en_us"

@@ -2,42 +2,48 @@ import logging
 
 from ...utils.requests import post
 from ...utils.urls import MESSAGES_API
-from .message import handle_message
-from .postback import handle_postback
+from .messages.message import handle_message
+from .postbacks.postback import handle_postback
+from .referrals.referral import handle_referral
 
 
-def process_page_entry(entry:dict) -> str:
+def process_page_entry(entry:dict, respMsg:str) -> str:
     """Processes a page object returned by a message subscription"""
     
     if not 'messaging' in entry:
-        raise KeyError("Expected 'messaging' in entry")
+        respMsg += "Unexpected JSON structure. Expected 'messaging' in entry object.\n"
+    
+    else: 
+        for message in entry['messaging']:
+            try: 
+                fbId:str = message['sender']['id']
+            except KeyError as e:
+                respMsg += f"Unexpected JSON structure. Expected 'sender.id' in messaging. Received error: {e}.\n"
+            else:
+                respMsg += "Typing ON success: {}\n".format(
+                    toggle_seen_and_typing_indicator(fbId, True))
+                respMsg = identify_message(fbId, message, respMsg)
+                respMsg += "Typing OFF success: {}\n".format(
+                    toggle_seen_and_typing_indicator(fbId, False))
+    return respMsg
 
-    for message in entry['messaging']:
-        try: 
-            fbId:str = message['sender']['id']
-        except KeyError as e:
-            raise KeyError("Expected 'sender.id' in messaging. " + \
-                f"Received error: {e}.") 
-        else:
-            toggle_seen_and_typing_indicator(fbId, True)
-            res = identify_message(fbId, message)
-            toggle_seen_and_typing_indicator(fbId, False)
-            return res
-
-def identify_message(fbId:str, message:str) -> str: 
+def identify_message(fbId:str, message:str, respMsg:str) -> str: 
     if 'message' in message.keys():
         logging.info("Received message")
-        res = handle_message(fbId, message['message'])
+        respMsg += handle_message(fbId, message['message'], respMsg)
+
     elif 'postback' in message.keys():
         logging.info("Received postback")
-        res = handle_postback(fbId, message['postback'])
+        respMsg += handle_postback(fbId, message['postback'], respMsg)
+
     elif 'referral' in message.keys():
         logging.info("Received referral")
-        res = "Received referral object. Referral is not currently supported."
+        respMsg += handle_referral(fbId, message['referral'], respMsg)
+            
     else: 
-        res = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging_referrals'."
+        respMsg = "Unsupported subsription. Only supporting 'messages', 'messaging_postbacks', and 'messaging_referrals'.\n"
 
-    return res
+    return respMsg
 
 
 # TODO: Bundle these two requests into a batch request
@@ -54,19 +60,17 @@ def toggle_seen_and_typing_indicator(fbId:str, on:bool) -> None:
 
     if on:
         data['sender_action'] = 'mark_seen'
-        ok, _ = post(MESSAGES_API, json=data)
-        if ok:
-            data['sender_action'] = 'typing_on'
-            ok, _ = post(MESSAGES_API, json=data)
-            if not ok: 
-                logging.warning("Didn't complete 'typing_on' sender action.")
-        else: 
-            logging.warning("Didn't complete 'mark_seen' sender action.")
+        isOk = post(MESSAGES_API, json=data)[0]
+        data['sender_action'] = 'typing_on'
+        isOk = post(MESSAGES_API, json=data)[0] and isOk
+        if not isOk: 
+            logging.warning("Didn't complete 'typing_on' and/or 'mark_seen' sender action.")
     else: 
         data['sender_action'] = 'typing_off'
-        ok, _ = post(MESSAGES_API, json=data)
-        if not ok: 
+        isOk = post(MESSAGES_API, json=data)[0]
+        if not isOk: 
             logging.warning("Didn't complete 'typing_off' sender action.")
+    return isOk
 
 
 # NOTE: I can possibly use these later

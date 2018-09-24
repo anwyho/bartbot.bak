@@ -7,6 +7,7 @@ import os
 import sys
 
 # TODO: Refresh all keys
+# TODO: Provide default values with os.environ.get("KEY", "DEFAULT")
 
 # BART
 BART_PUBL = os.environ.get('BART_PUBL')
@@ -43,3 +44,36 @@ def gen_app_secret_proof():
     
     return _pudding
 
+
+def verify_signature(req) -> bool:
+    """Verifies SHA-1 of message"""
+    # TODO: Verify SHA-1
+    return True
+
+
+def verify_challenge(req, respMsg:str):
+    """
+    Verifies and fulfills Messenger Platform GET challenge
+    """
+
+    qParams = req.args
+    verifiedToken = False
+    if 'hub.verify_token' in qParams.keys() and \
+        'hub.mode' in qParams.keys() and \
+        'hub.challenge' in qParams.keys():
+
+        if qParams['hub.verify_token'] == FB_VERIFY_TOK and \
+                qParams['hub.mode'] == 'subscribe':
+            verifiedToken = True
+            logging.info("Successfully verified token")
+            respMsg += f"{qParams['hub.challenge']}\n"
+        else: 
+            logging.info("Unable to verify token. Either " + \
+                f"{qParams['hub.verify_token']} != {FB_VERIFY_TOK} " + \
+                f"or {qParams['hub.mode']} != 'subscribe'")
+            respMsg += 'Invalid request or verification token.\n'
+    else: 
+        logging.info("Couldn't verify request. GET did not include all necessary parameters")
+        respMsg = 'Invalid request or verification token.\n'
+    
+    return respMsg
