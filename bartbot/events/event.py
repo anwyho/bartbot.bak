@@ -3,6 +3,7 @@ import logging
 
 from flask import request
 
+from ..message import (Attachment, Message, Postback, Referral, Text)
 from .pages.page import process_page_entry
 
 
@@ -24,6 +25,32 @@ def process_event(req:request, respMsg:str) -> str:
     finally:
         return respMsg
 
+    # TODO: Simplify overall code structure
+    # def parse_object_structure(data:dict) -> Message:
+    #     pass
+    # if isinstance(m, Text):
+    #     successful = m.parse_wit_entities()
+    #     if successful: 
+    #         def do_calculations_and_api_calls(m) -> success:
+    #             def calculate(m) -> result:
+    #                 pass
+    #             def construct_phrases(result) -> str:
+    #                 pass
+    # if isinstance(m, Attachment):
+    #     handle_attachment()
+    # if isinstance(m, Postback):
+    #     handle_postback()
+    # if isinstance(m, Referral):
+    #     return "oops sorry no support"
+                
+
+
+
+
+
+
+
+
 
 def identify_object(data:dict, respMsg:str) -> str:
     if data['object'] == 'page':
@@ -31,7 +58,7 @@ def identify_object(data:dict, respMsg:str) -> str:
         if 'entry' in data.keys():
             for entry in data['entry']:
                 respMsg += process_page_entry(entry, respMsg)
-                print(respMsg)
+
         else:
             logging.warning(
                 f"Object doesn't have the right structure. Error: {e}.")

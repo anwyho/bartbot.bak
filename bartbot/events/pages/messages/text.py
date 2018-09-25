@@ -6,7 +6,7 @@ from wit import Wit
 
 from .response import (format_response, send_message_to)
 
-from ....utils.keys import (DEBUG_TOK, WIT_TOK)
+from bartbot.utils.keys import (DEBUG_TOK, WIT_TOK)
 from ....utils.phrases.phrase import get_phrase
 from ....utils.requests import get
 from ....utils.urls import (MESSENGER_USER_API, WIT_HEADER, WIT_MESSAGE_API)

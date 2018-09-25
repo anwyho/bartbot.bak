@@ -26,7 +26,6 @@ def send_message_to(fbId:str, text:str, respMsg:str) -> str:
             'message': {'text': message}}
 
         sentSuccess = post(MESSAGES_API, json=data)[0] and sentSuccess
-        print(f"sent with sentSuccess {sentSuccess}")
         text = text[1996:]
     respMsg += "Sent message successfully" if sentSuccess else "Something went wrong while sending message."
     return respMsg

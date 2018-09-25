@@ -22,7 +22,6 @@ def post(*args, **kwargs) -> Tuple[bool,dict]:
 
     logging.info("Performing POST request") 
 
-    print(f"About to post with {args} and {kwargs}")
     if 'json' in kwargs:
         logging.debug(f"POSTing to URL {args[0] if len(args) else kwargs['url']} \nwith data {json.dumps(kwargs['json'],indent=2)}")
     

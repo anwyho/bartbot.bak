@@ -37,36 +37,6 @@ def handle_webhook() -> str:
     # rollbar.report_message('Hello from Lambda', 'info')
     # raise NotImplementedError("Test the rollbar")
 
-    # TODO: This should be in a unittest module
-    try:
-        # Set up logging configuration
-        logFile = os.path.join( '.',
-            'bartbot',
-            '.logs', 
-            '.bartbot-{}.log'.format('debug' if DEBUG else 'info'))
-        os.makedirs(os.path.dirname(logFile), exist_ok=True)
-    except Exception as e:
-        logging.error(f"Couldn't make log file {logFile}. Error: {e}")
-
-    logFormat = \
-        "%(levelname)s:%(module)s:%(lineno)d %(message)s:%(asctime)s"
-
-    try:
-        # # TODO: Check if uncommenting this breaks AWS Lambda
-        # for handler in logging.root.handlers[:]:
-        #     print(handler)
-            
-        logging.basicConfig(
-            filename=logFile, 
-            format=logFormat, 
-            level=logging.DEBUG if DEBUG else logging.INFO)
-    except Exception as e:
-        logging.error(f"Couldn't configure logfile. Error: {e}")
-
-
-    logging.info("\n\nS T A R T I N G   N E W   L O G\n\n")
-
-
 
     respMsg:str = ""
     try: 
@@ -87,8 +57,6 @@ def handle_webhook() -> str:
         respMsg += "\nERROR: Not OK, but surviving. Check logs\n"
     
     finally:
-        logging.info("E N D I N G   L O G")
-        logging.shutdown()
         return respMsg
 
 
@@ -125,7 +93,6 @@ def debug():
     return "OK"
 
 
-
 if __name__ == '__main__':
     app.run()
 
@@ -133,3 +100,38 @@ if __name__ == '__main__':
 
 # TODO: Check out how pywit handles logging in __init__.py
 
+
+    # # TODO: This should be in a unittest module
+    # try:
+    #     # Set up logging configuration
+    #     logFile = os.path.join( '.',
+    #         'bartbot',
+    #         '.logs', 
+    #         '.bartbot-{}.log'.format('debug' if DEBUG else 'info'))
+    #     os.makedirs(os.path.dirname(logFile), exist_ok=True)
+    # except Exception as e:
+    #     logging.error(f"Couldn't make log file {logFile}. Error: {e}")
+
+    # logFormat = \
+    #     "%(levelname)s:%(module)s:%(lineno)d %(message)s:%(asctime)s"
+
+    # try:
+    #     # # TODO: Check if uncommenting this breaks AWS Lambda
+    #     # for handler in logging.root.handlers[:]:
+    #     #     print(handler)
+            
+    #     logging.basicConfig(
+    #         filename=logFile, 
+    #         format=logFormat, 
+    #         level=logging.DEBUG if DEBUG else logging.INFO)
+    # except Exception as e:
+    #     logging.error(f"Couldn't configure logfile. Error: {e}")
+
+    # logging.info("\n\nS T A R T I N G   N E W   L O G\n\n")
+
+
+    # # The above is a mess of logging.
+
+
+        #     logging.info("E N D I N G   L O G")
+        # logging.shutdown()
