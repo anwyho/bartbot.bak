@@ -49,6 +49,13 @@ class Text(Message):
         self.messageId:str=setOrRaise(messageId)
         self.text:str = setOrRaise(text)
         self.quickReply:Optional[str] = quickReply
+        self._wit_entities:dict = None
+
+    @property
+    def entities(self) -> bool:
+        if self._wit_entities is None:
+            pass  # get entities from Wit call and parse entities
+        return self._wit_entities
 
 
 class Attachment(Message):
