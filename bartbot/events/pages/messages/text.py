@@ -7,9 +7,9 @@ from wit import Wit
 from .response import (format_response, send_message_to)
 
 from bartbot.utils.keys import (DEBUG_TOK, WIT_TOK)
-from ....utils.phrases.phrase import get_phrase
-from ....utils.requests import get
-from ....utils.urls import (MESSENGER_USER_API, WIT_HEADER, WIT_MESSAGE_API)
+from bartbot.utils.phrases.phrase import get_phrase
+from bartbot.utils.requests import get
+from bartbot.utils.urls import (MESSENGER_USER_API, WIT_HEADER, WIT_MESSAGE_API)
 
 
 def handle_text(fbId:str, text:str, respMsg:str) -> str:
@@ -20,12 +20,12 @@ def handle_text(fbId:str, text:str, respMsg:str) -> str:
     if keywordFound:
         logging.info("Found keyword")
         respMsg += send_message_to(fbId, msgText, respMsg)
-    else: 
+    else:
         msgEntities:Optional[dict] = get_msg_entities(fbId, text)
         if msgEntities is None:
             logging.warning("Couldn't get message entities from Wit")
             respMsg += handle_wit_failure(fbId, respMsg)
-        else: 
+        else:
             respMsg += process_message_entities(fbId, msgEntities, respMsg)
     return respMsg
 
@@ -44,13 +44,13 @@ def get_msg_entities(fbId:str, text:str) -> Optional[dict]:
         return witResp
     else:
         return None
-        
+
 
 def process_message_entities(fbId:str, msgEntities:dict, respMsg:str) -> str:
     logging.info("Processing message entities")
     if 'entities' not in msgEntities:
         respMsg += "Unexpected JSON structure. Expected 'entities' in Wit response."
-    else: 
+    else:
         entities:dict = msgEntities['entities']
         fn,ln = get_id_name(fbId)
 
@@ -66,7 +66,7 @@ def process_message_entities(fbId:str, msgEntities:dict, respMsg:str) -> str:
             if intent == 'map':
                 logging.info('Sending a map')
                 respMsg += send_map_to(fbId, respMsg, fn)
-            
+
         else:
             msgText = f"Hello {fn} {ln}. You typed: {msgEntities['_text']}"  # TODO: Is this correct? See structure of Wit entities
             respMsg += send_message_to(fbId, msgText)
@@ -91,8 +91,8 @@ def handle_keywords(text:str) -> Tuple[bool,Optional[str]]:
     resp:str = ""
     keywords:bool = False
     # Tests emojis and creates a palette
-    if f'debug.verify_tok={DEBUG_TOK};' in text: 
-    # if f'debug.verify_tok=yeaboi;' in text: 
+    if f'debug.verify_tok={DEBUG_TOK};' in text:
+    # if f'debug.verify_tok=yeaboi;' in text:
         resp += f"{'sup fam'}\n"  # f"{'fun'}-strings"
         keywords = True
     if keywords:
@@ -102,7 +102,7 @@ def handle_keywords(text:str) -> Tuple[bool,Optional[str]]:
 
     if resp is not "":
         return (True, resp)
-    else: 
+    else:
         return (False, None)
 
 
@@ -122,7 +122,7 @@ def get_id_name(fbId:str) -> Tuple[str,str]:
 
     if not ok:
         return ('{opt}','{opt}')
-    else: 
+    else:
         return (data['first_name'], data['last_name'])
 
 
