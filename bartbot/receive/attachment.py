@@ -3,8 +3,8 @@ import logging
 
 from typing import (Dict, List, Optional, Tuple, Union)
 
-from bartbot.messages import (Coordinate, Message, safe_import)
-from bartbot.messages import (ParamType)
+from bartbot.receive.message import (Coordinate, Message, safe_import)
+from bartbot.receive.message import (ParamType)
 
 
 class Payload():

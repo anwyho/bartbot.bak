@@ -7,7 +7,7 @@ from abc import (ABC, ABCMeta, abstractmethod)
 from typing import (Any, Callable, Dict, List, Optional, Tuple, TypeVar)
 
 from bartbot.utils.phrases import (Phrase)
-from bartbot.user import (User)
+from bartbot.process.user import (User)
 
 Coordinate = Tuple[float, float]
 ParamType = TypeVar('ParamType', str, int, Coordinate, list)

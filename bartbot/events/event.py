@@ -4,7 +4,7 @@ import logging
 from flask import request
 from typing import (List, Optional, Tuple, Type, Union)
 
-from bartbot.messages import (Attachment, Message, Postback, Referral, Text)
+from bartbot.receive import (Attachment, Message, Postback, Referral, Text)
 from bartbot.events.pages.page import process_page_entry
 
 

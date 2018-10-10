@@ -3,11 +3,11 @@ import json
 import logging
 import wrapt
 
-from typing import (Any, Callable, List, Optional)
+from typing import (Any, Callable, List, Optional, Union)
 
-# Defined within Response to prevent circular imports
-# from bartbot.controller import Controller
-from bartbot.messages import (Message)
+# # Defined within Response to prevent circular imports
+# from bartbot.process.controller import Controller
+from bartbot.receive.message import (Message)
 from bartbot.utils.requests import (post)
 from bartbot.utils.urls import (MESSAGES_API)
 
@@ -25,19 +25,6 @@ class Response():
         None]
     ATTACHMENT_TYPES: List[Optional[str]] = [
         'image', 'audio', 'video', 'file', 'template', None]
-    TEMPLATE_TYPES: List[Optional[str]] = [
-        'generic',
-        'button',
-        'list',
-        'media',
-        # 'receipt',  # not currently supported
-        None]
-    BUTTON_TYPES: List[Optional[str]] = [
-        'web_url',
-        'postback',
-        'element_share',
-        'phone_number',
-        None]
     QUICK_REPLY_TYPES: List[Optional[str]] = [
         'text', 'location', 'user_phone_number', 'user_email']
     MAX_QUICK_REPLIES: int = 11
@@ -57,7 +44,7 @@ class Response():
 
     @classmethod
     def from_message(cls, message: Message):
-        from bartbot.controller import Controller
+        from bartbot.process.controller import Controller
         return Controller(message).produce_response()
 
     @classmethod
@@ -112,6 +99,8 @@ class Response():
 class ResponseBuilder(Response):
     """Provides an interface for sending to Send API"""
 
+    MAX_QUICK_REPLIES = 11  # TODO: Move this to controller
+
     def __init__(self,
                  messagingType: str='RESPONSE',
                  text: Optional[str]=None,
@@ -120,7 +109,7 @@ class ResponseBuilder(Response):
 
         self.text: Optional[str] = text
         self._messagingType: Optional[str] = messagingType
-        self._attachmentId: Optional[str] = attachmentId
+        # self._attachmentId: Optional[str] = attachmentId
         self._quickReplies: List[dict] = []
 
     @property
@@ -174,10 +163,10 @@ class ResponseBuilder(Response):
             self._recipient: dict = {'id': id}
         elif phoneNumber:
             self._recipient: dict = {
-                'id': phone_number, 'phone_number': phoneNumber}
+                'id': phoneNumber, 'phone_number': phoneNumber}
             if firstName and lastName:
                 self._recipient['name']: dict = {
-                    'first_name': firstName, 'last_name': lastName}}
+                    'first_name': firstName, 'last_name': lastName}
         elif userRef:
             self._recipient: dict = {'id': userRef, 'user_ref': userRef}
         else:
@@ -187,30 +176,30 @@ class ResponseBuilder(Response):
 
         self._data = {}
 
-
-
     def make_template(self,
-            templateType = 'GENERIC'):
+                      templateType='GENERIC'):
         pass
 
-    def add_quick_reply(self,
-            contentType: str = 'Text',
-            title: str = '',
-            postbackPayload: Union[str, int] = '',
-            imageUrl: str = '') -> None:
-        if len(self._quickReplies) >= MAX_QUICK_REPLIES:
-            logging.warning('Only ')
+    def make_quick_reply(self,
+                         contentType: str = 'Text',
+                         title: str = '',
+                         postbackPayload: Union[str, int] = '',
+                         imageUrl: str = '') -> dict:
+        if len(self._quickReplies) >= self.MAX_QUICK_REPLIES:
+            logging.warning(
+                f"Only {self.MAX_QUICK_REPLIES} quick replies are allowed per response.")
         if contentType in self.QUICK_REPLY_TYPES:
-            quickReply: dict={'content_type': contentType}
+            quickReply: dict = {'content_type': contentType}
             if contentType == 'Text':
-                quickReply['title']=title
-                quickReply['payload']=postbackPayload
+                quickReply['title'] = title
+                quickReply['payload'] = postbackPayload
                 if imageUrl:
-                    quickReply['image_url']=imageUrl
+                    quickReply['image_url'] = imageUrl
             self._quickReplies.append(quickReply)
         else:
             logging.warning(
                 "Attempted to create unsupported quick reply type.")
 
-    def add_button(self, buttonType = 'WEB_URL'):
-        self._button
+    def add_button(self, buttonType='WEB_URL'):
+        # self._button =
+        pass

@@ -1,17 +1,17 @@
 # import boto3
-import logging
 import json
+import logging
 import wrapt
 
 from typing import(Any, Dict, List, Optional, Tuple, Union)
 
-from bartbot.messages import (Message)
-from bartbot.messages.attachment import (Attachment)
-from bartbot.messages.postback import (Postback)
-from bartbot.messages.referral import (Referral)
-from bartbot.messages.text import (Text)
-from bartbot.response import (Response, ResponseBuilder)
-from bartbot.user import (User)
+from bartbot.receive.message import (Message)
+from bartbot.receive.attachment import (Attachment)
+from bartbot.receive.postback import (Postback)
+from bartbot.receive.referral import (Referral)
+from bartbot.receive.text import (Text)
+from bartbot.send.response import (Response, ResponseBuilder)
+from bartbot.process.user import (User)
 from bartbot.utils.phrases import (Phrase)
 
 
@@ -39,11 +39,3 @@ class Controller:
 
 # - complex share button
 #   https://developers.facebook.com/docs/messenger-platform/reference/buttons/share
-
-
-class Template:
-
-    class Button:
-        def __init__(self):
-
-    def __init__(self):

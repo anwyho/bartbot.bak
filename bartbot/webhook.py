@@ -9,7 +9,7 @@ import traceback
 
 from flask import (Flask, request)
 
-from bartbot.event import process_event
+from bartbot.receive.event import process_event
 from bartbot.utils.keys import (verify_challenge, verify_signature)
 
 
@@ -46,7 +46,7 @@ def handle_webhook() -> str:
             if request.method == 'GET':
                 respMsg += verify_challenge(request, respMsg)[1]
             elif request.method == 'POST':
-                respMsg += process_event(request, respMsg)
+                respMsg += process_event(request)
             else:
                 respMsg += "Unsupported HTTPS Verb.\n"
         else:

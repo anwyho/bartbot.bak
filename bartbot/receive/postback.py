@@ -4,8 +4,8 @@ import logging
 
 from typing import (Dict, Optional)
 
-from bartbot.messages import (Message, ParamType, safe_import)
-from bartbot.messages.referral import (Referral)
+from bartbot.receive.message import (Message, ParamType, safe_import)
+from bartbot.receive.referral import (Referral)
 
 
 class Postback(Message):

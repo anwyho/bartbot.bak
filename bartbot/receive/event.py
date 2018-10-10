@@ -4,9 +4,9 @@ import logging
 from flask import request
 from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
 
-from bartbot import messages as msgs
-from bartbot.controller import Controller
-from bartbot.response import Response
+from bartbot import receive as rcv
+from bartbot.process.controller import Controller
+from bartbot.send.response import Response
 
 
 def process_event(req: request) -> list:
@@ -20,10 +20,10 @@ def process_event(req: request) -> list:
         objType: str = data.get('object').lower()
 
         if objType == 'page':
-            results = page_event(entry)
+            results = handle_page_event(entry)
 
         elif objType == 'user':
-            results = user_event(entry)
+            results = handle_user_event(entry)
 
         else:
             raise KeyError("Received entry had an unexpected structure.")
@@ -34,29 +34,28 @@ def process_event(req: request) -> list:
 
 
 @Response.response_hook
-def page_event(entry: dict):
+def handle_page_event(entry: dict):
     """Returns a list of results from found page events"""
     # TODO: What if .generate_response() is None
 
-    return [Response.from_message(mType.from_entry(entry, mNum))
-            .produce_response()
+    return [Response.from_message(message)
+            .build()
             .send()
-            for (mType, mNum) in find_page_events(entry)]
+            for message in get_messages(entry)]
 
 
 @Response.response_hook
-def user_event(entry: dict):
+def handle_user_event(entry: dict):
     # results = []  # collects results of events
     # events = find_user_events(entry)
     # results.extend()
     return []
 
 
-def find_page_events(entry: dict) \
-        -> List[Tuple[Optional[Type[msgs.Message], int]]]:
+def get_messages(entry: dict):
     """
-    Collects class types based on distinguishing factors to begin
-        instantiations and sending
+    Get specifically-typed instantiated messages from an entry
+        depending on distinguishing factors in each message.
     """
 
     messaging = entry.get('messaging')
@@ -64,22 +63,27 @@ def find_page_events(entry: dict) \
         logging.warning(f"Couldn't find any page events in entry.")
         logging.debug(f"{json.dumps(entry, indent=2)}")
 
-    for mNum, messageList in enumerate(messaging):
+    for msgNum, message in enumerate(messaging):
         # Attachments gets precedence because it can also have text
-        if 'attachments' in messageList.get('message', {}):
-            yield (msgs.attachment.Attachment, mNum)
+        if 'attachments' in message.get('message', {}):
+            yield rcv.attachment.Attachment.from_entry(entry, msgNum)
+
         # Echo gets precedence over Text for the same reason
-        elif messageList.get('message', {}).get('is_echo'):
+        elif message.get('message', {}).get('is_echo'):
             # TODO?
-            # yield (msgs.echo.Echo, mNum)
+            # yield rcv.echo.Echo.from_entry(entry, msgNum)
             pass
-        elif 'text' in messageList.get('message', {}):
-            yield (msgs.text.Text, mNum)
-        elif 'postback' in messageList:
-            yield (msgs.postback.Postback, mNum)
-        elif 'referral' in messageList:
-            yield (msgs.referral.Referral, mNum)
+
+        elif 'text' in message.get('message', {}):
+            yield rcv.text.Text.from_entry(entry, msgNum)
+
+        elif 'postback' in message:
+            yield rcv.postback.Postback.from_entry(entry, msgNum)
+
+        elif 'referral' in message:
+            yield rcv.referral.Referral.from_entry(entry, msgNum)
+
         else:
-            logging.warning(f"Couldn't identify Message type.")
+            logging.warning(f"Couldn't identify Message type. Skipping.")
             logging.debug(f"{json.dumps(entry, indent=2)}")
             pass

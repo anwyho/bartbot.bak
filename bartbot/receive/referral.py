@@ -3,7 +3,7 @@ import logging
 
 from typing import (Dict, Optional)
 
-from bartbot.messages import (Message, ParamType, safe_import)
+from bartbot.receive.message import (Message, ParamType, safe_import)
 
 
 class Referral(Message):

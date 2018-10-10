@@ -3,7 +3,7 @@ import logging
 
 from typing import (Dict, Optional)
 
-from bartbot.messages import (Message, ParamType, safe_import)
+from bartbot.receive.message import (Message, ParamType, safe_import)
 from bartbot.utils.requests import (get)
 from bartbot.utils.urls import (MESSAGES_API, WIT_HEADER,
                                 WIT_MESSAGE_API)
@@ -40,6 +40,7 @@ class Text(Message):
             if ok:
                 logging.info("Successfully retrieved Wit entities")
                 logging.debug(f"Wit entities: {json.dumps(witResp,indent=2)}")
+
                 return witResp
             else:
                 logging.warning("Failed to retrieve Wit entities")
