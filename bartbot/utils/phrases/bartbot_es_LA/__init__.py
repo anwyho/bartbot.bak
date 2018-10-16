@@ -1,32 +1,37 @@
-
+#  _                _   _           _
+# | |__   __ _ _ __| |_| |__   ___ | |_
+# | '_ \ / _` | '__| __| '_ \ / _ \| __|
+# | |_) | (_| | |  | |_| |_) | (_) | |_
+# |_.__/ \__,_|_|   \__|_.__/ \___/ \__|
+# Get all your BART info from your Messenger app!
 
 from ..emojis import emojis
 
 locale = "es_LA"
 
 phrases = {
-    'attachment' : [
+    'attachment': [
         "<response to attachment in Spanish>",
     ],
-    'bye' : [
+    'bye': [
         "Adios",
     ],
-    'cta' : [
+    'cta': [
         "<response for call to action in Spanish>",
     ],
-    'delivery' : [
+    'delivery': [
         "<response for delivery in Spanish>",
     ],
-    'hello' : [
+    'hello': [
         "Hola!",
     ],
-    'sorry' : [
+    'sorry': [
         "Lo siento!",
     ],
-    'thanks' : [
+    'thanks': [
         "Gracias!",
     ],
-    'yw' :[
+    'yw': [
         "<response for you're welcome in Spanish>",
     ],
 }

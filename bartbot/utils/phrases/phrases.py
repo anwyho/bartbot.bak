@@ -2,6 +2,13 @@
 The phrase module statically remembers the current locale and provides a facade to the locales, phrases, and emojis modules. It allows the setting of new locales and provides a fault-tolerant interface for phrase generation.
 """
 
+#  ____  _____ ____  ____  _____ ____    _  _____ _____ ____
+# |  _ \| ____|  _ \|  _ \| ____/ ___|  / \|_   _| ____|  _ \
+# | | | |  _| | |_) | |_) |  _|| |     / _ \ | | |  _| | | | |
+# | |_| | |___|  __/|  _ <| |__| |___ / ___ \| | | |___| |_| |
+# |____/|_____|_|   |_| \_\_____\____/_/   \_\_| |_____|____/
+
+
 # TODO: Ambiguous filenames? Maybe change to PhraseFactory or something
 
 import logging

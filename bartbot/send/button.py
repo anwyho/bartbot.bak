@@ -6,10 +6,42 @@ from abc import (ABC, abstractmethod)
 from typing import (List, Optional)
 
 # # Defined below to avoid circular dependencies
-# from bartbot.send.template import Template
+# from bartbot.send.template import ShareTemplate
+
+
+def set_if_exists(self,
+                  valName,
+                  val,
+                  maxLen: int = -1,
+                  types: list = [],
+                  prefix: str = "",
+                  raiseOnFail: bool = False):
+    if val is not None:  # TODO make this more elegant
+        # Max length provided
+        if maxLen >= 0 and len(val) > maxLen:
+            val = val[:maxLen]
+            logging.warning(
+                f"Attempted to set variable {valName} with length larger than the max length allowed ({maxLen} chars)." +
+                (f" {valName} has been truncated to {val}." if not raiseOnFail else ""))
+            if raiseOnFail:
+                raise ValueError(
+                    f"Value '{valName}' has too many characters. (Max allowed: {maxLen} chars)")
+        # List of types provided
+        elif types and val.lower() not in types:
+            raise ValueError(
+                f"{type(self).__name__} cannot take value {val.lower()} as {valName}. It does not match any of the types provided.")
+        elif prefix is not "" and not val.startswith(prefix):
+            raise ValueError(
+                f"Expected value '{val}' to start with prefix {prefix}."
+            )
+        setattr(self, valName, val)
+    elif raiseOnFail:
+        raise ValueError(
+            f"Given value '{val}' is None and raiseOnFail is True.")
 
 
 class Button(ABC):
+
     BUTTON_TYPES: List[Optional[str]] = [
         'web_url',
         'postback',
@@ -17,7 +49,7 @@ class Button(ABC):
         'phone_number',
         None]
 
-    MAX_BUTTON_TITLE_CHAR_LENGTH = 20
+    BUTTON_TITLE_CHAR_LIMIT = 20
 
     @classmethod
     def make_button(cls, buttonType: str, **kwargs):
@@ -32,7 +64,7 @@ class Button(ABC):
             return CallButton(**kwargs)
         else:
             logging.warning(
-                f"Attempted to make unsupported button type.{buttonType}.")
+                f"Attempted to make unsupported button type {buttonType}.")
 
     @abstractmethod
     def build(self) -> dict:
@@ -40,87 +72,121 @@ class Button(ABC):
         pass
 
 
+# DONE
 class UrlButton(Button):
 
+    TITLE_CHAR_LIMIT = 20
     WEB_VIEW_HEIGHT_RATIOS = ['compact', 'tall', 'full']
 
     def __init__(self,
-                 title: str,
+                 text: str,
                  url: str,
-                 webViewHeightRatio: Optional[str] = None,
                  messengerExtensions: bool = False,
                  fallbackUrl: Optional[str] = None,
-                 webViewShareButton: Optional[str] = None) -> None:
-        self.buttonType = 'web_url'
-        if len(title) > 20:
-            logging.warning(
-                f"Title message {title} is too long. Title must be {self.MAX_BUTTON_TITLE_CHAR_LENGTH} characters or less and has been truncated.")
-        self._title = title[:self.MAX_BUTTON_TITLE_CHAR_LENGTH]
-        self._url = url
-        if webViewHeightRatio and webViewHeightRatio in self.WEB_VIEW_HEIGHT_RATIOS:
-            self._webviewHeightRatio = webViewHeightRatio
+                 webviewHeightRatio: Optional[str] = None,
+                 webviewShareButton: bool = True) -> None:
+        self._button: dict = {}
+
+        self.buttonType: str = 'web_url'
+        set_if_exists(self, '_title', text, maxLen=self.TITLE_CHAR_LIMIT)
+        set_if_exists(self, '_url', url)
         if messengerExtensions:
-            self._messengerExtensions = True
-            self._fallbackUrl = fallbackUrl
-        if webViewShareButton:
-            self._webviewShareButton = webViewShareButton
+            self._messengerExtensions: bool = True
+            set_if_exists(self, '_fallbackUrl', fallbackUrl)
+        set_if_exists(self,
+                      '_webviewHeightRatio', webviewHeightRatio, types=self.WEB_VIEW_HEIGHT_RATIOS)
+        if not webviewShareButton:
+            self._webviewShareButton: str = 'hide'
 
     def build(self) -> dict:
-        data: dict = {}
-        data['type'] = self.buttonType
-        data['title'] = self._title
-        data['url'] = self._url
-        if hasattr(self, '_webviewHeightRatio'):
-            data['webview_height_ratio'] = self._webviewHeightRatio
-        if self._messengerExtensions:
-            data['messenger_extensions'] = self._messengerExtensions
-            data['fallback_url'] = self._fallbackUrl
-        if hasattr(self, '_webviewShareButton')
-        data['webview_share_button'] = self._webviewShareButton
-        return data
+        if not hasattr(self, '_button'):
+            self._button: dict = {}
+            self._button['type'] = self.buttonType
+            self._button['title'] = getattr(self, '_title')
+            self._button['url'] = getattr(self, '_url')
+            if self._messengerExtensions:
+                self._button['messenger_extensions'] = \
+                    self._messengerExtensions
+                self._button['fallback_url'] = \
+                    getattr(self, '_fallbackUrl')
+            if hasattr(self, '_webviewHeightRatio'):
+                self._button['webview_height_ratio'] = \
+                    getattr(self, '_webviewHeightRatio')
+            if hasattr(self, '_webviewShareButton'):
+                self._button['webview_share_button'] = \
+                    self._webviewShareButton
+        return self._button
 
 
+# DONE
 class PostbackButton(Button):
     def __init__(self, text: str, postbackData: str) -> None:
-        self.buttonType = 'postback'
-        self._title = text
-        self._payload = postbackData
+        self.buttonType: str = 'postback'
+        set_if_exists(self,
+                      '_title', text, maxLen=self.BUTTON_TITLE_CHAR_LIMIT)
+        self._payload: str = postbackData
 
     def build(self) -> dict:
-        return {'type': 'postback',
-                'title': self._title,
+        if not hasattr(self, '_button'):
+            self._button: dict = {
+                'type': 'postback',
+                'title': getattr(self, '_title'),
                 'payload': self._payload}
+        return self._button
 
 
+# DONE
 class ShareButton(Button):
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, template=None) -> None:
         self.buttonType = 'element_share'
-        from bartbot.send.template import Template
-        self._shareTemplate = Template.make_template(
-            templateType='share', **kwargs)
-        if self._shareTemplate.templateType != 'generic':
-            raise ValueError("Share button template must be generic")
+        if template:
+            # Defined here to avoid circular dependencies
+            from bartbot.send.template import ShareTemplate
+            if isinstance(template, ShareTemplate):
+                self._shareTemplate = template
+            else:
+                raise ValueError(
+                    "Must pass in a ShareTemplate into ShareButton template")
+            if self._shareTemplate.templateType != 'generic':
+                raise ValueError("Share button template must be generic")
 
     def build(self) -> dict:
-        return {'type': self.buttonType,
-                'share_contents': {'attachment':
-                                   {self._shareTemplate.build()}}}
+        if not hasattr(self, '_button'):
+            self._button: dict = {}
+            self._button['type'] = self.buttonType
+            if hasattr(self, '_shareTemplate'):
+                self._button['share_contents'] = {
+                    'attachment': self._shareTemplate.build()}
+        return self._button
+
+# me: "shaq, how do you feel about kobe bryant shaving his mustache?"
+# shaq: "have you ever cut your eyebrows? or i mean just one; you have like one red one"
+# someone else that i knew: "yeah right there"
+# me: "oh yeah, i can see it"
+# * shaq plucks the red eyebrow *
+# shaq: "there it is."
+# me: "woah this is a weird eyebrow. it has seeds in it!"
+# * looks inside red eyebrow to find tomato seeds inside *
+# ** wakes up **
 
 
+# DONE
 class CallButton(Button):
     def __init__(self, text: str, phoneNumber: str) -> None:
         """
-        Create a button that calls the phone number provided. This function doesn't validifiy the given phone number.
-        phoneNumber must contain a '+' followed by a valid country code.
+        Create a button that calls the phone number provided. This
+            function doesn't validifiy the given phone number.
+        NOTE: phoneNumber must contain a '+' followed by a valid
+            country code.
         """
         self.buttonType: str = 'phone_number'
-        self._title: str = text
-        self._payload: str = phoneNumber
-        if phoneNumber.lstrip()[0] != '+':
-            raise ValueError(
-                "Expected phone number {phoneNumber} to contain '+' followed by a country code.")
+        set_if_exists(self, '_title', text, self.BUTTON_TITLE_CHAR_LIMIT)
+        set_if_exists(self, '_payload', phoneNumber, prefix='+')
 
     def build(self) -> dict:
-        return {'type': self.buttonType,
-                'title': self._title,
-                'payload': self._payload}
+        if not hasattr(self, '_button'):
+            self._button: dict = {
+                'type': self.buttonType,
+                'title': getattr(self, '_title'),
+                'payload': getattr(self, '_payload')}
+        return self._button

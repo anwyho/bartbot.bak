@@ -41,4 +41,4 @@ class Postback(Message):
             pass
         else:
             kwargs['ofPostback'] = True
-        return Postback(**kwargs)
+        return cls(**kwargs)

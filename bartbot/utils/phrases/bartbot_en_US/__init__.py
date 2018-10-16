@@ -1,20 +1,24 @@
-# Phrase lists
+#  _                _   _           _
+# | |__   __ _ _ __| |_| |__   ___ | |_
+# | '_ \ / _` | '__| __| '_ \ / _ \| __|
+# | |_) | (_| | |  | |_| |_) | (_) | |_
+# |_.__/ \__,_|_|   \__|_.__/ \___/ \__|
+# Get all your BART info from your Messenger app!
 
 from ..emojis import emojis
-# TODO: More emojis
 
-# NOTE: 
-    # 1. Each string should be an f-string
-    # 2. Options should be double-bracketed to escape f-string
-    # 3. Emojis should be single-bracketed to be evaluated
-    # 4. Ideally, there should be no whitespace on the outsides, 
-    #   but str.strip() is called anyway
-    # 5. Call ..emojis.print_all_emojis() for easily copy-paste
+# NOTE:
+# 1. Each string should be an f-string
+# 2. Options should be double-bracketed to escape f-string
+# 3. Emojis should be single-bracketed to be evaluated
+# 4. Ideally, there should be no whitespace on the outsides,
+#   but str.strip() is called anyway
+# 5. Call bartbot.utils.phrases.emojis.print_all_emojis() for easily copy-paste
 
 locale = "en_US"
 
 phrases = {
-    'attachment' : [
+    'attachment': [
         f"Ooh attachment! I'm starting to get a little attached to you too {{opt[fn]}} {emojis['smiling_face_with_smiling_eyes']}",
         f"Ooh! For me? {emojis['face_with_open_mouth']}",
         f"Wow!",
@@ -22,8 +26,8 @@ phrases = {
         f"Hello there. {emojis['beaming_face_with_smiling_eyes']}",
         f"Whoa what is that?",
         f"Cool!",
-        ],
-    'bye' : [
+    ],
+    'bye': [
         f"See ya later!",
         f"See ya later {{opt[fn]}}!",
         f"Adios!",
@@ -41,10 +45,10 @@ phrases = {
         f"Later!",
         f"Until next time!",
         f"Until next time, {{opt[fn]}}!",
-        ],
-    # CTA usually follows hello. 
+    ],
+    # CTA usually follows hello.
     # NOTE: No {opt}s because name would"ve already been stated.
-    'cta' : [
+    'cta': [
         f"Where are you headed?",
         f"Where are you headed today?",
         f"Where would you like to go?",
@@ -54,8 +58,8 @@ phrases = {
         f"Where to?",
         f"Where ya headed?",
         f"Where ya headed today?",
-        ],
-    'delivery' : [
+    ],
+    'delivery': [
         f"Here it is!",
         f"Here it is, {{opt[fn]}}!",
         f"Here you go!",
@@ -64,14 +68,14 @@ phrases = {
         f"There ya go!",
         f"Special delivery!",
         f"Special delivery, for {{opt[fn]}}",
-        ],
-    'hello' : [
+    ],
+    'hello': [
         f"Greetings.",
         f"Hello there.",
         f"Sup!",
         f"Sup {{opt[fn]}}!",
         f"Hello from the other side!",
-        f"Good day!", 
+        f"Good day!",
         f"Good day, {{opt[fn]}}!",
         f"Good {{opt[time_of_day]}}!",
         f"Good {{opt[time_of_day]}} {{opt[fn]}}!",
@@ -81,8 +85,8 @@ phrases = {
         f"Hi!",
         f"Hi {{opt[fn]}}!",
         f"Hey, didn't see ya there!",
-        ],
-    'sorry' : [
+    ],
+    'sorry': [
         "Sorry about that!",
         f"Oops! {emojis['shushing_face']}",
         f"Oh no. {emojis['face_screaming_in_fear']}",
@@ -93,23 +97,25 @@ phrases = {
         f"Aiya!",
         f"Whoops! {emojis['dizzy_face']}",
         f"My bad! {emojis['grinning_face_with_sweat']}",
-        ],
-    'thanks' : [
+    ],
+    'thanks': [
+        f"Thanks! {emojis['smiling_face_with_smiling_eyes']}",
+        f"Thanks! {emojis['thumbs_up']}",
         f"Thanks!",
         f"Thankya!",
         f"Wow thanks!",
         f"tysm!",
         f"TY!",
         f"Xie xie!",
-        ],
-    'time-specific emoji' : [  # How do I even code this section
+    ],
+    'time-specific emoji': [  # How do I even code this section
         f"{emojis['sleeping_face']}"
     ],
-    'yw' : [
+    'yw': [
         f"You're welcome!",
         f"Have a great {{opt[time_of_day_w_night]}}!",
         f"Anytime!",
         f"Yeah, no problem!",
         f"Safe travels!",
-        ],
+    ],
 }

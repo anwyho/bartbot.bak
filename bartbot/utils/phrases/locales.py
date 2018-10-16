@@ -9,23 +9,9 @@ import logging
 from types import ModuleType
 from typing import (Tuple, Optional)  # noqa: F401
 
+from .supported_locales import (DEFAULT_LOCALE, SUPPORTED_LOCALES)
 
-DEFAULT_LOCALE = "en_us"
-
-SUPPORTED_LOCALES: dict = {
-    "en_us": "en_US",
-    "en_gb": "en_US",
-    "en_ud": "en_US",
-}
-
-FUTURE_SUPPORTED_LOCALES: dict = {
-    "es_la": "es_LA",
-    "ja_jp": "ja_JP",
-    "ja_ks": "ja_JP",
-    "zh_cn": "zh_CN",
-    "zh_hk": "zh_HK_TW",
-    "zh_tw": "zh_HK_TW",
-}
+PROJECT_NAME = 'bartbot'
 
 
 def import_locale_module(locale: str=DEFAULT_LOCALE) -> Tuple[ModuleType, str]:
@@ -36,8 +22,8 @@ def import_locale_module(locale: str=DEFAULT_LOCALE) -> Tuple[ModuleType, str]:
     if locale in SUPPORTED_LOCALES:
         logging.info(f"Importing locale {locale}")
         return importlib.import_module(
-            f".{SUPPORTED_LOCALES[locale]}",
-            package="bartbot.utils.phrases"), locale
+            f".{PROJECT_NAME}_{SUPPORTED_LOCALES[locale]}",
+            package=f"bartbot.utils.phrases"), locale
 
     else:
         if locale == DEFAULT_LOCALE:

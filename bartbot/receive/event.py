@@ -5,7 +5,7 @@ from flask import request
 from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
 
 from bartbot import receive as rcv
-from bartbot.process.controller import Controller
+from bartbot.process.controller import BartbotController
 from bartbot.send.response import Response
 
 
@@ -38,10 +38,12 @@ def handle_page_event(entry: dict):
     """Returns a list of results from found page events"""
     # TODO: What if .generate_response() is None
 
-    return [Response.from_message(message)
-            .build()
-            .send()
-            for message in get_messages(entry)]
+    return [Response.from_message(
+        message=message,
+        controllerType=BartbotController)  # TODO: Get from YAML
+        .build()
+        .send()
+        for message in get_messages(entry)]
 
 
 @Response.response_hook

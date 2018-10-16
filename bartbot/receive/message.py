@@ -51,7 +51,6 @@ class Message(ABC):  # Message is an Abstract Base Class
             raise KeyError("Unsupported message type")
 
         if self.senderId is not None:
-
             self._client: User = User(id=self.senderId)
             self._phrase: Phrase = Phrase(
                 initialLocale=self._client.locale)

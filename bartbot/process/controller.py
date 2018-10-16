@@ -3,6 +3,7 @@ import json
 import logging
 import wrapt
 
+from abc import (ABC, abstractmethod)
 from typing import(Any, Dict, List, Optional, Tuple, Union)
 
 from bartbot.receive.message import (Message)
@@ -16,12 +17,26 @@ from bartbot.utils.phrases import (Phrase)
 
 
 class Controller:
-
     def __init__(self, message: Message) -> None:
         self.message: Message = message
 
+    @abstractmethod
     def produce_response(self) -> Response:
-        resp = ResponseBuilder()
+        """
+        Parse the message and generate a response to send using the
+            ResponseBuilder.
+        """
+        pass
+
+
+class BartbotController(Controller):
+    def produce_response(self) -> Response:
+        resp = ResponseBuilder(recipientId=self.message.senderId)
+
+        if isinstance(self.message, Attachment):
+            resp.text = "# TODO: Get phrase"
+        elif isinstance(self.message, Text):
+            resp.make_template()
 
         return resp
 

@@ -3,25 +3,25 @@ import json
 import logging
 import wrapt
 
-from typing import (Any, Callable, List, Optional, Union)
+from typing import (Any, Callable, List, Optional, Type, Union)
 
-# # Defined within Response to prevent circular imports
-# from bartbot.process.controller import Controller
 from bartbot.receive.message import (Message)
+from bartbot.send.button import (Button, set_if_exists)
+from bartbot.send.template import (Template)
 from bartbot.utils.requests import (post)
 from bartbot.utils.urls import (MESSAGES_API)
 
 
 class Response():
-    MESSAGING_TYPES: str = ['RESPONSE', 'UPDATE', 'MESSAGE_TAG']
+    MESSAGING_TYPES: str = ['response', 'update', 'message_tag']
     NOTIFICATION_TYPES: List[Optional[str]] = [
-        'REGULAR', 'SILENT_PUSH', 'NO_PUSH', None]
+        'regular', 'silent_push', 'no_push', None]
     TAGS: List[Optional[str]] = [
-        'COMMUNITY_ALERT',
-        'CONFIRMED_EVENT_REMINDER',
-        'NON_PROMOTIONAL_SUBSCRIPTION',
-        'TRANSPORTATION_UPDATE',
-        'FEATURE_FUNCTIONALITY_UPDATE',
+        'community_alert',
+        'confirmed_event_reminder',
+        'non_promotional_subscription',
+        'transportation_update',
+        'feature_functionality_update',
         None]
     ATTACHMENT_TYPES: List[Optional[str]] = [
         'image', 'audio', 'video', 'file', 'template', None]
@@ -29,9 +29,12 @@ class Response():
         'text', 'location', 'user_phone_number', 'user_email']
     MAX_QUICK_REPLIES: int = 11
 
-    def __init__(self, apiUrl: Optional[str]=MESSAGES_API) -> None:
+    def __init__(self,
+                 recipientId: str,
+                 apiUrl: Optional[str] = MESSAGES_API) -> None:
+        self.recipientId: str = recipientId
         self.url: Optional[str] = apiUrl
-        self.data = {}
+        self.data: dict = {}
         self._readyToSend: bool = False
 
     def send(self) -> bool:
@@ -43,9 +46,9 @@ class Response():
         return isOk
 
     @classmethod
-    def from_message(cls, message: Message):
-        from bartbot.process.controller import Controller
-        return Controller(message).produce_response()
+    def from_message(cls, message: Message, controllerType):
+        # Defined here to prevent circular imports
+        return controllerType(message).produce_response()
 
     @classmethod
     def generate_indicators(cls, fbId: str):
@@ -176,12 +179,8 @@ class ResponseBuilder(Response):
 
         self._data = {}
 
-    def make_template(self,
-                      templateType='GENERIC'):
-        pass
-
     def make_quick_reply(self,
-                         contentType: str = 'Text',
+                         contentType: str = 'text',
                          title: str = '',
                          postbackPayload: Union[str, int] = '',
                          imageUrl: str = '') -> dict:
@@ -199,7 +198,3 @@ class ResponseBuilder(Response):
         else:
             logging.warning(
                 "Attempted to create unsupported quick reply type.")
-
-    def add_button(self, buttonType='WEB_URL'):
-        # self._button =
-        pass

@@ -57,4 +57,4 @@ class Referral(Message):
             super()._parse_message_vars(entry, mNum)
         kwargs = cls._parse_referral_vars(
             referral=entry['messaging'][mNum]['referral'], kwargs=kwargs)
-        return Referral(**kwargs)
+        return cls(**kwargs)
