@@ -4,8 +4,14 @@ import logging
 from flask import request
 from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
 
+# BUG: Why won't rcv.Text or rcv.Attachment work? It worked before but
+#      now I have to manually import them in the two lines below
 from bartbot import receive as rcv
-from bartbot.process.controller import BartbotEnController
+from bartbot.receive.attachment import Attachment
+from bartbot.receive.text import Text
+from bartbot.process.controller import (EchoController)
+from bartbot.process.bartbot_controller import (BartbotController)
+# from bartbot.process.controller import (import_controller)
 from bartbot.send.response import (Response, ResponseBuilder)
 
 
@@ -35,15 +41,14 @@ def process_event(req: request) -> list:
         raise KeyError("Received entry had an unexpected structure.")
 
 
-# @Response.response_hook
 def handle_page_event(entry: dict):
     """Returns a list of results from found page events"""
     # TODO: What if .from_message() is None? Maybe turn into generator?
-    return [Response.from_message(
+    return list((Response.from_message(
         message=message,
-        controllerType=BartbotEnController)  # TODO: Get from YAML
+        controllerType=BartbotController)  # TODO: Get from YAML
         .send()
-        for message in get_messages(entry)]
+        for message in get_messages(entry)))
 
 
 def handle_user_event(entry: dict):
@@ -72,7 +77,7 @@ def get_messages(entry: dict):
             # Echo gets precedence over Text for the same reason
             elif message.get('message', {}).get('is_echo'):
                 # TODO?
-                # yield rcv.echo.Echo.from_entry(entry, msgNum)
+                # messageInstance = rcv.echo.Echo.from_entry(entry, msgNum)
                 pass
 
             elif 'text' in message.get('message', {}):
@@ -92,13 +97,11 @@ def get_messages(entry: dict):
                 pass
 
             if messageInstance:
-                # TODO: Move typing notifs here
                 seenResponse = ResponseBuilder(
                     recipientId=messageInstance.senderId,
                     senderAction="mark_seen")
                 seenResponse.make_chained_response(senderAction="typing_on")
                 seenResponse.send()
-                print("Hello world 2")
                 yield messageInstance
                 typingOffResponse = ResponseBuilder(
                     recipientId=messageInstance.senderId,
