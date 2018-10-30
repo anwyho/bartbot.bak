@@ -44,11 +44,15 @@ class Text(Message):
                     logging.warning("Failed to retrieve Wit entities")
                     raise KeyError("Unexpected structure from Wit response.")
                 else:
-                    self._witEntities = witResp['entities']
+                    self._witEntities = self._process_wit_entities(
+                        witResp['entities'])
             else:
                 logging.warning("Failed to retrieve Wit entities")
                 return None
         return self._witEntities
+
+    def _process_wit_entities(self, entities: dict) -> dict:
+        return entities
         # {
         #     "intent": [
         #         {
