@@ -56,6 +56,7 @@ Thumbs.db
 misc
 node_modules
 .logs
+playground.py
 
 
 # Files with sensitive information #
