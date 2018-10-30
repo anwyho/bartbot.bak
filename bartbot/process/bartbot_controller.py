@@ -25,8 +25,8 @@ class BartbotController(Controller):
 
         elif isinstance(self.message, rcv.text.Text):
             nextResp.text = f"You typed {self.message.text}\n"
-            nextResp = nextResp.make_chained_response(
-                text=f"Debug info: \n{json.dumps(self.message.entities, indent=2)}")
+            # nextResp = nextResp.make_chained_response(
+            #     text=f"Debug info: \n{json.dumps(self.message.entities, indent=2)}")
 
             if self.message.entities.get('greetings', [{}])[0].get(
                     'confidence', 0) > 0.7:
@@ -61,7 +61,7 @@ class BartbotController(Controller):
         mapId = next(mapIdGen)
         if not mapId:
             self.send_waiting_response(
-                nextResp.make_separate_response())
+                responseSkeleton=nextResp.make_separate_response())
             mapId = next(mapIdGen)
         if mapId:
             nextResp = nextResp.make_chained_response(
