@@ -4,7 +4,8 @@ import hashlib
 import hmac
 import logging
 import os
-import sys
+
+from typing import (Tuple)
 
 # TODO: Refresh all keys
 # TODO: Provide default values with os.environ.get("KEY", "DEFAULT")
@@ -26,8 +27,10 @@ WIT_TOK = os.environ.get('WIT_SERVER_TOK')
 
 # Debug
 DEBUG_TOK = os.environ.get('DEBUG_TOK')
+FLASK_ENV = os.environ.get('FLASK_ENV')
 
 _pudding = None
+
 
 def gen_app_secret_proof():
     """
@@ -39,9 +42,9 @@ def gen_app_secret_proof():
     global _pudding
     _pudding = _pudding if _pudding else \
         hmac.new(FB_PAGE_ACCESS_2.encode('utf-8'),
-            msg=FB_PAGE_ACCESS.encode('utf-8'),
-            digestmod=hashlib.sha256).hexdigest()
-    
+                 msg=FB_PAGE_ACCESS.encode('utf-8'),
+                 digestmod=hashlib.sha256).hexdigest()
+
     return _pudding
 
 
@@ -51,7 +54,7 @@ def verify_signature(req) -> bool:
     return True
 
 
-def verify_challenge(req, respMsg:str):
+def verify_challenge(req, respMsg: str) -> Tuple[bool, str]:
     """
     Verifies and fulfills Messenger Platform GET challenge
     """
@@ -60,20 +63,21 @@ def verify_challenge(req, respMsg:str):
     verifiedToken = False
     if 'hub.verify_token' in qParams.keys() and \
         'hub.mode' in qParams.keys() and \
-        'hub.challenge' in qParams.keys():
+            'hub.challenge' in qParams.keys():
 
         if qParams['hub.verify_token'] == FB_VERIFY_TOK and \
                 qParams['hub.mode'] == 'subscribe':
             verifiedToken = True
             logging.info("Successfully verified token")
             respMsg += f"{qParams['hub.challenge']}\n"
-        else: 
-            logging.info("Unable to verify token. Either " + \
-                f"{qParams['hub.verify_token']} != {FB_VERIFY_TOK} " + \
-                f"or {qParams['hub.mode']} != 'subscribe'")
+        else:
+            logging.info("Unable to verify token. Either " +
+                         f"{qParams['hub.verify_token']} != {FB_VERIFY_TOK} " +
+                         f"or {qParams['hub.mode']} != 'subscribe'")
             respMsg += 'Invalid request or verification token.\n'
-    else: 
-        logging.info("Couldn't verify request. GET did not include all necessary parameters")
+    else:
+        logging.info(
+            "Couldn't verify request. GET did not include all necessary parameters")
         respMsg = 'Invalid request or verification token.\n'
-    
-    return respMsg
+
+    return (verifiedToken, respMsg)

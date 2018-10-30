@@ -19,6 +19,6 @@
   "homepage": "https://github.com/anwyho/bartbot#readme",
   "devDependencies": {
     "serverless-python-requirements": "^4.2.4",
-    "serverless-wsgi": "^1.5.1"
+    "serverless-wsgi": "^1.5.2"
   }
 }
