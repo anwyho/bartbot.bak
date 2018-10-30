@@ -2,7 +2,7 @@ import bartbot.utils.keys as keys
 
 # Graph & Messenger URLs
 GRAPH_API: str = 'https://graph.facebook.com/'
-GRAPH_VER: str = 'v2.6'
+GRAPH_VER: str = 'v2.7'
 MESSENGER_PLATFORM: str = f'{GRAPH_API}{GRAPH_VER}/me/'
 AUTH: str = f'access_token={keys.FB_PAGE_ACCESS}&appsecret_proof={keys.gen_app_secret_proof()}'
 
