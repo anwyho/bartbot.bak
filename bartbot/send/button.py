@@ -5,39 +5,10 @@ import logging
 from abc import (ABC, abstractmethod)
 from typing import (List, Optional)
 
+from bartbot.send import (set_if_exists)
+
 # # Defined below to avoid circular dependencies
-# from bartbot.send.template import ShareTemplate
-
-
-def set_if_exists(self,
-                  valName,
-                  val,
-                  maxLen: int = -1,
-                  types: list = [],
-                  prefix: str = "",
-                  raiseOnFail: bool = False):
-    if val is not None:  # TODO make this more elegant
-        # Max length provided
-        if maxLen >= 0 and len(val) > maxLen:
-            val = val[:maxLen]
-            logging.warning(
-                f"Attempted to set variable {valName} with length larger than the max length allowed ({maxLen} chars)." +
-                (f" {valName} has been truncated to {val}." if not raiseOnFail else ""))
-            if raiseOnFail:
-                raise ValueError(
-                    f"Value '{valName}' has too many characters. (Max allowed: {maxLen} chars)")
-        # List of types provided
-        elif types and val.lower() not in types:
-            raise ValueError(
-                f"{type(self).__name__} cannot take value {val.lower()} as {valName}. It does not match any of the types provided.")
-        elif prefix is not "" and not val.startswith(prefix):
-            raise ValueError(
-                f"Expected value '{val}' to start with prefix {prefix}."
-            )
-        setattr(self, valName, val)
-    elif raiseOnFail:
-        raise ValueError(
-            f"Given value '{val}' is None and raiseOnFail is True.")
+# from bartbot.send.attachment import ShareTemplate
 
 
 class Button(ABC):
@@ -141,7 +112,7 @@ class ShareButton(Button):
         self.buttonType = 'element_share'
         if template:
             # Defined here to avoid circular dependencies
-            from bartbot.send.template import ShareTemplate
+            from bartbot.send.attachment import ShareTemplate
             if isinstance(template, ShareTemplate):
                 self._shareTemplate = template
             else:
