@@ -64,7 +64,6 @@ phrases = {
     ],
     'delivery': [
         f"Here it is!",
-        f"Here it is, {{opt[fn]}}!",
         f"Here you go!",
         f"Here ya go {{opt[fn]}}!",
         f"Here ya go!",
@@ -112,7 +111,18 @@ phrases = {
         f"Xie xie!",
     ],
     'time-specific emoji': [  # How do I even code this section
-        f"{emojis['sleeping_face']}"
+        f"{emojis['sleeping_face']}",
+    ],
+    'wait': [
+        f"One moment please...",
+        f"One sec...",
+        f"BRB!",
+        f"Hold up...",
+        f"Lemme get something...",
+        f"Just a moment!",
+        f"One moment {{opt[fn]}}",
+        f"One sec {{opt[fn]}}...",
+        f"Just a moment {{opt[fn]}}!",
     ],
     'yw': [
         f"You're welcome!",
