@@ -5,10 +5,48 @@ import logging
 from abc import (ABC, abstractmethod)
 from typing import (List, Optional, Union)
 
-from bartbot.send.button import (Button, UrlButton, set_if_exists)
+from bartbot.send import (set_if_exists)
+from bartbot.send.button import (Button, UrlButton)
 
 
-class Template(ABC):
+class RespAttachment(ABC):
+
+    @abstractmethod
+    def build(self):
+        raise NotImplementedError
+
+
+class Asset(RespAttachment):
+
+    ASSET_TYPES = ['image', 'audio', 'video', 'file']
+
+    def __init__(self,
+                 assetType: str,
+                 assetUrl: Optional[str] = None,
+                 isReusable: bool = False,
+                 attchId: Optional[str] = None):
+
+        if assetType not in self.ASSET_TYPES:
+            ValueError(f"Asset type {assetType} not supported.")
+
+        payload: dict = {}
+
+        if attchId and attchId.isdigit():
+            payload['attachment_id'] = attchId
+        elif assetUrl:
+            payload['url'] = assetUrl
+            payload['is_reusable'] = isReusable
+        else:
+            ValueError(
+                "Expected asset URL or attachment ID when creating Asset.")
+
+        self._data = {'type': assetType, 'payload': payload}
+
+    def build(self):
+        return self._data
+
+
+class Template(RespAttachment, ABC):
 
     TEMPLATE_TYPES: List[Optional[str]] = [
         'generic',
@@ -17,7 +55,7 @@ class Template(ABC):
         'media',
         # 'receipt',  # not currently supported
         'share',
-        None]
+    ]
 
     @classmethod
     def make_template(cls, templateType: str, **kwargs):
@@ -188,7 +226,8 @@ class ButtonTemplate(Template):
             ValueError(
                 "Every element passed in the buttons argument of ButtonTemplate must be a Button.")
         else:
-            set_if_exists(self, '_buttons', buttons, maxLen=self.MAX_BUTTONS, raiseOnFail=True)
+            set_if_exists(self, '_buttons', buttons,
+                          maxLen=self.MAX_BUTTONS, raiseOnFail=True)
 
     def build(self) -> dict:
         if not hasattr(self, '_template'):
@@ -287,6 +326,7 @@ class MediaTemplate(Template):
         else:
             element['url'] = getattr(self, '_url')
         if hasattr(self, 'button'):
+            # TODO: The below seems dangerous
             element['buttons'] = [getattr(self, '_button').build()]
 
         template['payload'] = {
