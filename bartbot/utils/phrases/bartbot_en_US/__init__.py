@@ -20,6 +20,7 @@ locale = "en_US"
 phrases = {
     'attachment': [
         f"Ooh attachment! I'm starting to get a little attached to you too {{opt[fn]}} {emojis['smiling_face_with_smiling_eyes']}",
+        f"Ooh attachment! I'm starting to get a little attached to you too {emojis['smiling_face_with_smiling_eyes']}",
         f"Ooh! For me? {emojis['face_with_open_mouth']}",
         f"Wow!",
         f"Hmm... {emojis['face_with_raised_eyebrow']} I don't quite know what to do with this.",
@@ -48,6 +49,7 @@ phrases = {
     ],
     # CTA usually follows hello.
     # NOTE: No {opt}s because name would"ve already been stated.
+    # TODO: Seaprate the ones with names into a different category
     'cta': [
         f"Where are you headed?",
         f"Where are you headed today?",
@@ -58,6 +60,7 @@ phrases = {
         f"Where to?",
         f"Where ya headed?",
         f"Where ya headed today?",
+        f"Headed anywhere?",
     ],
     'delivery': [
         f"Here it is!",
@@ -87,7 +90,7 @@ phrases = {
         f"Hey, didn't see ya there!",
     ],
     'sorry': [
-        "Sorry about that!",
+        f"Sorry about that!",
         f"Oops! {emojis['shushing_face']}",
         f"Oh no. {emojis['face_screaming_in_fear']}",
         f"Hmm...",
