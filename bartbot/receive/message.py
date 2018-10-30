@@ -14,9 +14,7 @@ ParamType = TypeVar('ParamType', str, int, Coordinate, list)
 
 
 @wrapt.decorator
-def safe_import(
-        importer: Callable[[dict, int], Optional[Any]],
-        instance, entry: dict, mNum: int) -> Any:
+def safe_import(wrapped, instance, args, kwargs):
     """
     This wrapper attempts to catch and handle any errors that indicate
         that entries were incorrectly formatted, returning None if
@@ -24,7 +22,7 @@ def safe_import(
     """
 
     try:
-        return importer(entry, mNum)
+        return wrapped(*args, **kwargs)
     except (AttributeError, IndexError, KeyError, TypeError) as e:
         logging.warning(f"Couldn't parse JSON entry. Error: {e}")
         return None
@@ -63,8 +61,8 @@ class Message(ABC):  # Message is an Abstract Base Class
         """Prepare Message kwargs for subclasses"""
 
         messaging: dict = entry.get('messaging')
-        messageType: dict = messaging[mNum] if isinstance(messaging, list) \
-            and len(messaging) else None
+        messageType: dict = messaging[mNum] if isinstance(
+            messaging, list) else None
 
         if messageType is None:
             raise KeyError("Couldn't find expected kind of messaging.")
@@ -85,8 +83,8 @@ class Message(ABC):  # Message is an Abstract Base Class
     @safe_import
     def from_entry(cls, entry: dict, mNum: int):
         """
-        Given an entry and mNum, return an instance of this object
-            that is full initialized or raise an exception.
+        Given an entry and message number, return an instance of this
+            object that is full initialized or raise an exception.
         NOTE: This function must be implemented as a @classmethod in
             every subclass.
         """
