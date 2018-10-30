@@ -39,6 +39,9 @@ def handle_webhook() -> str:
     """
     Processes POST and GET requests from the Messenger Platform
     """
+    # respMsg = ""
+    # respMsg += str(process_event(request))
+    # return respMsg
 
     respMsg: str = ""
     try:
@@ -46,7 +49,13 @@ def handle_webhook() -> str:
             if request.method == 'GET':
                 respMsg += verify_challenge(request, respMsg)[1]
             elif request.method == 'POST':
-                respMsg += process_event(request)
+                result = process_event(request)
+                for event in result:
+                    for message in event:
+                        messageResult = f"\n{message[0]} - {message[1]}"
+                        if len(messageResult) > 60:
+                            messageResult = messageResult[:57] + "..."
+                        respMsg += messageResult
             else:
                 respMsg += "Unsupported HTTPS Verb.\n"
         else:
