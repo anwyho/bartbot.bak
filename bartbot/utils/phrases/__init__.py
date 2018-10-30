@@ -20,7 +20,7 @@ class Phrase():
         return self._locale
 
     @locale.setter
-    def locale(self, newLocale: Optional[str]=None) -> None:
+    def locale(self, newLocale: Optional[str]) -> None:
         self._set_locale(newLocale)
 
     def _set_locale(self, newLocale: Optional[str] = None) \
@@ -154,3 +154,8 @@ class Phrase():
                 f"Failed to import package for locale {newLocale}. Error: {e}")
         finally:
             return localeImport
+
+
+if __name__ == '__main__':
+    p = Phrase()
+    print(p.get_phrase('wait', opt={'fn': 'Anthony'}))
