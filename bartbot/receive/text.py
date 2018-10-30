@@ -40,21 +40,24 @@ class Text(Message):
             if ok:
                 logging.info("Successfully retrieved Wit entities")
                 logging.debug(f"Wit entities: {json.dumps(witResp,indent=2)}")
-
-                return witResp
+                if 'entities' not in witResp:
+                    logging.warning("Failed to retrieve Wit entities")
+                    raise KeyError("Unexpected structure from Wit response.")
+                else:
+                    self._witEntities = witResp['entities']
             else:
                 logging.warning("Failed to retrieve Wit entities")
                 return None
         return self._witEntities
 
-    @classmethod
     @safe_import
+    @classmethod
     def from_entry(cls, entry: dict, mNum: int):
         """
         Parse message num mNum in given entry for arguments necessary
             to instantiate Text object
         """
-        print(entry)
+        print(json.dumps(entry, indent=2))
         message = entry['messaging'][mNum]['message']
 
         kwargs: Dict[str, Optional[ParamType]] = \
