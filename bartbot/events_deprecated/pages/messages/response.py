@@ -36,7 +36,7 @@ def send_map_to(fbId: str, respMsg: str, fn: str='{opt}') -> Tuple[str, str]:
     logging.info('Sending a map')
     logging.debug(f'fbId: {fbId}')
 
-    mapId = bartMap.get_map_id()
+    mapId = bartMap.yield_map_id()
     if mapId != None:
         data = {
             'recipient': {'id': fbId},
