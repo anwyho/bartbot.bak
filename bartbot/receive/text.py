@@ -49,6 +49,63 @@ class Text(Message):
                 logging.warning("Failed to retrieve Wit entities")
                 return None
         return self._witEntities
+        # {
+        #     "intent": [
+        #         {
+        #             "confidence": 0.9996880040735,
+        #             "value": "map",
+        #             "_entity": "intent"
+        #         },
+        #         {
+        #             "confidence": 0.00013442298169662,
+        #             "value": "help",
+        #             "_entity": "intent"
+        #         },
+        #         {
+        #             "confidence": 3.9605147030204e-05,
+        #             "value": "travel",
+        #             "_entity": "intent"
+        #         },
+        #         {
+        #             "confidence": 1.5016054927827e-05,
+        #             "value": "cost",
+        #             "_entity": "intent"
+        #         }
+        #     ],
+        #     "decision": [
+        #         {
+        #             "confidence": 4.4354493420279e-05,
+        #             "value": "yes",
+        #             "_entity": "decision"
+        #         },
+        #         {
+        #             "confidence": 1.1067228903365e-05,
+        #             "value": "no",
+        #             "_entity": "decision"
+        #         }
+        #     ],
+        #     "greetings": [
+        #         {
+        #             "confidence": 0.0020849342089947,
+        #             "value": "true",
+        #             "_entity": "greetings"
+        #         }
+        #     ],
+        #     "thanks": [
+        #         {
+        #             "confidence": 0.00022431994258195,
+        #             "value": "true",
+        #             "_entity": "thanks"
+        #         }
+        #     ],
+        #     "bye": [
+        #         {
+        #             "confidence": 0.0075319464344856,
+        #             "value": "true",
+        #             "_entity": "bye"
+        #         }
+        #     ]
+        # }
 
     @safe_import
     @classmethod
@@ -57,7 +114,6 @@ class Text(Message):
         Parse message num mNum in given entry for arguments necessary
             to instantiate Text object
         """
-        print(json.dumps(entry, indent=2))
         message = entry['messaging'][mNum]['message']
 
         kwargs: Dict[str, Optional[ParamType]] = \
