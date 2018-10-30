@@ -35,6 +35,11 @@ Things Bartbot taught me:
   * All the protocols
   * How to design them and how to call them
   * Key/secret management
+* Object Oriented Programming
+  * Not the theoretical stuff they teach you in school
+  * Inheritance is amazing
+* Functional Programming
+  * Concurrency comes by design
 * Serverless programming
 * Natural language processing
 
@@ -48,6 +53,7 @@ I went through plenty of design iterations for how to structure the code, but I 
   * Periodic GET requests for challenge (verify my webhook is online)
   * POST requests for messages and postback events
 * [Amazon Web Services](aws)
+  * [botocore](boto)
   * [Lambda](lambda)
     * Hosts my Serverless Flask application
   * [API Gateway](apigateway)
@@ -101,7 +107,7 @@ Ayy [check it](releases).
 
 <!-- TODO: This section is not done yet -->
 
-I'm not sure if I'll be supporting contributors before v1.0, but watch the repo and see the [contributing guideline](contributing) if you're interested! It'll be soon. 
+I'm not sure if I'll be supporting contributors before v1.0, but watch the repo and see the [contributing guideline](contributing) if you're interested! It'll be soon.
 
 Also, check out the [functions-to-implement checklist](toimplement).
 
@@ -128,35 +134,36 @@ This Serverless tutorial got my app up and running.
 <!-- URLS -->
 
 <!-- Stack -->
-[apigateway]:      https://aws.amazon.com/api-gateway/
-[aws]:             https://aws.amazon.com/
-[bartapi]:         http://api.bart.gov/docs/overview/index.aspx
-[bottle]:          https://bottlepy.org/
-[darksky]:         https://darksky.net/dev/
-[gitprof]:         http://github.com/anwyho/
-[lambda]:          https://aws.amazon.com/lambda/
-[messenger]:       https://messenger.com/
-[messengerapps]:   https://messenger.fb.com/
-[parameterstore]:  https://aws.amazon.com/systems-manager/
-[pybart]:          https://github.com/anwyho/pybart/
-[python3]:         https://www.python.org/
-[requests]:        http://docs.python-requests.org/en/master/
-[s3]:              https://aws.amazon.com/s3/
-[serverless]:      https://serverless.com/
-[unittest]:        https://docs.python.org/3/library/unittest.html
-[venv]:            https://virtualenv.pypa.io/en/stable/
-[wit]:             https://wit.ai/
-[zappa]:           https://www.zappa.io/
+[apigateway]:         https://aws.amazon.com/api-gateway/
+[aws]:                https://aws.amazon.com/
+[bartapi]:            http://api.bart.gov/docs/overview/index.aspx
+[boto]:               https://github.com/boto/botocore
+[bottle]:             https://bottlepy.org/
+[darksky]:            https://darksky.net/dev/
+[gitprof]:            http://github.com/anwyho/
+[lambda]:             https://aws.amazon.com/lambda/
+[messenger]:          https://messenger.com/
+[messengerapps]:      https://messenger.fb.com/
+[parameterstore]:     https://aws.amazon.com/systems-manager/
+[pybart]:             https://github.com/anwyho/pybart/
+[python3]:            https://www.python.org/
+[requests]:           http://docs.python-requests.org/en/master/
+[s3]:                 https://aws.amazon.com/s3/
+[serverless]:         https://serverless.com/
+[unittest]:           https://docs.python.org/3/library/unittest.html
+[venv]:               https://virtualenv.pypa.io/en/stable/
+[wit]:                https://wit.ai/
+[zappa]:              https://www.zappa.io/
 
 <!-- Articles -->
-[khomenko]:        https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup
-[nodetutorial]:    https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76
-[serverlesstutorial]: 
-                   https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/
+[khomenko]:           https://tutorials.botsfloor.com/@igorkhomenko?source=post_header_lockup
+[nodetutorial]: https://tutorials.botsfloor.com/run-facebook-messenger-chat-bot-on-aws-lambda-2fa800a67d76
+[serverlesstutorial]:
+                      https://serverless.com/blog/flask-python-rest-api-serverless-lambda-dynamodb/
 
 <!-- Repo References -->
-[contributing]:    ./CONTRIBUTING.md
-[license]:         ./LICENSE
-[releases]:        ./RELEASES.md
-[requirements]:    ./requirements.txt
-[toimplement]:     ./functionsToImplement.md
+[contributing]:       ./CONTRIBUTING.md
+[license]:            ./LICENSE
+[releases]:           ./RELEASES.md
+[requirements]:       ./requirements.txt
+[toimplement]:        ./functionsToImplement.md
