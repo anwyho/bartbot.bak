@@ -9,7 +9,7 @@ import traceback
 
 from flask import (Flask, request)
 
-from bartbot.receive.event import process_event
+from bartbot.receive.event import (process_event)
 from bartbot.utils.keys import (verify_challenge, verify_signature)
 
 
@@ -47,12 +47,12 @@ def handle_webhook() -> str:
     try:
         if verify_signature(request):
             if request.method == 'GET':
-                respMsg += verify_challenge(request, respMsg)[1]
+                respMsg += verify_challenge(request.args, respMsg)[1]
             elif request.method == 'POST':
-                result = process_event(request)
-                for event in result:
+                results = process_event(request)
+                for event in results:
                     for message in event:
-                        messageResult = f"\n{message[0]} - {message[1]}"
+                        messageResult = f"\n{'Sent!' if message[0] else 'FAILURE'} - {message[1]}"
                         if len(messageResult) > 60:
                             messageResult = messageResult[:57] + "..."
                         respMsg += messageResult
@@ -73,7 +73,7 @@ def handle_webhook() -> str:
         respMsg += "\nERROR: Not OK, but surviving. Check logs\n"
 
     finally:
-        return respMsg
+        return str(respMsg) + "\n\n"
 
 
 @app.route("/debug", methods=['GET'])
