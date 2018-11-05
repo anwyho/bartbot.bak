@@ -6,13 +6,16 @@ from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
 
 # BUG: Why won't rcv.Text or rcv.Attachment work? It worked before but
 #      now I have to manually import them in the two lines below
-from bartbot import receive as rcv
-from bartbot.receive.attachment import Attachment
-from bartbot.receive.text import Text
+# Defined here for lazy importing
+# from bartbot.receive.attachment import Attachment
+# from bartbot.receive.postback import Postback
+# from bartbot.receive.referral import Referral
+# from bartbot.receive.text import Text
 from bartbot.process.controller import (EchoController)
 from bartbot.process.bartbot_controller import (BartbotController)
 # from bartbot.process.controller import (import_controller)
-from bartbot.send.response import (Response, ResponseBuilder)
+from bartbot.send.response import (Response)
+from bartbot.send.response_builder import (ResponseBuilder)
 
 
 def process_event(req: request) -> list:
@@ -21,8 +24,7 @@ def process_event(req: request) -> list:
     data: dict = req.get_json(silent=True)
     entryList: Optional[List[dict]] = data.get('entry')
 
-    if isinstance(entryList, list) and \
-            len(entryList) == 1 and \
+    if isinstance(entryList, list) and len(entryList) == 1 and \
             isinstance(entryList[0], dict):
         entry: dict = entryList[0]  # there should only be one entry
         objType: str = data.get('object').lower()
@@ -42,8 +44,9 @@ def process_event(req: request) -> list:
 
 
 def handle_page_event(entry: dict):
-    """Returns a list of results from found page events"""
-    # TODO: What if .from_message() is None? Maybe turn into generator?
+    """For each message in an entry, create and send a response."""
+    # BUG: from_message() doesn't return None, but throws KeyError. If thrown, the other messages don't get processed.
+    # TODO: Turn this method into a nice for loop maybe
     return list((Response.from_message(
         message=message,
         controllerType=BartbotController)  # TODO: Get from YAML
@@ -71,24 +74,30 @@ def get_messages(entry: dict):
 
             # Attachments gets precedence because it can also have text
             if 'attachments' in message.get('message', {}):
-                messageInstance = rcv.attachment.Attachment.from_entry(
+                from bartbot.receive.attachment import Attachment
+                messageInstance = Attachment.from_entry(
                     entry, msgNum)
 
             # Echo gets precedence over Text for the same reason
             elif message.get('message', {}).get('is_echo'):
                 # TODO?
-                # messageInstance = rcv.echo.Echo.from_entry(entry, msgNum)
+                # from bartbot.receive.echo import Echo
+                # messageInstance = Echo.from_entry(entry, msgNum)
                 pass
 
             elif 'text' in message.get('message', {}):
-                messageInstance = rcv.text.Text.from_entry(entry, msgNum)
+                from bartbot.receive.text import Text
+                messageInstance = Text.from_entry(
+                    entry, msgNum)
 
             elif 'postback' in message:
-                messageInstance = rcv.postback.Postback.from_entry(
+                from bartbot.receive.postback import Postback
+                messageInstance = Postback.from_entry(
                     entry, msgNum)
 
             elif 'referral' in message:
-                messageInstance = rcv.referral.Referral.from_entry(
+                from bartbot.receive.referral import Referral
+                messageInstance = Referral.from_entry(
                     entry, msgNum)
 
             else:
@@ -97,15 +106,22 @@ def get_messages(entry: dict):
                 pass
 
             if messageInstance:
+                print("\nReceived message!")
                 seenResponse = ResponseBuilder(
                     recipientId=messageInstance.senderId,
-                    senderAction="mark_seen")
-                seenResponse.make_chained_response(senderAction="typing_on")
+                    senderAction="mark_seen",
+                    description="Marking message as seen")
+                seenResponse.make_chained_response(
+                    senderAction="typing_on",
+                    description="Turning typing on")
                 seenResponse.send()
+
                 yield messageInstance
+
                 typingOffResponse = ResponseBuilder(
                     recipientId=messageInstance.senderId,
-                    senderAction="typing_off")
+                    senderAction="typing_off",
+                    description="Turning typing off")
                 typingOffResponse.send()
     else:
         logging.warning(f"Couldn't find any page events in entry.")

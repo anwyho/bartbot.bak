@@ -48,7 +48,7 @@ class Attachment(Message):
     def __init__(self,
                  attachments: List[Payload]=None,
                  messageId: str=None,
-                 ** kwargs: Optional[ParamType]) -> None:
+                 **kwargs: Optional[ParamType]) -> None:
         super(Attachment, self).__init__(
             messageType='ATTACHMENT', **kwargs)
         self.messageId: str = messageId
