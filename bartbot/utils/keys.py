@@ -34,7 +34,7 @@ _pudding = None
 
 def gen_app_secret_proof():
     """
-    Calculates FB app secret proof from SHA256 with Singleton DP
+    Calculate FB app secret proof from SHA256 with Singleton DP
     """
 
     logging.info("Generating app secret proof in keys.py")
@@ -49,35 +49,18 @@ def gen_app_secret_proof():
 
 
 def verify_signature(req) -> bool:
-    """Verifies SHA-1 of message"""
+    """Verify SHA-1 of message"""
     # TODO: Verify SHA-1
     return True
 
 
-def verify_challenge(req, respMsg: str) -> Tuple[bool, str]:
+def verify_challenge(queryParams: dict, respMsg: str) -> Tuple[bool, str]:
     """
-    Verifies and fulfills Messenger Platform GET challenge
+    Verify and fulfill Messenger Platform GET challenge
     """
 
-    qParams = req.args
-    verifiedToken = False
-    if 'hub.verify_token' in qParams.keys() and \
-        'hub.mode' in qParams.keys() and \
-            'hub.challenge' in qParams.keys():
-
-        if qParams['hub.verify_token'] == FB_VERIFY_TOK and \
-                qParams['hub.mode'] == 'subscribe':
-            verifiedToken = True
-            logging.info("Successfully verified token")
-            respMsg += f"{qParams['hub.challenge']}\n"
-        else:
-            logging.info("Unable to verify token. Either " +
-                         f"{qParams['hub.verify_token']} != {FB_VERIFY_TOK} " +
-                         f"or {qParams['hub.mode']} != 'subscribe'")
-            respMsg += 'Invalid request or verification token.\n'
-    else:
-        logging.info(
-            "Couldn't verify request. GET did not include all necessary parameters")
-        respMsg = 'Invalid request or verification token.\n'
-
-    return (verifiedToken, respMsg)
+    return (True, queryParams['hub.challenge']) \
+        if queryParams.get('hub.verify_token') == FB_VERIFY_TOK and \
+        queryParams.get('hub.mode') == 'subscribe' and \
+        isinstance(queryParams.get('hub.challenge'), str) else \
+        (False, 'Invalid request or verification token.\n')
