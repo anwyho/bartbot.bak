@@ -15,16 +15,18 @@ from bartbot.utils.keys import (verify_challenge, verify_signature)
 
 app = Flask(__name__)
 
+bartbotGithubHtml: str = \
+    '<a href="http://github.com/anwyho/bartbot">github.com/anwyho/bartbot</a>'
+APP_HANDLE_TEXT: str = f'Hello! This is the main API endpoint for Bartbot. What is Bartbot you ask? Check out {bartbotGithubHtml} for more details.'
+
 
 @app.route("/")
 def main_handle() -> str:
     """Returns static website for Bartbot info"""
     # TODO turn this into staticly delivered website
     logging.info("In main handle")
-    return ("Hello! This is the main API endpoint for Bartbot. What is " +
-            "Bartbot you ask? Check out <a href=" +
-            "\"http://github.com/anwyho/bartbot\">" +
-            "github.com/anwyho/bartbot</a> for more details.")
+    global APP_HANDLE_TEXT
+    return APP_HANDLE_TEXT
 
 
 # # TODO: Figure out if Rollbar is right for this project
