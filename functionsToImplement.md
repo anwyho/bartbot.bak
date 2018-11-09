@@ -7,6 +7,8 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
 - [ ] Incorporate accessibility emojis (maybe parking emojis too?) and cost/trip
 
+- [ ] Use emojis that are the color of the route
+
 - [ ] Next departure times to arrive before or by arrival time
 
   ```python
@@ -172,6 +174,8 @@ All function stubs are written in Python psudocode. See the [Python 3.5 Typing m
 
 Future Features
 ---------------
+
+- [ ] Transfer at LAKE instead of BAYF for same direction transfers
 
 - [ ] Nearest station
 
