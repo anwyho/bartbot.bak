@@ -26,22 +26,20 @@ class BartbotController(Controller):
         head = ResponseBuilder(recipientId=self.message.senderId)
         respTail = head
 
-        head.text = f'You typed: "{self.message.text}"'
-        head.description = "Echoing message"
-
         if isinstance(self.message, Attachment):
-            respTail = respTail.make_chained_response()
             respTail.text = self.message._phrase.get_phrase(
                 'attachment', opt={'fn': self.message._client.fn})
             respTail.description = "Attachment response"
 
         elif isinstance(self.message, rcv.text.Text):
+            respTail.text = f'You typed: "{self.message.text}"'
+            respTail.description = "Echoing message"
             respTail = respTail.make_chained_response()
-            entities = WitEntities(self.message.entities)
-            respTail.text = str(entities)
+            self.entities = WitEntities(self.message.entities)
+            respTail.text = str(self.entities)
             respTail.description = "Wit entities"
 
-            intent = entities.intent
+            intent = self.entities.intent
             if 'help' == intent:
                 respTail = self.help_response(respTail)
             elif 'map' == intent:
@@ -99,9 +97,38 @@ class BartbotController(Controller):
         return respTail
 
     def travel_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail.make_chained_response(
+        respTail = respTail.make_chained_response(
             text="[TODO: Fill in the travel response.]",
             description="Travel text")
+
+        # HACK: Just trying to get basic functionality
+
+        from bartbot.utils.requests import get
+        from bartbot.utils.keys import BART_PUBL
+
+        params: dict = {
+            'cmd': 'depart' if self.entities.timeArr is None else 'arrive',
+            'orig': self.entities.stn,
+            'dest': self.entities.stnDest,
+            'time': time.strftime("%-I:%M %p", self.entities.time if self.entities.timeArr is None else self.entities.timeArr),
+            'b': '2',
+            'a': '3',
+            'json': 'y',
+            'key': BART_PUBL
+        }
+
+        ok, resp = get(
+            url="http://api.bart.gov/api/sched.aspx", params=params)
+
+        trips: list = resp['root']['schedule']['request']['trip']
+        strTrips: list = []
+        for trip in trips:
+            strTrips.append(
+                f"{trip['@origin']} {trip['@origTimeMin']} to {trip['@destination']} {trip['@destTimeMin']}")
+            # respTail = respTail.make_chained_response(
+            #     text=f"{trip['@origin']} {trip['@origTimeMin']} to {trip['@destination']} {trip['@destTimeMin']}")
+        respTail = respTail.make_chained_response(text='\n'.join(strTrips))
+
         return respTail
 
     def weather_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
