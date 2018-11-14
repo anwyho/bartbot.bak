@@ -15,7 +15,9 @@ BART_MAP_FILE = os.path.join(
 # HACK: Improve this function to work for any given attachment
 
 
-def yield_map_id(forceRefresh=False, writeCache=BART_MAP_FILE) -> Optional[str]:
+def yield_map_id(
+        forceRefresh=False,
+        writeCache: os.path = BART_MAP_FILE) -> Optional[str]:
     """
     Yield local copy of map ID and then a refreshed version.
     Saves attachment to FB for cached map.
@@ -23,13 +25,14 @@ def yield_map_id(forceRefresh=False, writeCache=BART_MAP_FILE) -> Optional[str]:
     """
 
     # Yields locally sourced map ID
-    mapId = read_local()
-    yield mapId
+    if not forceRefresh:
+        mapId = read_local(writeCache)
+        yield mapId
 
     # Upload attachment from GitHub URL
     mapId = post_from_url()
     if mapId is not None:
-        write_local(mapId)
+        write_local(mapId, writeCache)
 
     # TODO: Upload attachment from S3 Bucket
     if mapId is None:
@@ -38,15 +41,15 @@ def yield_map_id(forceRefresh=False, writeCache=BART_MAP_FILE) -> Optional[str]:
     yield mapId
 
 
-def read_local() -> Optional[str]:
+def read_local(writeCache: os.path) -> Optional[str]:
     """Tries to read attachment ID from file"""
     try:
-        with open(BART_MAP_FILE, 'r') as f:
+        with open(writeCache, 'r') as f:
             mapId = f.read()
 
     except IOError as e:
         logging.warning("Couldn't retreive attachment ID from file " +
-                        f"{BART_MAP_FILE}. Error: {e}")
+                        f"{writeCache}. Error: {e}")
         mapId = None
 
     else:
@@ -79,17 +82,17 @@ def post_from_url() -> Optional[str]:
         return None
 
 
-def write_local(mapId: str) -> bool:
+def write_local(mapId: str, writeCache: os.path) -> bool:
     """Tries to cache attachment ID to a local file"""
     try:
-        with open(BART_MAP_FILE, 'w') as f:
+        with open(writeCache, 'w') as f:
             f.write(mapId)
     except Exception as e:
         logging.warning("Couldn't write attachment ID to " +
-                        f"file {BART_MAP_FILE}. Received error {e}.")
+                        f"file {writeCache}. Received error {e}.")
         return False
     else:
-        logging.info(f"Wrote map attachment ID to file {BART_MAP_FILE}")
+        logging.info(f"Wrote map attachment ID to file {writeCache}")
         return True
 
 

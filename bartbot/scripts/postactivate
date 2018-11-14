@@ -55,7 +55,6 @@ import_vars () {
             fi
         done
         unset $SLS_DEBUG
-        unset $LOCAL
         unset -f import_vars
         unset -f remove_vars
         # Prints environment variables removed

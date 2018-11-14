@@ -9,11 +9,15 @@ import traceback
 
 from flask import (Flask, request)
 
-from bartbot.receive.event import process_event
+from bartbot.receive.event import (process_event)
 from bartbot.utils.keys import (verify_challenge, verify_signature)
 
 
 app = Flask(__name__)
+
+bartbotGithubHtml: str = \
+    '<a href="http://github.com/anwyho/bartbot">github.com/anwyho/bartbot</a>'
+APP_HANDLE_TEXT: str = f'Hello! This is the main API endpoint for Bartbot. What is Bartbot you ask? Check out {bartbotGithubHtml} for more details.'
 
 
 @app.route("/")
@@ -21,10 +25,8 @@ def main_handle() -> str:
     """Returns static website for Bartbot info"""
     # TODO turn this into staticly delivered website
     logging.info("In main handle")
-    return ("Hello! This is the main API endpoint for Bartbot. What is " +
-            "Bartbot you ask? Check out <a href=" +
-            "\"http://github.com/anwyho/bartbot\">" +
-            "github.com/anwyho/bartbot</a> for more details.")
+    global APP_HANDLE_TEXT
+    return APP_HANDLE_TEXT
 
 
 # # TODO: Figure out if Rollbar is right for this project
@@ -47,12 +49,12 @@ def handle_webhook() -> str:
     try:
         if verify_signature(request):
             if request.method == 'GET':
-                respMsg += verify_challenge(request, respMsg)[1]
+                respMsg += verify_challenge(request.args, respMsg)[1]
             elif request.method == 'POST':
-                result = process_event(request)
-                for event in result:
+                results = process_event(request)
+                for event in results:
                     for message in event:
-                        messageResult = f"\n{message[0]} - {message[1]}"
+                        messageResult = f"\n{'Sent!' if message[0] else 'FAILURE'} - {message[1]}"
                         if len(messageResult) > 60:
                             messageResult = messageResult[:57] + "..."
                         respMsg += messageResult
@@ -73,7 +75,7 @@ def handle_webhook() -> str:
         respMsg += "\nERROR: Not OK, but surviving. Check logs\n"
 
     finally:
-        return respMsg
+        return str(respMsg) + "\n\n"
 
 
 @app.route("/debug", methods=['GET'])

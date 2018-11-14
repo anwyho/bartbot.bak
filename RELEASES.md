@@ -1,16 +1,103 @@
 # Releases
 
-This change log tries its best to follow [Semantic Versioning](semver). Since this is not a library, I tried to apply the recommendations from this [Stack Exchange post](https://softwareengineering.stackexchange.com/questions/255190/how-does-semantic-versioning-apply-to-programs-without-api).
+This change log tries its best to follow [Semantic Versioning](semver). Since this is not a library, I tried to apply the recommendations from this [Stack Exchange post](seRecs).
+
+[semver]: https://semver.org/
+[seRecs]: (https://softwareengineering.stackexchange.com/questions/255190/how-does-semantic-versioning-apply-to-programs-without-api)
 
 ## [Unreleased]
 
 ### To Be Added
 
-* Support for BART API through a [pybart session](https://github.com/anwyho/pybart/)
+* Support for BART API through a [pybart](pybart) session
+* Concurrency and multi-threading!
+  * Classes made response times slower
 
 ## [1.0.0] - 2018-MM-DD
 
 * Anticipating 1.0 release! Getting ready to ship it :shipit:
+
+### Notes
+
+* The 1.0.0 release will come with the ability to query the BART API
+  * As a result, it won't be reached until my project [pybart](pybart) is finished
+
+[pybart]: https://github.com/anwyho/pybart/
+
+## [0.8.1] - 2018-11-DD
+
+### Todo
+
+* Phrases
+  * `get_phrase()` is not very smooth to use
+* Tests!
+
+## [0.8.0] - 2018-11-14
+
+### Added
+
+* **Basic functionality!**
+  * Bartbot now knows how to handle basic arrival and departure trip requests
+* Wit processing class
+  * Entities are processed in initialization
+
+### Changed
+
+* Typing and seen indicators are now handled in the controller rather than for all events
+
+### Removed
+
+* Refactored much of the `receive` module to cut bulk of preprocessing time before handling actual message contents
+
+## [0.7.1] - 2018-10-30
+
+### Removed
+
+* Deprecated events and phrases packages
+
+## [0.7.0] - 2018-10-29
+
+### Notes
+
+* This was a **big release**. I've been working on a separate branch called `organize_classes` and today is the day that it was pushed.
+* *Why is this a big release?* If you look through the files, the structure is way more organized.
+  * I implemented classes very heavily, so now there are Messages and Responses.
+  * A Controller class now facillitates Messages and Responses.
+  * Almost everything is abstracted
+    * **Bartbot can easily become ____bot.**
+    * Another goal I had was to use Bartbot as a framework for mass producing other bots.
+  * UX development just got a lot more ergonomic with all the Template and Button classes available.
+* I also deleted deprecated files in the `clean_deprecated` branch.
+
+### Added
+
+* Classes make flow of processing much easier
+  * Comes at cost of slower responses
+* New phrases (e.g. 'wait')
+* Response and ResponseBuilders
+  * Allow for quick response creation
+* Template and Button
+
+### Changed
+
+* Phrases is now a class
+  * Still needs work for ergonomics of creating phrases
+* Getting a map now uses generators and has a different force-refresh option
+
+### Deprecated
+
+* Previously, events used procedural processing
+  * Efficient but messy and not good for scaling
+* Old phrases module is deprecated in favor of newer and abstracted phrases module
+  * Old tests for phrases module are only half-deprecated since they still need to be reimplemented
+
+### Updated
+
+* FB Graph API version was updated from v2.6 to v2.7
+
+### Security
+
+* Requests is updated to v2.20.0 for HTTP vs. HTTPS things
 
 ## [0.6.2] - 2018-09-11
 
@@ -284,9 +371,6 @@ This change log tries its best to follow [Semantic Versioning](semver). Since th
 `Deprecated` for once-stable features removed in upcoming releases.
 `Removed` for deprecated features removed in this release.
 `Fixed` for any bug fixes.
-`Security` to invite users to upgrade in case of vulnerabilities. 
+`Security` to invite users to upgrade in case of vulnerabilities.
 -->
 
-<!-- URLS -->
-
-[semver]:          https://semver.org/
