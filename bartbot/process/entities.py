@@ -31,7 +31,7 @@ class WitEntities:
         # Handle datetime entity
         if 'datetime' in entities:
             def get_datetime(witTime: str):
-                print(f"witTime: {witTime}")
+                # print(f"witTime: {witTime}")
                 dt = witTime[:19] + witTime[23:26] + witTime[27:]
                 return time.strptime(dt, "%Y-%m-%dT%H:%M:%S%z") if witTime else None
 
@@ -40,7 +40,6 @@ class WitEntities:
                 self.time = get_datetime(self.ret_val_if_confident(w_datetime))
             elif 'interval' == w_datetime.get('type') and \
                     self.ret_val_if_confident(w_datetime, key='to'):
-                print(w_datetime['from'])
                 self.time = get_datetime(w_datetime['from']['value'])
                 self.timeArr = get_datetime(w_datetime['to']['value'])
 
