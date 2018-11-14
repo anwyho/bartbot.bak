@@ -25,7 +25,9 @@ def yield_map_id(
     """
 
     # Yields locally sourced map ID
-    if not forceRefresh:
+    if forceRefresh:
+        yield None
+    else:
         mapId = read_local(writeCache)
         yield mapId
 
