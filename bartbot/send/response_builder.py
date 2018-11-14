@@ -76,7 +76,7 @@ class ResponseBuilder(Response):
         resp.senderAction = 'typing_off'
         yield resp
 
-    def make_chained_response(self, **responseInitKwargs):
+    def create_and_get_chained_response(self, **responseInitKwargs):
         """Create and attach a chained response and set recipient and moves quick replies."""
         self._chainedResponse = ResponseBuilder(**responseInitKwargs)
         self._chainedResponse._recipient = self._recipient
@@ -84,7 +84,7 @@ class ResponseBuilder(Response):
         self.quickReplies = []
         return self._chainedResponse
 
-    def make_separate_response(self, **responseInitKwargs):
+    def create_and_get_separate_response(self, **responseInitKwargs):
         """Create a new response set the same recipient."""
         resp = ResponseBuilder(**responseInitKwargs)
         resp._recipient = self._recipient
