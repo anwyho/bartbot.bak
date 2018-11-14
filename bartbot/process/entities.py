@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from datetime import datetime
 
 from typing import(Optional)
 
@@ -29,7 +30,7 @@ class WitEntities:
 
         # Handle datetime entity
         if 'datetime' in entities:
-            def get_datetime(witTime: Optional[str]):
+            def get_datetime(witTime: str):
                 print(f"witTime: {witTime}")
                 dt = witTime[:19] + witTime[23:26] + witTime[27:]
                 return time.strptime(dt, "%Y-%m-%dT%H:%M:%S%z") if witTime else None
@@ -76,6 +77,12 @@ class WitEntities:
         # Handle decision
         if 'decision' in entities:
             self.decision = self.ret_val_if_confident(entities['decision'])
+
+        self.handle_model_bugs()
+
+    def handle_model_bugs(self):
+        # TODO: The NLP model always recognizes "fremont" as WARM
+        pass
 
     def ret_val_if_confident(self, entity: dict,
                              minConfidence: float = -1, key: str = 'value'):
