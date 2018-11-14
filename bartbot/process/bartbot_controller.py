@@ -23,6 +23,29 @@ class BartbotController(Controller):
     HELP_TEXT = "[TODO: Fill in this help text.]"
 
     def produce_responses(self) -> ResponseBuilder:
+        self.preprocess_message()
+        response = self.process_message()
+        self.postprocess_message()
+        return response
+
+    def preprocess_message(self):
+        seenResponse = ResponseBuilder(
+            recipientId=self.message.senderId,
+            senderAction="mark_seen",
+            description="Marking message as seen")
+        seenResponse.create_and_get_chained_response(
+            senderAction="typing_on",
+            description="Turning typing on")
+        seenResponse.send()
+
+    def postprocess_message(self):
+        typingOffResponse = ResponseBuilder(
+            recipientId=self.message.senderId,
+            senderAction="typing_off",
+            description="Turning typing off")
+        typingOffResponse.send()
+
+    def process_message(self):
         head = ResponseBuilder(recipientId=self.message.senderId)
         respTail = head
 
@@ -34,7 +57,7 @@ class BartbotController(Controller):
         elif isinstance(self.message, rcv.text.Text):
             respTail.text = f'You typed: "{self.message.text}"'
             respTail.description = "Echoing message"
-            respTail = respTail.make_chained_response()
+            respTail = respTail.create_and_get_chained_response()
             self.entities = WitEntities(self.message.entities)
             respTail.text = str(self.entities)
             respTail.description = "Wit entities"
@@ -65,13 +88,13 @@ class BartbotController(Controller):
         return head
 
     def help_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail = respTail.make_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text=self.HELP_TEXT,
             description="Help text response")
         return respTail
 
     def map_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail = respTail.make_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text=self.message._phrase.get_phrase(
                 'delivery', opt={'fn': self.message._client.fn}),
             description="Delivery text")
@@ -81,7 +104,7 @@ class BartbotController(Controller):
             self.send_waiting_response(respTail)
             mapId = next(mapIdGen)
         if mapId:
-            respTail = respTail.make_chained_response(
+            respTail = respTail.create_and_get_chained_response(
                 attachment=Asset(assetType='image', attchId=mapId),
                 description="Map asset from attachment ID")
         else:
@@ -91,13 +114,13 @@ class BartbotController(Controller):
         return respTail
 
     def cost_response(self, respTail: ResponseBuilder, roundTrip: bool = False) -> ResponseBuilder:
-        respTail.make_chained_response(
+        respTail.create_and_get_chained_response(
             text="[TODO: Fill in the cost response.]",
             description="Cost text")
         return respTail
 
     def travel_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail = respTail.make_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text="[TODO: Fill in the travel response.]",
             description="Travel text")
 
@@ -125,29 +148,31 @@ class BartbotController(Controller):
         for trip in trips:
             strTrips.append(
                 f"{trip['@origin']} {trip['@origTimeMin']} to {trip['@destination']} {trip['@destTimeMin']}")
-            # respTail = respTail.make_chained_response(
+            # respTail = respTail.create_and_get_chained_response(
             #     text=f"{trip['@origin']} {trip['@origTimeMin']} to {trip['@destination']} {trip['@destTimeMin']}")
-        respTail = respTail.make_chained_response(text='\n'.join(strTrips))
+        respTail = respTail.create_and_get_chained_response(
+            text='\n'.join(strTrips))
 
         return respTail
 
     def weather_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail.make_chained_response(
+        respTail.create_and_get_chained_response(
             text="[TODO: Fill in the weather response.]",
             description="Weather text")
         return respTail
 
     def reset_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail.make_chained_response(
+        respTail.create_and_get_chained_response(
             text="[TODO: Fill in the reset response.]",
             description="Reset text")
         return respTail
 
     def send_waiting_response(self, respTail: ResponseBuilder):
-        respBranch = respTail.make_separate_response(description="Wait text")
+        respBranch = respTail.create_and_get_separate_response(
+            description="Wait text")
         respBranch.text = self.message._phrase.get_phrase(
             'wait', opt={'fn': self.message._client.fn})
-        respBranch.make_chained_response(
+        respBranch.create_and_get_chained_response(
             senderAction="typing_on",
-            description="Turn typing on")
+            description="Turning typing on for waiting")
         respBranch.send()
