@@ -24,15 +24,30 @@ This change log tries its best to follow [Semantic Versioning](semver). Since th
 
 [pybart]: https://github.com/anwyho/pybart/
 
-## [0.7.2] - 2018-11-DD
+## [0.8.1] - 2018-11-DD
 
 ### Todo
 
-* Wit processing and access
-  * Maybe make a class
 * Phrases
   * `get_phrase()` is not very smooth to use
 * Tests!
+
+## [0.8.0] - 2018-11-14
+
+### Added
+
+* **Basic functionality!**
+  * Bartbot now knows how to handle basic arrival and departure trip requests
+* Wit processing class
+  * Entities are processed in initialization
+
+### Changed
+
+* Typing and seen indicators are now handled in the controller rather than for all events
+
+### Removed
+
+* Refactored much of the `receive` module to cut bulk of preprocessing time before handling actual message contents
 
 ## [0.7.1] - 2018-10-30
 
