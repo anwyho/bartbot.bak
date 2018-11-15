@@ -1,1 +1,3 @@
 curl -H "Content-Type:application/json" -X POST "localhost:5000/webhook" -d '{"object":"page","entry":[{"id":"1816383528408275","time":1458692752478,"messaging":[{"sender":{"id":"2153980617965043"},"recipient":{"id":"1816383528408275"},"timestamp":1535668107322,"message":{"mid":"BPz5ur9Btq7j4COCe1mCzYkLKYgxzkzkA1c5Qo1fAeHwydq7QZl3h2_9tJsh7t1yWpu-vCymEb1Scci-RVgOkg","seq":1560439,"text":"What can I do?"}}]}]}'
+
+# http://api.bart.gov/api/sched.aspx?cmd=arrive&orig=ASHB&dest=CIVC&date=now&key=MW9S-E7SL-26DU-VV8V&b=2&a=2&l=1&json=y
