@@ -40,8 +40,10 @@ Things Bartbot taught me:
   * Inheritance is amazing
 * Functional Programming
   * Concurrency comes by design
+  * It isn't always useful to run concurrently
 * Serverless programming
 * Natural language processing
+* NoSQL databases
 
 ## :gift:  Implementation
 
@@ -99,7 +101,7 @@ I went through plenty of design iterations for how to structure the code, but I 
 
 I will detail this section more at v1.0 release.
 
-## :sparkles: Releases
+## :sparkles: Releases/Changelog
 
 Ayy [check it](releases).
 
