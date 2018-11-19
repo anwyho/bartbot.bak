@@ -7,8 +7,6 @@ from abc import (ABC, ABCMeta, abstractmethod)
 from typing import (Any, Callable, Dict, List, Optional, Tuple, TypeVar)
 
 from bartbot.utils.errors import (print_traceback)
-from bartbot.utils.phrases import (Phrase)
-from bartbot.process.user import (User)
 
 Coordinate = Tuple[float, float]
 ParamType = TypeVar('ParamType', str, int, Coordinate, list)
@@ -40,7 +38,6 @@ class Message(ABC):  # Message is an Abstract Base Class
 
     @safe_parse
     def __init__(self, entry: dict, mNum: int, messageType: str):
-        print(entry)
         messaging: dict = entry['messaging'][mNum]
 
         if messageType in self.SUPPORTED_MESSAGE_TYPES:
@@ -53,9 +50,3 @@ class Message(ABC):  # Message is an Abstract Base Class
         self.time: int = entry['time']
         self.senderId: str = messaging['sender']['id']
         self.recipientId: str = messaging['recipient']['id']
-
-        if self.senderId is not None:
-            self._client: User = User(id=self.senderId)
-            # HACK: Phrase is not complete
-            self._phrase: Phrase = Phrase(
-                initialLocale=self._client.locale)
