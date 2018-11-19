@@ -12,20 +12,37 @@ def import_controller(controllerName: str):
 
 
 class Controller(ABC):
-    def __init__(self, message: Message) -> None:
+    def __init__(self, message: Message, dryRun: bool = False) -> None:
         self.message: Message = message
+        self._dryRun: bool = dryRun
+
+    def produce_responses(self) -> ResponseBuilder:
+        # self._dryRun = True
+        self.preprocess_message()
+        response = self.process_message()
+        self.postprocess_message()
+        return response
 
     @abstractmethod
-    def produce_responses(self) -> Response:
+    def process_message(self) -> Response:
         """
         Parse the message and generate a response to send using the
             ResponseBuilder.
         """
         pass
 
+    def preprocess_message(self) -> None:
+        pass
+
+    def postprocess_message(self) -> None:
+        pass
+
 
 class EchoController(Controller):
     """Calling produce_responses from this class sends an echo of the received message."""
 
-    def produce_responses(self) -> ResponseBuilder:
-        return ResponseBuilder(recipientId=self.message.senderId, text=f"You typed {self.message.text if hasattr(self.message, 'text') else '[no text found]'}")
+    def process_message(self) -> ResponseBuilder:
+        return ResponseBuilder(
+            recipientId=self.message.senderId,
+            text=f"You typed {self.message.text if hasattr(self.message, 'text') else '[no text found]'}",
+            description="Message echo from EchoController")
