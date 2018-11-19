@@ -1,8 +1,8 @@
 import json
 import logging
 
-from flask import request
-from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
+# from concurrent.futures import ThreadPoolExecutor
+from typing import (List, Optional)
 
 # BUG: Why won't rcv.Text or rcv.Attachment work? It worked before but
 #      now I have to manually import them in the two lines below
@@ -11,16 +11,15 @@ from typing import (Generator, List, Optional, Tuple, Type, TypeVar)
 # from bartbot.receive.postback import Postback
 # from bartbot.receive.referral import Referral
 # from bartbot.receive.text import Text
-from bartbot.receive.message import (MessageParsingError)
-from bartbot.process.controller import (EchoController)
+from bartbot.receive.message import (Message, MessageParsingError)
+from bartbot.process.controller import (Controller, EchoController)
 from bartbot.process.bartbot_controller import (BartbotController)
 # from bartbot.process.controller import (import_controller)
 from bartbot.send.response import (Response)
-from bartbot.send.response_builder import (ResponseBuilder)
 from bartbot.utils.errors import (print_traceback)
 
 
-def process_event(req: request) -> list:
+def process_event(req) -> list:
     """Collects and processes events"""
 
     data: dict = req.get_json(silent=True)
@@ -32,6 +31,9 @@ def process_event(req: request) -> list:
         objType: str = data.get('object').lower()
 
         if objType == 'page':
+            # loop = asyncio.get_event_loop()
+            # loop.run_until_complete(
+            #     asyncio.ensure_future(handle_page_event(entry)))
             results = handle_page_event(entry)
 
         elif objType == 'user':
@@ -47,17 +49,34 @@ def process_event(req: request) -> list:
 
 def handle_page_event(entry: dict):
     """For each message in an entry, create and send a response."""
-    results = []
-    for message in get_messages(entry):
-        try:
-            results.append(Response.from_message(
-                message=message,
-                controllerType=BartbotController)  # TODO: Get from YAML
-                .send())
-        except Exception as e:
-            print_traceback(e)
+    SEQ_PROCESS_MSG_TH = 1  # msgs before activating multithreading superpowers
+
+    if len(entry.get('messaging', '')) > SEQ_PROCESS_MSG_TH:
+        futures, results = [], []
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=8) as p:
+            # NOTE to future self: Turning this into a generator kills the concurrency
+            futures = [p.submit(handle_message, *(message, BartbotController))
+                       for message in get_messages(entry)]
+
+        for future in futures:
+            while not future.done():
+                pass
+            results.append(future.result())
+    else:  # Sequential handling of message
+        results = [handle_message(message, BartbotController)
+                   for message in get_messages(entry)]
 
     return list(results)
+
+
+def handle_message(message: Message, controllerType: Controller):
+    try:
+        return Response.from_message(
+            message=message,
+            controllerType=controllerType).send()
+    except Exception as e:
+        print_traceback(e)
 
 
 def handle_user_event(entry: dict):
@@ -111,9 +130,9 @@ def get_messages(entry: dict):
                 try:
                     messageInstance = messageType(entry=entry, mNum=msgNum)
                 except MessageParsingError as e:
+                    print_traceback(e)
                     logging.warning(f"Failed to parse message. Error: {e}")
                     logging.debug(json.dumps(entry))
-                    print_traceback(e)
                     messageInstance = None
 
             if messageInstance:
