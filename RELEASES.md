@@ -24,13 +24,29 @@ This change log tries its best to follow [Semantic Versioning](semver). Since th
 
 [pybart]: https://github.com/anwyho/pybart/
 
-## [0.8.1] - 2018-11-DD
+## [0.9.0] - 2018-11-19
 
-### Todo
+### Added
 
-* Phrases
-  * `get_phrase()` is not very smooth to use
-* Tests!
+* Concurrency through Python `multithreading` built-in package
+  * Processing multiple messages in a single entry now happens faster
+
+### Changed
+
+* New Phrases interface!
+  * `get_phrase()` was not very smooth to use and is now deprecated and removed
+  * New `get()` allows for arbitrary phrases and arbitrary keyword arguments
+* New phrase database format
+  * Phrases now go into a global list named after the phrase type
+* Minimum confidence for Wit entities now based on F1 Scores
+
+### Deprecated
+
+* Phrases interface and phrase storage format
+
+### Removed
+
+* Phrase `get_phrase()` for poor performance and ergonomics
 
 ## [0.8.0] - 2018-11-14
 
