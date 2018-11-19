@@ -8,7 +8,11 @@ from typing import(Optional)
 
 class WitEntities:
 
-    MIN_CONFIDENCE = 0.7
+    # Calculated from F1 Score from Wit Model.
+    # Source:
+    #   https://towardsdatascience.com/beyond-accuracy-precision-and-recall-3da06bea9f6c
+    # Calculation: https://www.desmos.com/calculator/ectgpnxult
+    MIN_CONFIDENCE = 0.54
 
     def __repr__(self):
         return f"""Intent: {self.intent}\nStation: {self.stn}\nStation Dest: {self.stnDest}\nTime: {self.time}\nTime Arr: {self.timeArr}\nDecision: {self.decision}\nGreetings? {self.greetings}\nThanks? {self.thanks}\nBye? {self.bye}"""
@@ -29,7 +33,9 @@ class WitEntities:
         # print(json.dumps(entities, indent=2))
 
         # Handle datetime entity
-        if 'datetime' in entities:
+        if 'datetime' in entities or \
+            'dep' in entities or \
+                'arr' in entities:
             def get_datetime(witTime: str):
                 # print(f"witTime: {witTime}")
                 dt = witTime[:19] + witTime[23:26] + witTime[27:]
