@@ -38,12 +38,14 @@ class Response:
     def __init__(self,
                  apiUrl: Optional[str] = MESSAGES_API,
                  description: str = "default",
-                 data: Optional[dict] = {}):
+                 data: Optional[dict] = {},
+                 dryRun: bool = False):
         self.apiUrl: Optional[str] = apiUrl
         self.description: str = description
         self._data: dict = data
         self._passingChecks: bool = False
         self._chainedResponse = None
+        self._dryRun: bool = dryRun
 
     def _pre_send_check(self):
         """
@@ -73,18 +75,23 @@ class Response:
         Check if response passes checks and then send current response and any chained responses. Return a list of bools depicting the success or failure of each successive send.
         """
         results: List[Tuple[bool, Optional[dict]]] = []
-        if self.passedChecks:
+        if self._dryRun:
+            print(f"DRY-RUN sent - {self.description}")
+            results.extend(self.send_chained_response())
+
+        elif self.passedChecks:
             results.append(post(self.apiUrl, json=self._data))
             if results[-1][0]:  # Successfully sent
                 print(f"sent - {self.description}")
             else:  # Failed to send
                 print(f"FAILED - {self.description}\n\t{results[-1][1]}")
-            if isinstance(self._chainedResponse, Response):
-                # NOTE: Possible timout feature?
-                results.extend(self._chainedResponse.send())
+            results.extend(self.send_chained_response())
         else:
             logging.warning("Attempted to send, unsuccessfully.")
         return results
+
+    def send_chained_response(self):
+        return self._chainedResponse.send() if isinstance(self._chainedResponse, Response) else []
 
     @classmethod
     def from_message(cls, message: Message, controllerType):
