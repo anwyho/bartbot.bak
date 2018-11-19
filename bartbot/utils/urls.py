@@ -1,5 +1,9 @@
 import bartbot.utils.keys as keys
 
+# Dark Sky URLs
+DARK_SKY_API: str = f'https://api.darksky.net/forecast/{keys.DS_TOK}/{{latitude}},{{longitude}},{{time}}'
+DARK_SKY_HEADER: dict = {'Accept-Encoding': 'gzip'}
+
 # Graph & Messenger URLs
 GRAPH_API: str = 'https://graph.facebook.com/'
 GRAPH_VER: str = 'v2.7'
