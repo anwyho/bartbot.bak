@@ -40,12 +40,13 @@ class ResponseBuilder(Response):
                  tag: Optional[str] = None,
                  senderAction: Optional[str] = None,
                  apiUrl: Optional[str] = MESSAGES_API,
+                 dryRun: bool = False,
                  description: Optional[str] = None,
                  **recipientArgs) -> None:
         super(ResponseBuilder, self).__init__(
-            apiUrl=apiUrl, description=description)
+            apiUrl=apiUrl, dryRun=dryRun, description=description)
 
-        self.text: Optional[str] = text
+        self._text: Optional[str] = str(text)
         self._attachment: Optional[Union[Template, Asset]] = attachment if isinstance(
             attachment, Asset) else None
         self._messagingType: str = messagingType if \
@@ -79,6 +80,7 @@ class ResponseBuilder(Response):
     def create_and_get_chained_response(self, **responseInitKwargs):
         """Create and attach a chained response and set recipient and moves quick replies."""
         self._chainedResponse = ResponseBuilder(**responseInitKwargs)
+        self._chainedResponse._dryRun = self._dryRun
         self._chainedResponse._recipient = self._recipient
         self._chainedResponse.quickReplies = self.quickReplies
         self.quickReplies = []
@@ -87,6 +89,7 @@ class ResponseBuilder(Response):
     def create_and_get_separate_response(self, **responseInitKwargs):
         """Create a new response set the same recipient."""
         resp = ResponseBuilder(**responseInitKwargs)
+        resp._dryRun = self._dryRun
         resp._recipient = self._recipient
         return resp
 
@@ -169,6 +172,19 @@ class ResponseBuilder(Response):
             raise ValueError("Failed to set recipient information.")
 
     @property
+    def senderAction(self) -> str:
+        return self._senderAction
+
+    @senderAction.setter
+    @require_rebuild
+    def senderAction(self, senderAction: str) -> None:
+        if senderAction in self.SENDER_ACTIONS:
+            self._senderAction = senderAction
+        else:
+            ValueError(
+                f"Attempted to set sender action to an unsupported sender action {senderAction}.")
+
+    @property
     def tag(self) -> str:
         return self._tag
 
@@ -182,17 +198,12 @@ class ResponseBuilder(Response):
                 f"Attempted to set tag to an unsupported tag {tag}.")
 
     @property
-    def senderAction(self) -> str:
-        return self._senderAction
+    def text(self) -> str:
+        return self._text
 
-    @senderAction.setter
-    @require_rebuild
-    def senderAction(self, senderAction: str) -> None:
-        if senderAction in self.SENDER_ACTIONS:
-            self._senderAction = senderAction
-        else:
-            ValueError(
-                f"Attempted to set sender action to an unsupported sender action {senderAction}.")
+    @text.setter
+    def text(self, text: str) -> None:
+        self._text = str(text)
 
     @require_rebuild
     def add_quick_reply(self,
@@ -237,7 +248,7 @@ class ResponseBuilder(Response):
             message: dict = {}
 
             if self.text:
-                message['text'] = self.text
+                message['text'] = str(self.text)
             elif self.attachment:
                 message['attachment'] = self.attachment.build()
             else:
