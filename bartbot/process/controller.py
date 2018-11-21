@@ -1,6 +1,8 @@
 import logging
 
 from abc import (ABC, abstractmethod)
+from concurrent.futures import (ThreadPoolExecutor)
+from typing import (Optional)
 
 from bartbot.receive.message import (Message)
 from bartbot.send.response import (Response)
@@ -15,12 +17,14 @@ class Controller(ABC):
     def __init__(self, message: Message, dryRun: bool = False) -> None:
         self.message: Message = message
         self._dryRun: bool = dryRun
+        self._executor: Optional[ThreadPoolExecutor] = None
 
     def produce_responses(self) -> ResponseBuilder:
-        # self._dryRun = True
-        self.preprocess_message()
-        response = self.process_message()
-        self.postprocess_message()
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            self._executor = executor
+            self.preprocess_message()
+            response = self.process_message()
+            self.postprocess_message()
         return response
 
     @abstractmethod

@@ -5,6 +5,7 @@ import time
 import wrapt
 
 from abc import (ABC, abstractmethod)
+from concurrent.futures import (ThreadPoolExecutor)
 from typing import(Any, Dict, List, Optional, Tuple, Union)
 
 from bartbot import receive as rcv
@@ -20,16 +21,16 @@ from bartbot.resources.map import (yield_map_id)
 from bartbot.utils.phrases.phrase import (Phrase)
 
 
-DRY_RUN = True
+DRY_RUN = False
 
 
 class BartbotController(Controller):
 
     def __init__(self, message, dryRun: bool = False) -> None:
         super().__init__(message=message, dryRun=dryRun)
-        self.user = User(id=message.senderId)
-        self.phrase = Phrase(initialLocale=self.user.locale)
-        self._dryRun = DRY_RUN
+        self.user: User = User(id=message.senderId)
+        self.phrase: Phrase = Phrase(initialLocale=self.user.locale)
+        self._dryRun: bool = DRY_RUN
 
     def preprocess_message(self):
         seenResponse = ResponseBuilder(
@@ -40,7 +41,7 @@ class BartbotController(Controller):
         seenResponse.create_and_get_chained_response(
             senderAction="typing_on",
             description="Turning typing on")
-        seenResponse.send()
+        self._executor.submit(seenResponse.send())
 
     def postprocess_message(self):
         typingOffResponse = ResponseBuilder(
@@ -48,7 +49,7 @@ class BartbotController(Controller):
             senderAction="typing_off",
             description="Turning typing off",
             dryRun=self._dryRun)
-        typingOffResponse.send()
+        self._executor.submit(typingOffResponse.send())
 
     def process_message(self):
         self.phrase.add_attributes(
@@ -190,4 +191,4 @@ class BartbotController(Controller):
         respBranch.create_and_get_chained_response(
             senderAction="typing_on",
             description="Turning typing on for waiting")
-        respBranch.send()
+        self._executor.submit(respBranch.send())

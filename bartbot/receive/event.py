@@ -31,9 +31,6 @@ def process_event(req) -> list:
         objType: str = data.get('object').lower()
 
         if objType == 'page':
-            # loop = asyncio.get_event_loop()
-            # loop.run_until_complete(
-            #     asyncio.ensure_future(handle_page_event(entry)))
             results = handle_page_event(entry)
 
         elif objType == 'user':
@@ -53,16 +50,22 @@ def handle_page_event(entry: dict):
 
     if len(entry.get('messaging', '')) > SEQ_PROCESS_MSG_TH:
         futures, results = [], []
-        from concurrent.futures import ThreadPoolExecutor
+        from concurrent.futures import (Future, ThreadPoolExecutor)
         with ThreadPoolExecutor(max_workers=8) as p:
             # NOTE to future self: Turning this into a generator kills the concurrency
             futures = [p.submit(handle_message, *(message, BartbotController))
                        for message in get_messages(entry)]
 
         for future in futures:
-            while not future.done():
-                pass
-            results.append(future.result())
+            while True:
+                if future.done():
+                    result = future.result()
+                    if isinstance(result, Future):
+                        future = result
+                    else:
+                        results.append(result)
+                        break
+
     else:  # Sequential handling of message
         results = [handle_message(message, BartbotController)
                    for message in get_messages(entry)]
