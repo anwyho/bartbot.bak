@@ -70,13 +70,18 @@ class Response:
         self._pre_send_check()
         return self._passingChecks
 
-    def send(self) -> List[bool]:
+    def send(self, inChain: bool = False) -> List[bool]:
         """
         Check if response passes checks and then send current response and any chained responses. Return a list of bools depicting the success or failure of each successive send.
         """
+        # TODO: If inChain, spin up new thread to send chain
+        #   This helps for sending earlier messages like wait messages
+
         results: List[Tuple[bool, Optional[dict]]] = []
         if self._dryRun:
-            print(f"DRY-RUN sent - {self.description}")
+            res = f"DRY-RUN - {self.description}"
+            print(res)
+            results.append((True, res))
             results.extend(self.send_chained_response())
 
         elif self.passedChecks:
@@ -86,12 +91,15 @@ class Response:
             else:  # Failed to send
                 print(f"FAILED - {self.description}\n\t{results[-1][1]}")
             results.extend(self.send_chained_response())
+
         else:
             logging.warning("Attempted to send, unsuccessfully.")
+
         return results
 
     def send_chained_response(self):
-        return self._chainedResponse.send() if isinstance(self._chainedResponse, Response) else []
+        return self._chainedResponse.send(inChain=True) \
+            if isinstance(self._chainedResponse, Response) else[]
 
     @classmethod
     def from_message(cls, message: Message, controllerType):

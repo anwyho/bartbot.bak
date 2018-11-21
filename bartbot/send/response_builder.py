@@ -61,22 +61,6 @@ class ResponseBuilder(Response):
             self.set_recipient(**recipientArgs)
         self._built: bool = False
 
-    @classmethod
-    def generate_indicators(cls, fbId: str):
-        """
-        Yields Responses for sending message indicators to a given Facebook ID.
-        """
-        if not fbId:
-            yield None
-        else:
-            yield True
-        resp = cls(senderAction='mark_seen', recipientId=fbId)
-        yield resp
-        resp.senderAction = 'typing_on'
-        yield resp
-        resp.senderAction = 'typing_off'
-        yield resp
-
     def create_and_get_chained_response(self, **responseInitKwargs):
         """Create and attach a chained response and set recipient and moves quick replies."""
         self._chainedResponse = ResponseBuilder(**responseInitKwargs)
@@ -276,10 +260,10 @@ class ResponseBuilder(Response):
 
         self._built = True
 
-    def send(self) -> bool:
+    def send(self, inChain: bool = False) -> bool:
         """
         Verify that response data is built before calling super send method.
         """
         if not self._built:
             self.build()
-        return super(ResponseBuilder, self).send()
+        return super(ResponseBuilder, self).send(inChain=inChain)
