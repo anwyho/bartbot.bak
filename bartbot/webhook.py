@@ -75,7 +75,7 @@ def handle_webhook() -> str:
         respMsg += "\nERROR: Not OK, but surviving. Check logs\n"
 
     finally:
-        return str(respMsg) + "\n\n"
+        return str(respMsg) + "\nDone!\n"
 
 
 @app.route("/debug", methods=['GET'])
