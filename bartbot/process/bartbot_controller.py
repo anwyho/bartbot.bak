@@ -10,7 +10,7 @@ from typing import(Any, Dict, List, Optional, Tuple, Union)
 
 from bartbot import receive as rcv
 from bartbot.process.controller import (Controller)
-from bartbot.process.entities import (WitEntities)
+from bartbot.process.bartbot_entities import (BartbotEntities)
 from bartbot.process.user import (User)
 from bartbot.send.attachment import (Asset, Template)
 from bartbot.send.button import (Button)
@@ -32,7 +32,22 @@ class BartbotController(Controller):
         self.phrase: Phrase = Phrase(initialLocale=self.user.locale)
         self._dryRun: bool = DRY_RUN
 
+    ### PRE- & POST- PROCESSING ###
+
+    # OVERRIDES CONTROLLER
     def preprocess_message(self):
+        self.send_seen_and_typing_on_indicators()
+        if hasattr(self.message, 'text'):
+            self.futureEntities = self._executor.submit(
+                self.get_wit_entities)
+
+    # OVERRIDES CONTROLLER
+    def postprocess_message(self):
+        self.send_typing_off_indicator()
+
+    ### Pre- and Post-Processing Helpers ###
+
+    def send_seen_and_typing_on_indicators(self):
         seenResponse = ResponseBuilder(
             recipientId=self.message.senderId,
             senderAction="mark_seen",
@@ -43,13 +58,29 @@ class BartbotController(Controller):
             description="Turning typing on")
         self._executor.submit(seenResponse.send())
 
-    def postprocess_message(self):
+    def send_typing_off_indicator(self):
         typingOffResponse = ResponseBuilder(
             recipientId=self.message.senderId,
             senderAction="typing_off",
             description="Turning typing off",
             dryRun=self._dryRun)
         self._executor.submit(typingOffResponse.send())
+
+    def send_waiting_response(self, respTail: ResponseBuilder):
+        respBranch = respTail.create_and_get_separate_response(
+            text=self.phrase.get('wait'),
+            description="Wait text")
+        respBranch.create_and_get_chained_response(
+            senderAction="typing_on",
+            description="Turning typing on for waiting")
+        self._executor.submit(respBranch.send)
+
+    def get_wit_entities(self):
+        return BartbotEntities(
+            text=self.message.text,
+            senderId=self.message.senderId)
+
+    ### PROCESS MESSAGE ###
 
     def process_message(self):
         self.phrase.add_attributes(
@@ -62,6 +93,7 @@ class BartbotController(Controller):
         if isinstance(self.message, Attachment):
             respTail = self.process_attachment(respTail)
 
+        # BUG: Figure out why I can't call Text as `Text`
         elif isinstance(self.message, rcv.text.Text):
             respTail = self.process_text(respTail)
 
@@ -76,10 +108,12 @@ class BartbotController(Controller):
     def process_text(self, respTail) -> ResponseBuilder:
         respTail.text = f'You typed: "{self.message.text}"'
         respTail.description = "Echoing message"
-        self.entities = WitEntities(self.message.entities)
+
+        self.entities = self.await_entities()
+
         respTail = respTail.create_and_get_chained_response(
             text=str(self.entities),
-            description="Wit entities")
+            description="Wit self.entities")
 
         intent = self.entities.intent
         if 'help' == intent:
@@ -97,14 +131,28 @@ class BartbotController(Controller):
         elif 'reset' == intent:
             respTail = self.reset_response(respTail)
         else:
+            # TODO: Unknown request
             pass
+
+        # TODO: self.add_quick_replies
 
         respTail.add_quick_reply(
             text="What is love?", postbackPayload="Payload")
         respTail.add_quick_reply(
             text="Baby don't hurt me...", postbackPayload="Payload")
+        respTail.add_quick_reply(
+            text="Baby don't hurt me...", postbackPayload="Payload")
+        respTail.add_quick_reply(
+            text="No more...!", postbackPayload="Payload")
 
         return respTail
+
+    def await_entities(self) -> dict:
+        while not self.futureEntities.done():
+            pass
+        return self.futureEntities.result()
+
+    ### Specific Response Helpers ###
 
     def help_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
         respTail = respTail.create_and_get_chained_response(
@@ -132,7 +180,7 @@ class BartbotController(Controller):
         return respTail
 
     def cost_response(self, respTail: ResponseBuilder, roundTrip: bool=False) -> ResponseBuilder:
-        respTail.create_and_get_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text="[TODO: Fill in the cost response.]",
             description="Cost text")
         return respTail
@@ -141,6 +189,8 @@ class BartbotController(Controller):
         respTail = respTail.create_and_get_chained_response(
             text="[TODO: Fill in the travel response.]",
             description="Travel text")
+
+        # TODO: Outsource this to new file
 
         # HACK: Just trying to get basic functionality
 
@@ -173,22 +223,19 @@ class BartbotController(Controller):
         return respTail
 
     def weather_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail.create_and_get_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text="[TODO: Fill in the weather response.]",
             description="Weather text")
         return respTail
 
     def reset_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
-        respTail.create_and_get_chained_response(
+        respTail = respTail.create_and_get_chained_response(
             text="[TODO: Fill in the reset response.]",
             description="Reset text")
         return respTail
 
-    def send_waiting_response(self, respTail: ResponseBuilder):
-        respBranch = respTail.create_and_get_separate_response(
-            description="Wait text")
-        respBranch.text = self.phrase.get('wait')
-        respBranch.create_and_get_chained_response(
-            senderAction="typing_on",
-            description="Turning typing on for waiting")
-        self._executor.submit(respBranch.send())
+    def unknown_response(self, respTail: ResponseBuilder) -> ResponseBuilder:
+        respTail = respTail.create_and_get_chained_response(
+            text="[TODO: Fill in the unknown text response.]",
+            description="Unknown text")
+        return respTail
