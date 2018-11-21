@@ -9,6 +9,13 @@ from bartbot.utils.requests import (post)
 from bartbot.utils.urls import (MESSAGES_API)
 
 
+class InvalidObjectStructureError(Exception):
+    """
+    Raised when Response has incorrect structure or is not ready to be sent.
+    """
+    pass
+
+
 class Response:
 
     ATTACHMENT_TYPES: List[str] = [
@@ -29,11 +36,7 @@ class Response:
         None]
     SENDER_ACTIONS: List[str] = ['mark_seen', 'typing_on', 'typing_off']
 
-    class InvalidObjectStructureError(Exception):
-        """
-        Raised when Response has incorrect structure or is not ready to be sent.
-        """
-        pass
+
 
     def __init__(self,
                  apiUrl: Optional[str] = MESSAGES_API,
@@ -59,7 +62,7 @@ class Response:
         # TODO: Check if everything is ready
         # NOTE: This needs to apply to both Send API objects and other objects
         if False:
-            raise self.InvalidObjectStructureError(
+            raise InvalidObjectStructureError(
                 "Response has incorrect structure and is not ready to be sent.")
 
         self._passingChecks = True
