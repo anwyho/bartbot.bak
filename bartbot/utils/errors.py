@@ -1,6 +1,7 @@
 
 import logging
 import json
+import wrapt
 
 
 def handle_request_error(response: dict) -> bool:
@@ -29,3 +30,11 @@ def print_traceback(error):
         f"Error: {error}. Error info: {exc_type}, {fname}, {exc_tb.tb_lineno}")
     print(
         f"Error: {error}. Error info: {exc_type}, {fname}, {exc_tb.tb_lineno}")
+
+
+@wrapt.decorator
+def catch_here(wrapped, instance, args, kwargs):
+    try:
+        return wrapped(*args, **kwargs)
+    except Exception as e:
+        print_traceback(e)
