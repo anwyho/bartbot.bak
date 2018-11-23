@@ -2,13 +2,13 @@
 
 service: bartbot-serverless
 
-package: 
+package:
   exclude:
     # Folders
-    - bartbot/__pycache__
-    - bartbot/**/__pycache__
-    - bartbot/.logs
-    - bartbot/scripts/*.sh
+    - compose/__pycache__
+    - compose/**/__pycache__
+    - compose/.logs
+    - compose/scripts/*.sh
     - misc/**
     # - node_modules/**
     # - resources/images/**
@@ -31,7 +31,7 @@ plugins:
 
 custom:
   wsgi:
-    app: bartbot.webhook.app
+    app: compose.webhook.app
     packRequirements: false
   pythonRequirements:
     dockerizePip: non-linux
