@@ -1,4 +1,8 @@
-# :light_rail:  Bartbot
+# :light_rail:  BARTbot
+
+## Deprecation Notice: 
+
+Ever since starting work at Mercedes-Benz R&D NA, my Python proficiency has skyrocketed. I hope to someday make this bot again in Python using Google Cloud Functions. It will be so much cleaner! I'll be especially motivated if I get a job in SF. ;)
 
 *Oh shoot.*
 
